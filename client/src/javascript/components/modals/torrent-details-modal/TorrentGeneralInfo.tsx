@@ -19,11 +19,10 @@ const getTags = (tags: TorrentProperties['tags']) =>
 const TorrentGeneralInfo: FC = observer(() => {
   const {i18n} = useLingui();
 
-  if (UIStore.activeModal?.id !== 'torrent-details') {
-    return null;
-  }
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrent = torrentHash ? TorrentStore.torrents[torrentHash] : undefined;
 
-  const torrent = TorrentStore.torrents[UIStore.activeModal.hash];
   if (torrent == null) {
     return null;
   }

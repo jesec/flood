@@ -18,11 +18,14 @@ const TorrentMediainfo: FC = () => {
   const [isFetchingMediainfo, setIsFetchingMediainfo] = useState<boolean>(true);
   const [isCopiedToClipboard, setIsCopiedToClipboard] = useState<boolean>(false);
 
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+
   useEffect(() => {
     const {current: currentCancelToken} = cancelToken;
 
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchMediainfo(UIStore.activeModal?.hash, cancelToken.current.token).then(
+    if (torrentHash) {
+      TorrentActions.fetchMediainfo(torrentHash, cancelToken.current.token).then(
         (fetchedMediainfo) => {
           setMediainfo(fetchedMediainfo.output);
           setIsFetchingMediainfo(false);
@@ -39,7 +42,7 @@ const TorrentMediainfo: FC = () => {
     return () => {
       currentCancelToken.cancel();
     };
-  }, []);
+  }, [torrentHash]);
 
   let headingMessageId = 'mediainfo.heading';
   if (isFetchingMediainfo) {

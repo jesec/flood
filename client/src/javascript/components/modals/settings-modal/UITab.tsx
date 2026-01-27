@@ -1,9 +1,10 @@
-import {FC, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Form, FormRow, Select, SelectItem, Radio} from '@client/ui';
 import Languages from '@client/constants/Languages';
 import SettingStore from '@client/stores/SettingStore';
+import ToggleList from '@client/components/general/ToggleList';
 
 import type {Language} from '@client/constants/Languages';
 
@@ -23,6 +24,9 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
   const [torrentListViewSize, setTorrentListViewSize] = useState(SettingStore.floodSettings.torrentListViewSize);
   const [selectedLanguage, setSelectedLanguage] = useState(SettingStore.floodSettings.language);
   const [UITagSelectorMode, setUITagSelectorMode] = useState(SettingStore.floodSettings.UITagSelectorMode);
+  const UITorrentDetailsPanelRef = useRef<FloodSettings['UITorrentDetailsPanel']>(
+    SettingStore.floodSettings.UITorrentDetailsPanel ?? true,
+  );
 
   return (
     <Form
@@ -69,6 +73,23 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
         <Radio defaultChecked={UITagSelectorMode === 'multi'} groupID="ui-tag-selector-mode" id="multi" width="auto">
           <Trans id="settings.ui.tag.selector.mode.multi" />
         </Radio>
+      </FormRow>
+      <ModalFormSectionHeader>
+        <Trans id="settings.ui.torrent.details" />
+      </ModalFormSectionHeader>
+      <FormRow>
+        <ToggleList
+          items={[
+            {
+              label: 'settings.ui.torrent.details.panel',
+              defaultChecked: UITorrentDetailsPanelRef.current,
+              onClick: () => {
+                UITorrentDetailsPanelRef.current = !UITorrentDetailsPanelRef.current;
+                onSettingsChange({UITorrentDetailsPanel: UITorrentDetailsPanelRef.current});
+              },
+            },
+          ]}
+        />
       </FormRow>
       <ModalFormSectionHeader>
         <Trans id="settings.ui.torrent.list" />

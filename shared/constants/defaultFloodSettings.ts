@@ -79,6 +79,8 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
   deleteTorrentData: true,
   startTorrentsOnLoad: true,
   UIPageTitleSpeedEnabled: true,
+  UITorrentDetailsPanel: true,
+  detailsPanelHeight: 400,
 };
 
 export default defaultFloodSettings;

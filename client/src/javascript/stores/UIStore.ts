@@ -98,6 +98,8 @@ class UIStore {
   styleElement: HTMLStyleElement & {
     styleSheet?: {cssText: string};
   } = this.createStyleElement();
+  detailsPanelHash: string | null = null;
+  detailsPanelVisible = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -183,6 +185,18 @@ class UIStore {
 
   setActiveModal(modal: this['activeModal']) {
     this.activeModal = modal;
+  }
+
+  setDetailsPanelHash(hash: string | null) {
+    this.detailsPanelHash = hash;
+  }
+
+  setDetailsPanelVisible(visible: boolean) {
+    this.detailsPanelVisible = visible;
+  }
+
+  toggleDetailsPanel() {
+    this.detailsPanelVisible = !this.detailsPanelVisible;
   }
 
   verifyDependencies() {

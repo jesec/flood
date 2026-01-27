@@ -10,6 +10,9 @@ import UIStore from '../../../stores/UIStore';
 const TorrentTrackers: FC = () => {
   const [trackers, setTrackers] = useState<Array<TorrentTracker>>([]);
 
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+
   const trackerCount = trackers.length;
   const trackerTypes = ['http', 'udp', 'dht'];
 
@@ -21,14 +24,14 @@ const TorrentTrackers: FC = () => {
   ));
 
   useEffect(() => {
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchTorrentTrackers(UIStore.activeModal?.hash).then((data) => {
+    if (torrentHash) {
+      TorrentActions.fetchTorrentTrackers(torrentHash).then((data) => {
         if (data != null) {
           setTrackers(data);
         }
       });
     }
-  }, []);
+  }, [torrentHash]);
 
   return (
     <div className="torrent-details__trackers torrent-details__section">

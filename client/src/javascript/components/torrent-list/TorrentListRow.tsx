@@ -6,6 +6,7 @@ import {useLongPress} from 'react-use';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
+import ConfigStore from '@client/stores/ConfigStore';
 import SettingStore from '@client/stores/SettingStore';
 import {torrentStatusClasses} from '@client/util/torrentStatus';
 import TorrentStore from '@client/stores/TorrentStore';
@@ -50,6 +51,17 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
 
 const displayTorrentDetails = (hash: string) => UIStore.setActiveModal({id: 'torrent-details', hash});
 
+const showTorrentInPanel = (hash: string) => {
+  const usePanelView = SettingStore.floodSettings.UITorrentDetailsPanel ?? true;
+  if (usePanelView) {
+    UIStore.setDetailsPanelHash(hash);
+    if (!UIStore.detailsPanelVisible) {
+      UIStore.setDetailsPanelVisible(true);
+    }
+  }
+  // If panel is disabled, do nothing - just keep the torrent selected
+};
+
 const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
   TorrentStore.setSelectedTorrents({hash, event});
 
@@ -58,7 +70,11 @@ const onKeyPress = (hash: string, e: KeyboardEvent) => {
     e.preventDefault();
     if (TorrentStore.selectedTorrents.includes(hash)) {
       if (e.key === 'Enter') {
-        displayTorrentDetails(hash);
+        if (ConfigStore.isSmallScreen) {
+          displayTorrentDetails(hash);
+        } else {
+          showTorrentInPanel(hash);
+        }
       } else if (e.key === 'ContextMenu') {
         displayContextMenu(hash, e);
       }
@@ -99,13 +115,34 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     }
   });
 
+  const handleClick = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) => {
+    selectTorrent(hash, event);
+    if (!ConfigStore.isSmallScreen) {
+      showTorrentInPanel(hash);
+    }
+  };
+
+  const handleDoubleClick = (hash: string) => {
+    if (ConfigStore.isSmallScreen) {
+      displayTorrentDetails(hash);
+    } else {
+      showTorrentInPanel(hash);
+    }
+  };
+
   const onTouchStartHooked = (e: TouchEvent) => {
     if (!TorrentStore.selectedTorrents.includes(hash)) {
       selectTorrent(hash, e);
     }
 
     if (shouldDisplayTorrentDetails.current) {
-      displayTorrentDetails(hash);
+      // On mobile, always show modal (panel doesn't work on small screens)
+      // On desktop touch, respect the panel setting
+      if (ConfigStore.isSmallScreen) {
+        displayTorrentDetails(hash);
+      } else {
+        showTorrentInPanel(hash);
+      }
     } else {
       shouldDisplayTorrentDetails.current = true;
       setTimeout(() => {
@@ -125,8 +162,8 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         ref={rowRef}
         style={style}
         hash={hash}
-        handleClick={selectTorrent}
-        handleDoubleClick={displayTorrentDetails}
+        handleClick={handleClick}
+        handleDoubleClick={handleDoubleClick}
         handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
@@ -141,8 +178,8 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       ref={rowRef}
       style={style}
       hash={hash}
-      handleClick={selectTorrent}
-      handleDoubleClick={displayTorrentDetails}
+      handleClick={handleClick}
+      handleDoubleClick={handleDoubleClick}
       handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}

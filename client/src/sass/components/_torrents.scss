@@ -4,6 +4,7 @@
 @use '../tools/variables';
 
 @use './action-bar';
+@use './torrent-details-panel-bottom';
 
 .torrents {
   @include themes.theme('background', 'torrent-list--background');

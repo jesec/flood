@@ -17,8 +17,9 @@ import Size from '../../general/Size';
 
 const TorrentHeading: FC = observer(() => {
   const {i18n} = useLingui();
-  const torrent =
-    UIStore.activeModal?.id === 'torrent-details' ? TorrentStore.torrents[UIStore.activeModal.hash] : undefined;
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrent = torrentHash ? TorrentStore.torrents[torrentHash] : undefined;
   const [torrentStatus, setTorrentStatus] = useState<'start' | 'stop'>('stop');
 
   useEffect(() => {
