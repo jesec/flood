@@ -1,6 +1,6 @@
 ARG RTORRENT_IMAGE=docker.io/jesec/rtorrent:master
 
-FROM docker.io/alpine as build
+FROM docker.io/alpine AS build
 
 WORKDIR /root
 
@@ -27,7 +27,7 @@ RUN mkdir -p /root/sysroot/home/download
 RUN chown 1001:1001 /root/sysroot/home/download
 
 # flood image
-FROM scratch as flood
+FROM scratch AS flood
 
 COPY --from=build /root/sysroot /
 
@@ -43,8 +43,8 @@ ENV FLOOD_OPTION_HOST="0.0.0.0"
 ENTRYPOINT ["/bin/tini", "--", "flood"]
 
 # rtorrent-flood image
-FROM ${RTORRENT_IMAGE} as rtorrent
-FROM flood as rtorrent-flood
+FROM ${RTORRENT_IMAGE} AS rtorrent
+FROM flood AS rtorrent-flood
 
 # Install rTorrent
 COPY --from=rtorrent / /
