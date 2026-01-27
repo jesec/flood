@@ -15,7 +15,7 @@ import config from '../../config';
 import Users from '../models/Users';
 import apiRoutes from './api';
 
-const constructRoutes = async (fastify: FastifyInstance) => {
+const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => {
   const {appDist} = createServerPaths();
   await Users.bootstrapServicesForAllUsers();
 
