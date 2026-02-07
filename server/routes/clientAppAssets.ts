@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 import fastifyStatic from '@fastify/static';
 import type {FastifyInstance, FastifyReply} from 'fastify';
 
 import config from '../../config';
-import {fileURLToPath} from 'node:url';
 
 type EmbeddedAssets = Record<string, {type: string; bodyBase64: string}>;
 
