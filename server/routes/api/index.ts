@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import {notificationStateSchema} from '@shared/schema/Notification';
 import {
   directoryListQuerySchema,
   notificationFetchQuerySchema,
   setFloodSettingsSchema,
   settingPropertyParamSchema,
 } from '@shared/schema/api/index';
+import {notificationStateSchema} from '@shared/schema/Notification';
 import {transferHistorySchema} from '@shared/schema/TransferData';
 import type {DirectoryListResponse} from '@shared/types/api/index';
 import type {FastifyInstance, FastifyReply} from 'fastify';
@@ -52,7 +52,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
           querystring: directoryListQuerySchema,
         },
       },
-      async (req, reply): Promise<FastifyReply> => {
+      async (req, reply) => {
         const {path: inputPath} = req.query;
 
         const resolvedPath = sanitizePath(inputPath);
@@ -154,7 +154,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
           params: settingPropertyParamSchema,
         },
       },
-      async (request, reply: FastifyReply) => {
+      async (request, reply) => {
         const authedContext = getAuthedContext(request);
         const setting = await authedContext.services.settingService.get(request.params.property);
         reply.status(200).send(setting);
@@ -168,7 +168,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
           body: setFloodSettingsSchema,
         },
       },
-      async (request, reply: FastifyReply) => {
+      async (request, reply) => {
         const authedContext = getAuthedContext(request);
         const savedSettings = await authedContext.services.settingService.set(request.body);
         reply.status(200).send(savedSettings);

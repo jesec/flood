@@ -1,3 +1,4 @@
+import {floodSettingKeySchema, floodSettingsSchema} from '@shared/schema/FloodSettings';
 import {z} from 'zod';
 
 export const directoryListQuerySchema = z
@@ -9,16 +10,16 @@ export const directoryListQuerySchema = z
 export const notificationFetchQuerySchema = z
   .object({
     id: z.string().optional(),
-    limit: z.coerce.number().int().nonnegative().optional(),
-    start: z.coerce.number().int().nonnegative().optional(),
+    limit: z.coerce.number().int().nonnegative().default(0),
+    start: z.coerce.number().int().nonnegative().default(0),
     allNotifications: z.coerce.boolean().optional(),
   })
   .strict();
 
 export const settingPropertyParamSchema = z
   .object({
-    property: z.string().min(1),
+    property: floodSettingKeySchema,
   })
   .strict();
 
-export const setFloodSettingsSchema = z.record(z.string(), z.unknown());
+export const setFloodSettingsSchema = floodSettingsSchema.partial().strict();

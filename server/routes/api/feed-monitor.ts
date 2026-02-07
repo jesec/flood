@@ -6,7 +6,7 @@ import {
   feedItemsQuerySchema,
   modifyFeedSchema,
 } from '@shared/schema/api/feed-monitor';
-import type {FastifyInstance, FastifyReply} from 'fastify';
+import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
@@ -15,7 +15,7 @@ import {getAuthedContext} from './requestContext';
 const feedMonitorRoutes = async (fastify: FastifyInstance) => {
   const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
 
-  typedFastify.get('/', async (request, reply: FastifyReply): Promise<void> => {
+  typedFastify.get('/', async (request, reply) => {
     const authedContext = getAuthedContext(request);
     const {services} = authedContext;
     try {
@@ -33,7 +33,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         params: feedIdParamSchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       try {
@@ -52,7 +52,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         params: feedIdOptionalParamSchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       try {
@@ -71,7 +71,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         body: addFeedSchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       try {
@@ -91,7 +91,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         params: feedIdParamSchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       try {
@@ -111,7 +111,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         querystring: feedItemsQuerySchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       try {
@@ -123,7 +123,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
     },
   );
 
-  typedFastify.get('/rules', async (request, reply: FastifyReply): Promise<void> => {
+  typedFastify.get('/rules', async (request, reply) => {
     const authedContext = getAuthedContext(request);
     const {services} = authedContext;
     try {
@@ -141,7 +141,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         body: addRuleSchema,
       },
     },
-    async (request, reply: FastifyReply): Promise<void> => {
+    async (request, reply) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
       let sanitizedPath: string | null = null;
