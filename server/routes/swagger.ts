@@ -1,10 +1,6 @@
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 import {z} from 'zod';
 
-type SwaggerRouteOptions = {
-  servedPath: string;
-};
-
 const swaggerHtml = `<!doctype html>
 <html lang="en">
   <head>
@@ -56,9 +52,9 @@ const swaggerHtml = `<!doctype html>
 </html>
 `;
 
-const swaggerRoutes = async (fastify: FastifyInstance, {servedPath}: SwaggerRouteOptions) => {
+const swaggerRoutes = async (fastify: FastifyInstance) => {
   fastify.get(
-    `${servedPath}openapi.json`,
+    '/openapi.json',
     {
       schema: {
         response: {
@@ -70,7 +66,7 @@ const swaggerRoutes = async (fastify: FastifyInstance, {servedPath}: SwaggerRout
   );
 
   fastify.get(
-    `${servedPath}api/openapi.json`,
+    '/api/openapi.json',
     {
       schema: {
         response: {
@@ -81,25 +77,19 @@ const swaggerRoutes = async (fastify: FastifyInstance, {servedPath}: SwaggerRout
     async () => fastify.swagger(),
   );
 
-  const openApiUrl = `${servedPath}api/openapi.json`;
+  const openApiUrl = '../openapi.json';
   const body = swaggerHtml.replace('__OPENAPI_URL__', openApiUrl);
 
   const sendSwaggerUi = async (_request: FastifyRequest, reply: FastifyReply) => {
     reply.type('text/html; charset=UTF-8').send(body);
   };
 
-  fastify.get(
-    `${servedPath}api/docs`,
-    {
-      config: {
-        compress: false,
-      },
-    },
-    sendSwaggerUi,
-  );
+  fastify.get('/api/docs', async (_request, reply) => {
+    reply.redirect('/api/docs/', 302);
+  });
 
   fastify.get(
-    `${servedPath}api/docs/`,
+    '/api/docs/',
     {
       config: {
         compress: false,

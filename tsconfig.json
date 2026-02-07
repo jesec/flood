@@ -2,10 +2,10 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "sourceMap": true,
-    "target": "esnext",
+    "target": "es2022",
     "moduleResolution": "Bundler",
     "allowJs": true,
-    "module": "es2020",
+    "module": "es2022",
     "noEmit": true,
     "strict": true,
     "isolatedModules": true,
