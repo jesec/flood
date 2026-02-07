@@ -25,7 +25,7 @@ Embedding is mainly for distribution and packaging, single deployable artifact, 
 
 - If embedded assets are present, Flood serves the UI from the embedded map.
   - Asset bodies are decoded from base64 to `Buffer` once at startup, then reused per request.
-- If embedded assets are not present, Flood serves static files from `dist/assets/` under the current working directory.
+- If embedded assets are not present, Flood serves static files from `dist/assets/`.
   - In development, `dist/assets/index.html` may not exist (e.g. when using the webpack dev server); in that case the server won’t crash, and UI routes will return 404.
 
 ## Development tips
