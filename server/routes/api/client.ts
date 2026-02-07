@@ -1,35 +1,46 @@
-import type {UserInDatabase} from '@shared/schema/Auth';
+import {setClientSettingsSchema} from '@shared/schema/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
+import {boolean, strictObject} from 'zod';
 
 import requireAdmin from '../../middleware/requireAdmin';
-import type {ServiceInstances} from '../../services';
+import {getAuthedContext} from './requestContext';
 
 const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownSpeed', 'throttleGlobalUpSpeed'];
 
-type AuthedRequest<T extends RouteGenericInterface = RouteGenericInterface> = FastifyRequest<T> & {
-  services: ServiceInstances;
-  user: UserInDatabase;
-};
-
 const clientRoutes = async (fastify: FastifyInstance) => {
-  fastify.get('/connection-test', async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest;
+  const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
+
+  typedFastify.get(
+    '/connection-test',
+    {
+      schema: {
+        response: {
+          200: strictObject({
+            isConnected: boolean(),
+          }),
+        },
+      },
+    },
+    async (req, reply: FastifyReply): Promise<void> => {
+      const authedContext = getAuthedContext(req);
+
+      try {
+        await authedContext.services.clientGatewayService.testGateway();
+        reply.status(200).send({isConnected: true});
+      } catch {
+        reply.status(500).send({isConnected: false});
+      }
+    },
+  );
+
+  typedFastify.get('/settings', async (req, reply: FastifyReply): Promise<void> => {
+    const authedContext = getAuthedContext(req);
 
     try {
-      await authedReq.services.clientGatewayService.testGateway();
-      reply.status(200).send({isConnected: true});
-    } catch {
-      reply.status(500).send({isConnected: false});
-    }
-  });
-
-  fastify.get('/settings', async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest;
-
-    try {
-      const settings = await authedReq.services.clientGatewayService.getClientSettings();
+      const settings = await authedContext.services.clientGatewayService.getClientSettings();
       reply.status(200).send(settings);
     } catch (error) {
       const {code, message} = error as {code?: string; message?: string};
@@ -41,29 +52,36 @@ const clientRoutes = async (fastify: FastifyInstance) => {
     req: FastifyRequest<{Body: SetClientSettingsOptions}>,
     reply: FastifyReply,
   ) => {
-    const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
+    getAuthedContext(req);
     if (
-      Object.keys(authedReq.body ?? {}).some((key) => {
+      Object.keys(req.body ?? {}).some((key) => {
         return !SAFE_CLIENT_SETTINGS.includes(key as keyof ClientSettings);
       })
     ) {
-      await requireAdmin(authedReq, reply);
+      await requireAdmin(req, reply);
     }
   };
 
-  fastify.patch<{
-    Body: SetClientSettingsOptions;
-  }>('/settings', {preHandler: enforceAdminForSensitiveSettings}, async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
+  typedFastify.patch(
+    '/settings',
+    {
+      preHandler: enforceAdminForSensitiveSettings,
+      schema: {
+        body: setClientSettingsSchema,
+      },
+    },
+    async (req: FastifyRequest<{Body: SetClientSettingsOptions}>, reply: FastifyReply): Promise<void> => {
+      const authedContext = getAuthedContext(req);
 
-    try {
-      const response = await authedReq.services.clientGatewayService.setClientSettings(authedReq.body);
-      reply.status(200).send(response);
-    } catch (error) {
-      const {code, message} = error as {code?: string; message?: string};
-      reply.status(500).send({code, message});
-    }
-  });
+      try {
+        const response = await authedContext.services.clientGatewayService.setClientSettings(req.body);
+        reply.status(200).send(response);
+      } catch (error) {
+        const {code, message} = error as {code?: string; message?: string};
+        reply.status(500).send({code, message});
+      }
+    },
+  );
 };
 
 export default clientRoutes;

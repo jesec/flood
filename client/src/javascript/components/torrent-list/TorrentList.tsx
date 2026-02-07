@@ -18,7 +18,7 @@ import UIStore from '@client/stores/UIStore';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';

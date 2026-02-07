@@ -3,11 +3,7 @@ import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {strictObject, string} from 'zod';
 
 import config from '../../../config';
-import type {
-  AuthAuthenticationResponse,
-  AuthRegistrationOptions,
-  AuthVerificationResponse,
-} from '../../../shared/schema/api/auth';
+import type {AuthAuthenticationResponse, AuthVerificationResponse} from '../../../shared/schema/api/auth';
 import {
   authAuthenticationSchema,
   authRegistrationSchema,
@@ -99,10 +95,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
     });
   };
 
-  typedFastify.post<{
-    Body: AuthRegistrationOptions;
-    Querystring: {cookie?: string};
-  }>(
+  typedFastify.post(
     '/register',
     {
       ...(authRateLimitOptions ?? {}),

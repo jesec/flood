@@ -1,3 +1,5 @@
+import type {TransferHistorySchema} from '../schema/TransferData';
+
 export interface TransferSummary {
   // Global download rate in B/s
   downRate: number;
@@ -18,4 +20,4 @@ export interface TransferSnapshot extends TransferData {
   timestamp: number;
 }
 
-export type TransferHistory = Record<TransferDirection | 'timestamps', Array<number>>;
+export type TransferHistory = TransferHistorySchema;

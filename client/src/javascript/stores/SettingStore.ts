@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
