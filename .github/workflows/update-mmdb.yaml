@@ -1,0 +1,66 @@
+name: Update GeoLite2 MMDB
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # Every week on Monday at 03:17 UTC
+    - cron: '17 3 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-mmdb
+  cancel-in-progress: false
+
+jobs:
+  update-mmdb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download GeoLite2-Country.mmdb
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh --version
+          mkdir -p server/geoip
+          gh release download --repo P3TERX/GeoLite.mmdb --pattern 'GeoLite2-Country.mmdb' --dir server/geoip --clobber
+          test -s server/geoip/GeoLite2-Country.mmdb
+
+      - name: Update encoded source
+        run: node scripts/update-mmdb.mjs
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/update-mmdb
+          delete-branch: true
+          commit-message: 'chore(geoip): update GeoLite2-Country.mmdb'
+          title: 'chore(geoip): update GeoLite2-Country.mmdb'
+          body: |
+            Automated weekly update of GeoLite2 Country database.
+
+            - Downloads `GeoLite2-Country.mmdb` from https://github.com/P3TERX/GeoLite.mmdb
+            - Regenerates `server/geoip/data.ts` via `scripts/update-mmdb.mjs`
+          labels: |
+            dependencies
