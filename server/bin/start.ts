@@ -24,10 +24,13 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 
-enforcePrerequisites()
-  .then(migrateData)
-  .then(startWebServer)
-  .catch((error) => {
-    logger.fatal({error}, `Failed to start Flood ${error}`);
-    process.exit(1);
-  });
+const main = async () => {
+  await enforcePrerequisites();
+  await migrateData();
+  await startWebServer();
+};
+
+main().catch((error) => {
+  logger.fatal({error}, `Failed to start Flood ${error}`);
+  process.exit(1);
+});
