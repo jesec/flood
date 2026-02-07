@@ -31,7 +31,7 @@ import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {cleanupEmptyDirectories, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import ClientGatewayService from '../clientGatewayService';
 import * as geoip from '../geoip';
@@ -344,13 +344,33 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             ? path.resolve(isBasePath ? destination : path.join(destination, name))
             : path.resolve(destination);
 
-          if (sourceDirectory !== destDirectory) {
-            if (isMultiFile[index]) {
-              await move(sourceDirectory, destDirectory, {overwrite: true});
-            } else {
-              await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
+          if (sourceDirectory === destDirectory) {
+            return;
+          }
+
+          const contents = await this.getTorrentContents(hash);
+
+          for (const content of contents) {
+            const sourcePath = sanitizePath(path.resolve(sourceDirectory, content.path));
+
+            if (!fs.existsSync(sourcePath) || !isAllowedPath(sourcePath)) {
+              continue;
+            }
+
+            const destPath = sanitizePath(path.resolve(destDirectory, content.path));
+
+            if (!isAllowedPath(destPath)) {
+              continue;
+            }
+
+            await fs.promises.mkdir(path.dirname(destPath), {recursive: true});
+
+            if (sourcePath !== destPath) {
+              await move(sourcePath, destPath, {overwrite: true});
             }
           }
+
+          await cleanupEmptyDirectories(sourceDirectory);
         }),
       );
     }
