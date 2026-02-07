@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 const enforcePrerequisites = async (): Promise<void> => {
   // Ensures that WebAssembly support is present
   if (typeof WebAssembly === 'undefined') {
