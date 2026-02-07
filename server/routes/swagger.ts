@@ -31,7 +31,6 @@ const swaggerRoutes = async (fastify: FastifyInstance, {servedPath}: SwaggerRout
     async () => fastify.swagger(),
   );
 
-
   await fastify.register(swaggerUi, {
     routePrefix: `${servedPath}api/docs`,
     uiConfig: {
