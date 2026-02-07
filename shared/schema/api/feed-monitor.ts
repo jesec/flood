@@ -1,5 +1,7 @@
 import {z} from 'zod';
 
+import {tagsSchema} from './tags';
+
 export const feedIdParamSchema = z
   .object({
     id: z.string().min(1),
@@ -36,7 +38,7 @@ export const addRuleSchema = z
     match: z.string(),
     exclude: z.string(),
     destination: z.string().min(1),
-    tags: z.array(z.string()),
+    tags: tagsSchema,
     startOnLoad: z.boolean(),
     isBasePath: z.boolean().optional(),
   })

@@ -6,14 +6,17 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import fastifyStatic from '@fastify/static';
+import swagger from '@fastify/swagger';
 import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
-import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import {jsonSchemaTransform, serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
 import {createServerPaths} from 'server/config/paths';
 
 import config from '../../config';
+import packageJson from '../../package.json';
 import Users from '../models/Users';
 import apiRoutes from './api';
+import swaggerRoutes from './swagger';
 
 const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => {
   const {appDist} = createServerPaths();
@@ -46,6 +49,24 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifyCompress);
   await fastify.register(fastifySSE);
+  await fastify.register(swagger, {
+    openapi: {
+      info: {
+        title: 'Flood API',
+        version: packageJson.version,
+      },
+      components: {
+        securitySchemes: {
+          User: {
+            type: 'apiKey',
+            in: 'cookie',
+            name: 'jwt',
+          },
+        },
+      },
+    },
+    transform: jsonSchemaTransform,
+  });
 
   if (!config.disableRateLimit) {
     await fastify.register(fastifyRateLimit, {
@@ -86,6 +107,7 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
     fastify.get(`${servedPath}overview`, sendIndex);
   }
 
+  await fastify.register(swaggerRoutes, {servedPath});
   await fastify.register(apiRoutes, {prefix: `${servedPath}api`});
 };
 
