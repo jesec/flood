@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  test-backend-real:
+  test-backend-matrix:
     runs-on: ubuntu-22.04
 
     strategy:
@@ -45,8 +45,8 @@ jobs:
 
   test-backend:
     # so we do not need to update GitHub repo config
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs:
-      - test-backend-real
+      - test-backend-matrix
     steps:
       - run: echo pass
