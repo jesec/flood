@@ -2,10 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import config from '../../config';
-import {createServerPaths} from '../config/paths';
 
-const {appDist} = createServerPaths();
-const staticAssets = [path.join(appDist, 'index.html')];
+const staticAssets = [path.resolve(process.cwd(), path.join('dist', 'assets', 'index.html'))];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
 const doFilesExist = (files: Array<string>) => {
@@ -27,8 +25,9 @@ const enforcePrerequisites = () =>
       return;
     }
 
-    // Ensure static assets exist if they need to be served
-    if (!doFilesExist(staticAssets) && config.serveAssets !== false) {
+    // Ensure static assets exist if they need to be served.
+    // In development, the client may be served by a separate dev server.
+    if (process.env.NODE_ENV === 'production' && !doFilesExist(staticAssets) && config.serveAssets !== false) {
       reject(new Error(`Static assets are missing.`));
       return;
     }

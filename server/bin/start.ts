@@ -28,6 +28,6 @@ enforcePrerequisites()
   .then(migrateData)
   .then(startWebServer)
   .catch((error) => {
-    logger.fatal({error}, 'Failed to start Flood');
+    logger.fatal({error}, `Failed to start Flood ${error}`);
     process.exit(1);
   });

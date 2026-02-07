@@ -1,25 +1,20 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
 import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
-import fastifyStatic from '@fastify/static';
 import swagger from '@fastify/swagger';
-import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
+import type {FastifyError, FastifyInstance} from 'fastify';
 import {jsonSchemaTransform, serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
-import {createServerPaths} from 'server/config/paths';
 
 import config from '../../config';
 import packageJson from '../../package.json';
 import Users from '../models/Users';
 import apiRoutes from './api';
+import {registerClientAppAssetsRoutes} from './clientAppAssets';
 import swaggerRoutes from './swagger';
 
 const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => {
-  const {appDist} = createServerPaths();
   await Users.bootstrapServicesForAllUsers();
 
   fastify.setValidatorCompiler(validatorCompiler);
@@ -83,119 +78,15 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
     }
   });
 
-  if (config.serveAssets !== false) {
-    const embeddedAssets = typeof __FLOOD_EMBEDDED_ASSETS__ === 'undefined' ? undefined : __FLOOD_EMBEDDED_ASSETS__;
+  // enforce `/` at end
+  const routePrefix = servedPath.endsWith('/') ? servedPath : servedPath + '/';
+  await fastify.register(registerScopedRoutes, {prefix: routePrefix});
+};
 
-    const decodeAssetPath = (rawPath: string): string => {
-      try {
-        return decodeURIComponent(rawPath);
-      } catch {
-        return rawPath;
-      }
-    };
-
-    const getEmbeddedAsset = (assetPath: string) => {
-      if (!embeddedAssets) {
-        return undefined;
-      }
-
-      const normalizedPath = assetPath.startsWith('/') ? assetPath.slice(1) : assetPath;
-      return embeddedAssets[normalizedPath];
-    };
-
-    const sendEmbedded = (assetPath: string, reply: FastifyReply) => {
-      const asset = getEmbeddedAsset(assetPath);
-      if (!asset) {
-        return false;
-      }
-
-      const isIndexHtml = assetPath === 'index.html' || assetPath === '/index.html';
-
-      if (isIndexHtml) {
-        reply.headers({
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Expires: '0',
-          Pragma: 'no-cache',
-          'content-type': 'text/html; charset=UTF-8',
-        });
-      } else {
-        reply.header('content-type', asset.type);
-        reply.header('Cache-Control', 'public, max-age=31536000, immutable');
-      }
-
-      reply.send(Buffer.from(asset.bodyBase64, 'base64'));
-      return true;
-    };
-
-    if (embeddedAssets) {
-      const sendIndex = (_req: unknown, res: FastifyReply) => {
-        if (!sendEmbedded('index.html', res)) {
-          res.callNotFound();
-        }
-      };
-
-      fastify.get(servedPath, sendIndex);
-      fastify.get(`${servedPath}index.html`, sendIndex);
-      fastify.get(`${servedPath}login`, sendIndex);
-      fastify.get(`${servedPath}register`, sendIndex);
-      fastify.get(`${servedPath}overview`, sendIndex);
-
-      fastify.get(`${servedPath}*`, (request, reply) => {
-        const pathname = new URL(request.url, 'http://localhost').pathname;
-        if (!pathname.startsWith(servedPath)) {
-          reply.callNotFound();
-          return;
-        }
-
-        const relativePath = decodeAssetPath(pathname.slice(servedPath.length));
-
-        if (
-          relativePath === '' ||
-          relativePath === '/' ||
-          relativePath === 'login' ||
-          relativePath === 'register' ||
-          relativePath === 'overview'
-        ) {
-          sendIndex(request, reply);
-          return;
-        }
-
-        if (relativePath.startsWith('api/') || relativePath === 'api' || relativePath === 'openapi.json') {
-          reply.callNotFound();
-          return;
-        }
-
-        if (!sendEmbedded(relativePath, reply)) {
-          reply.callNotFound();
-        }
-      });
-    } else {
-      await fastify.register(fastifyStatic, {root: appDist, prefix: servedPath, etag: false});
-
-      const html = fs.readFileSync(path.join(appDist, 'index.html'), {
-        encoding: 'utf8',
-      });
-
-      const headers = {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        Expires: '0',
-        Pragma: 'no-cache',
-        'content-type': 'text/html; charset=UTF-8',
-      };
-
-      const sendIndex = (_req: unknown, res: FastifyReply) => {
-        res.headers(headers);
-        res.send(html);
-      };
-
-      fastify.get(`${servedPath}login`, sendIndex);
-      fastify.get(`${servedPath}register`, sendIndex);
-      fastify.get(`${servedPath}overview`, sendIndex);
-    }
-  }
-
-  await fastify.register(swaggerRoutes, {servedPath});
-  await fastify.register(apiRoutes, {prefix: `${servedPath}api`});
+const registerScopedRoutes = async (scoped: FastifyInstance) => {
+  await registerClientAppAssetsRoutes(scoped);
+  await scoped.register(swaggerRoutes);
+  await scoped.register(apiRoutes, {prefix: '/api/'});
 };
 
 export default constructRoutes;
