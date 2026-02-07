@@ -84,3 +84,6 @@ styled-system-studio
 css-snapshots/
 *storybook.log
 storybook-static
+
+# Local scratch
+tmp/

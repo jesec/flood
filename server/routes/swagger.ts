@@ -19,11 +19,24 @@ const swaggerRoutes = async (fastify: FastifyInstance, {servedPath}: SwaggerRout
     async () => fastify.swagger(),
   );
 
+  fastify.get(
+    `${servedPath}api/openapi.json`,
+    {
+      schema: {
+        response: {
+          200: z.unknown(),
+        },
+      },
+    },
+    async () => fastify.swagger(),
+  );
+
   await fastify.register(swaggerUi, {
     routePrefix: `${servedPath}api/docs`,
     uiConfig: {
       docExpansion: 'list',
-      deepLinking: false,
+      deepLinking: true,
+      url: `${servedPath}api/openapi.json`,
     },
   });
 };
