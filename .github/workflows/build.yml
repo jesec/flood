@@ -46,3 +46,13 @@ jobs:
   debian:
     needs: package
     uses: ./.github/workflows/build-debian.yml
+
+  build:
+    runs-on: ubuntu-slim
+    needs:
+      - pkg
+      - docker
+      - docker-distroless
+      - debian
+    steps:
+      - run: echo 1
