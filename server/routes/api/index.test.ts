@@ -74,3 +74,25 @@ describe('GET /api/settings/{property}', () => {
     });
   });
 });
+
+describe('GET /openapi.json', () => {
+  it('Returns OpenAPI spec', async () => {
+    const res = await request.get('/openapi.json').send().expect(200).expect('Content-Type', /json/);
+
+    expect(res.body).toMatchObject({
+      openapi: '3.0.3',
+      info: {title: 'Flood API'},
+    });
+  });
+});
+
+describe('GET /api/openapi.json', () => {
+  it('Returns OpenAPI spec', async () => {
+    const res = await request.get('/api/openapi.json').send().expect(200).expect('Content-Type', /json/);
+
+    expect(res.body).toMatchObject({
+      openapi: '3.0.3',
+      info: {title: 'Flood API'},
+    });
+  });
+});
