@@ -1,26 +1,23 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type {UserInDatabase} from '@shared/schema/Auth';
+import {notificationStateSchema} from '@shared/schema/Notification';
+import {transferHistorySchema} from '@shared/schema/TransferData';
 import type {DirectoryListQuery, DirectoryListResponse, SetFloodSettingsOptions} from '@shared/types/api/index';
 import type {FloodSettings} from '@shared/types/FloodSettings';
-import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
-import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
+import type {NotificationFetchOptions} from '@shared/types/Notification';
+import type {FastifyInstance, FastifyReply} from 'fastify';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 import appendUserServices from '../../middleware/appendUserServices';
 import {authenticateHook} from '../../middleware/authenticate';
 import clientActivityStream from '../../middleware/clientActivityStream';
-import type {ServiceInstances} from '../../services';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import authRoutes from './auth';
 import clientRoutes from './client';
 import feedMonitorRoutes from './feed-monitor';
+import {getAuthedContext} from './requestContext';
 import torrentsRoutes from './torrents';
-
-type AuthedRequest<T extends RouteGenericInterface = RouteGenericInterface> = FastifyRequest<T> & {
-  services: ServiceInstances;
-  user: UserInDatabase;
-};
 
 const apiRoutes = async (fastify: FastifyInstance) => {
   fastify.addHook('onSend', async (_req, reply, payload) => {
@@ -34,6 +31,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
   await fastify.register(authRoutes, {prefix: '/auth'});
 
   await fastify.register(async (protectedRoutes) => {
+    const typedProtectedRoutes = protectedRoutes.withTypeProvider<ZodTypeProvider>();
     protectedRoutes.addHook('preHandler', authenticateHook);
     protectedRoutes.addHook('preHandler', appendUserServices);
 
@@ -100,67 +98,64 @@ const apiRoutes = async (fastify: FastifyInstance) => {
       } satisfies DirectoryListResponse);
     });
 
-    protectedRoutes.get('/history', (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest;
-      return authedReq.services.historyService.getHistory().then(
-        (snapshot) => {
-          reply.send(snapshot);
+    typedProtectedRoutes.get(
+      '/history',
+      {
+        schema: {
+          response: {
+            200: transferHistorySchema,
+          },
         },
-        ({code, message}) => {
-          reply.status(500).send({code, message});
-        },
-      );
-    });
+      },
+      async (request) => {
+        const authedContext = getAuthedContext(request);
+        return authedContext.services.historyService.getHistory();
+      },
+    );
 
-    protectedRoutes.get<{
+    typedProtectedRoutes.get<{
       Querystring: NotificationFetchOptions;
-      Reply: NotificationState | {code: number; message: string};
-    }>('/notifications', async (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest<{Querystring: NotificationFetchOptions}>;
-      await authedReq.services.notificationService.getNotifications(req.query).then(
-        (notifications) => reply.status(200).send(notifications),
-        ({code, message}) => reply.status(500).send({code, message}),
-      );
+    }>(
+      '/notifications',
+      {
+        schema: {
+          response: {
+            200: notificationStateSchema,
+          },
+        },
+      },
+      async (request) => {
+        const authedContext = getAuthedContext(request);
+        return authedContext.services.notificationService.getNotifications(request.query);
+      },
+    );
+
+    protectedRoutes.delete('/notifications', async (request, reply: FastifyReply) => {
+      const authedContext = getAuthedContext(request);
+      await authedContext.services.notificationService.clearNotifications();
+      reply.status(200).send();
     });
 
-    protectedRoutes.delete('/notifications', (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest;
-      authedReq.services.notificationService.clearNotifications().then(
-        () => {
-          reply.status(200).send();
-        },
-        ({code, message}) => {
-          reply.status(500).send({code, message});
-        },
-      );
-    });
-
-    protectedRoutes.get('/settings', async (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest;
-      return authedReq.services.settingService.get(null).then(
-        (settings) => reply.status(200).send(settings),
-        ({code, message}) => reply.status(500).send({code, message}),
-      );
+    protectedRoutes.get('/settings', async (request, reply: FastifyReply) => {
+      const authedContext = getAuthedContext(request);
+      const settings = await authedContext.services.settingService.get(null);
+      reply.status(200).send(settings);
     });
 
     protectedRoutes.get<{
       Params: {property: keyof FloodSettings};
-    }>('/settings/:property', async (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest<{Params: {property: keyof FloodSettings}}>;
-      return authedReq.services.settingService.get(authedReq.params.property).then(
-        (setting) => reply.status(200).send(setting),
-        ({code, message}) => reply.status(500).send({code, message}),
-      );
+    }>('/settings/:property', async (request, reply: FastifyReply) => {
+      const authedContext = getAuthedContext(request);
+      const setting = await authedContext.services.settingService.get(request.params.property);
+      reply.status(200).send(setting);
     });
 
     protectedRoutes.patch<{
       Body: SetFloodSettingsOptions;
-    }>('/settings', async (req, reply: FastifyReply) => {
-      const authedReq = req as AuthedRequest<{Body: SetFloodSettingsOptions}>;
-      return authedReq.services.settingService.set(authedReq.body).then(
-        (savedSettings) => reply.status(200).send(savedSettings),
-        ({code, message}) => reply.status(500).send({code, message}),
-      );
+    }>('/settings', async (request, reply: FastifyReply) => {
+      const authedContext = getAuthedContext(request);
+      const savedSettings = await authedContext.services.settingService.set(request.body);
+      reply.status(200).send(savedSettings);
     });
   });
 };

@@ -1,4 +1,4 @@
-import type {ClientSettings} from '../ClientSettings';
+import type {SetClientSettingsSchema} from '../../schema/api/client';
 
 // PATCH /api/client/settings
-export type SetClientSettingsOptions = Partial<ClientSettings>;
+export type SetClientSettingsOptions = SetClientSettingsSchema;
