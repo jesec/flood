@@ -2,6 +2,7 @@ import type {NotificationSchema, NotificationStateSchema} from '../schema/Notifi
 
 export type Notification = NotificationSchema;
 export type NotificationState = NotificationStateSchema;
+export type NotificationCount = NotificationStateSchema['count'];
 
 export interface NotificationFetchOptions {
   id?: string;
