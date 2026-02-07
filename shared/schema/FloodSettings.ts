@@ -48,8 +48,6 @@ const sortTorrentsSchema = sortTorrentsSchemaBase.default({
   property: 'dateAdded',
 });
 
-const sortTorrentsPatchSchema = sortTorrentsSchemaBase.partial().strict();
-
 const torrentListColumnItemSchema = z
   .object({
     id: torrentListColumnSchema,
@@ -81,8 +79,6 @@ const torrentListColumnsSchema = z.array(torrentListColumnItemSchema).default([
   {id: 'tags', visible: true},
 ]);
 
-const torrentListColumnsPatchSchema = z.array(torrentListColumnItemSchema);
-
 const torrentListColumnWidthShape = Object.fromEntries(
   torrentListColumnKeys.map((key) => [key, z.number().int().nonnegative()]),
 ) as Record<TorrentListColumn, z.ZodNumber>;
@@ -113,8 +109,6 @@ const torrentListColumnWidthsSchema = torrentListColumnWidthsSchemaBase.default(
   tags: 100,
 });
 
-const torrentListColumnWidthsPatchSchema = torrentListColumnWidthsSchemaBase.partial().strict();
-
 const torrentContextMenuActionItemSchema = z
   .object({
     id: torrentContextMenuActionSchema,
@@ -140,8 +134,6 @@ const torrentContextMenuActionsSchema = z.array(torrentContextMenuActionItemSche
   {id: 'setPriority', visible: false},
 ]);
 
-const torrentContextMenuActionsPatchSchema = z.array(torrentContextMenuActionItemSchema);
-
 const speedLimitsSchemaBase = z
   .object({
     download: z.array(z.number().int().nonnegative()),
@@ -153,8 +145,6 @@ const speedLimitsSchema = speedLimitsSchemaBase.default({
   download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
   upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
 });
-
-const speedLimitsPatchSchema = speedLimitsSchemaBase.partial().strict();
 
 export const floodSettingsSchema = z
   .object({
@@ -172,25 +162,6 @@ export const floodSettingsSchema = z
     UITagSelectorMode: z.enum(['single', 'multi']).optional(),
     UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
     UIPageTitleSpeedEnabled: z.boolean().default(true),
-  })
-  .strict();
-
-export const floodSettingsPatchSchema = z
-  .object({
-    language: languageSchema.optional(),
-    sortTorrents: sortTorrentsPatchSchema.optional(),
-    torrentListColumns: torrentListColumnsPatchSchema.optional(),
-    torrentListColumnWidths: torrentListColumnWidthsPatchSchema.optional(),
-    torrentContextMenuActions: torrentContextMenuActionsPatchSchema.optional(),
-    torrentListViewSize: z.enum(['condensed', 'expanded']).optional(),
-    speedLimits: speedLimitsPatchSchema.optional(),
-    mountPoints: z.array(z.string()).optional(),
-    deleteTorrentData: z.boolean().optional(),
-    startTorrentsOnLoad: z.boolean().optional(),
-    torrentDestinations: z.record(z.string(), z.string()).optional(),
-    UITagSelectorMode: z.enum(['single', 'multi']).optional(),
-    UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
-    UIPageTitleSpeedEnabled: z.boolean().optional(),
   })
   .strict();
 

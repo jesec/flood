@@ -1,7 +1,7 @@
-import type {FloodSettingsPatch} from '../FloodSettings';
+import type {FloodSettings} from '../FloodSettings';
 
 // PATCH /api/settings
-export type SetFloodSettingsOptions = FloodSettingsPatch;
+export type SetFloodSettingsOptions = Partial<FloodSettings>;
 
 // GET /api/directory-list
 export interface DirectoryListQuery {

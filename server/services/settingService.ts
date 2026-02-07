@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
-import type {FloodSettings, FloodSettingsPatch} from '@shared/types/FloodSettings';
+import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import config from '../../config';
 import BaseService from './BaseService';
@@ -12,7 +12,7 @@ interface SettingRecord {
 }
 
 type SettingServiceEvents = {
-  SETTINGS_CHANGE: (changeSettings: FloodSettingsPatch) => void;
+  SETTINGS_CHANGE: (changeSettings: Partial<FloodSettings>) => void;
 };
 
 class SettingService extends BaseService<SettingServiceEvents> {
@@ -34,7 +34,7 @@ class SettingService extends BaseService<SettingServiceEvents> {
     return super.destroy(drop);
   }
 
-  async get(property: keyof FloodSettings | null): Promise<FloodSettingsPatch> {
+  async get(property: keyof FloodSettings | null): Promise<Partial<FloodSettings>> {
     const docs = await this.db
       .findAsync<SettingRecord>(
         property
@@ -55,7 +55,7 @@ class SettingService extends BaseService<SettingServiceEvents> {
     );
   }
 
-  async set(changedSettings: FloodSettingsPatch): Promise<FloodSettingsPatch> {
+  async set(changedSettings: Partial<FloodSettings>): Promise<Partial<FloodSettings>> {
     const savedSettings: typeof changedSettings = {};
 
     if (changedSettings) {
