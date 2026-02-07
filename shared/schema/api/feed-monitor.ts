@@ -1,10 +1,6 @@
 import {z} from 'zod';
 
-import {noComma} from '../../util/regEx';
-
-const TAG_NO_COMMA_MESSAGE = {
-  message: 'Tag must not contain comma',
-};
+import {tagsSchema} from './tags';
 
 export const feedIdParamSchema = z
   .object({
@@ -42,7 +38,7 @@ export const addRuleSchema = z
     match: z.string(),
     exclude: z.string(),
     destination: z.string().min(1),
-    tags: z.array(z.string().regex(noComma, TAG_NO_COMMA_MESSAGE)),
+    tags: tagsSchema,
     startOnLoad: z.boolean(),
     isBasePath: z.boolean().optional(),
   })
