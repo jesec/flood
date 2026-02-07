@@ -19,10 +19,7 @@ Flood can serve the web UI in two ways:
 
 ## Why embedded assets?
 
-Embedding is mainly for distribution and packaging:
-
-- Single deployable artifact (no separate `dist/assets/` directory to ship)
-- Fewer “missing file” issues in production
+Embedding is mainly for distribution and packaging, single deployable artifact, no separate `dist/assets/` directory to ship.
 
 ## Runtime behavior
 
