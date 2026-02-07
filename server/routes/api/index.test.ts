@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
+import {defaultFloodSettings} from '../../../shared/schema/FloodSettings';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
@@ -40,7 +41,7 @@ describe('PATCH /api/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/);
 
-    expect(res.body).toStrictEqual(settings);
+    expect(res.body).toStrictEqual({...defaultFloodSettings, ...settings});
   });
 });
 
