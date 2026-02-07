@@ -3,7 +3,7 @@ name: Update GeoLite2 MMDB
 on:
   schedule:
     # Every week on Monday at 03:17 UTC
-    - cron: '17 3 * * 1'
+    - cron: '17 3 4 * 1'
   workflow_dispatch: {}
 
 permissions:
