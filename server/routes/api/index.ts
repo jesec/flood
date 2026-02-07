@@ -250,7 +250,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
           security: [{User: []}],
           body: setFloodSettingsSchema,
           response: {
-            200: floodSettingsSchema,
+            200: setFloodSettingsSchema,
           },
         },
       },
