@@ -6,6 +6,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ContentToken,
+  MoveTorrentsOptions,
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
@@ -14,7 +15,6 @@ import {
   CreateTorrentOptionsSchema,
   DeleteTorrentsOptions,
   ICreateTorrentOptions,
-  MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
@@ -33,6 +33,7 @@ import tar, {Pack} from 'tar-fs';
 import {
   addTorrentByFileSchema,
   addTorrentByURLSchema,
+  moveTorrentsSchema,
   reannounceTorrentsSchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
@@ -407,35 +408,43 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    * @return {object} 200 - success response - application/json
    * @return {Error} 500 - failure response - application/json
    */
-  fastify.post<{
+  typedFastify.post<{
     Body: MoveTorrentsOptions;
-  }>('/move', async (req, reply) => {
-    const request = req as FloodRequest<{Body: MoveTorrentsOptions}>;
-    let sanitizedPath: string | null = null;
+  }>(
+    '/move',
+    {
+      schema: {
+        body: moveTorrentsSchema,
+      },
+    },
+    async (req, reply) => {
+      const request = req as FloodRequest<{Body: MoveTorrentsOptions}>;
+      let sanitizedPath: string | null = null;
 
-    try {
-      sanitizedPath = sanitizePath(request.body.destination);
-      if (!isAllowedPath(sanitizedPath)) {
-        const {code, message} = accessDeniedError();
+      try {
+        sanitizedPath = sanitizePath(request.body.destination);
+        if (!isAllowedPath(sanitizedPath)) {
+          const {code, message} = accessDeniedError();
+          return reply.status(403).send({code, message});
+        }
+      } catch (error) {
+        const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
         return reply.status(403).send({code, message});
       }
-    } catch (error) {
-      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
-      return reply.status(403).send({code, message});
-    }
 
-    try {
-      const response = await request.services.clientGatewayService.moveTorrents({
-        ...request.body,
-        destination: sanitizedPath,
-      });
-      request.services.torrentService.fetchTorrentList();
-      return reply.status(200).send(response);
-    } catch (error) {
-      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
-      return reply.status(500).send({code, message});
-    }
-  });
+      try {
+        const response = await request.services.clientGatewayService.moveTorrents({
+          ...request.body,
+          destination: sanitizedPath,
+        });
+        request.services.torrentService.fetchTorrentList();
+        return reply.status(200).send(response);
+      } catch (error) {
+        const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+        return reply.status(500).send({code, message});
+      }
+    },
+  );
 
   /**
    * POST /api/torrents/delete
