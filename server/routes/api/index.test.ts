@@ -2,8 +2,8 @@ import fastify from 'fastify';
 import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
-import type {FloodSettings} from '../../../shared/types/FloodSettings';
 import {defaultFloodSettings} from '../../../shared/schema/FloodSettings';
+import type {FloodSettings} from '../../../shared/types/FloodSettings';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
