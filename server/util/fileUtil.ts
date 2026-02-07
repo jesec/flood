@@ -84,6 +84,46 @@ export async function existAsync(path: string): Promise<boolean> {
   return true;
 }
 
+export async function cleanupEmptyDirectories(directory: string): Promise<boolean> {
+  if (!isAllowedPath(directory)) {
+    return false;
+  }
+
+  let entries: fs.Dirent[];
+
+  try {
+    entries = await fsp.readdir(directory, {withFileTypes: true});
+  } catch {
+    return false;
+  }
+
+  let isEmpty = true;
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      const childPath = path.join(directory, entry.name);
+      const wasRemoved = await cleanupEmptyDirectories(childPath);
+
+      if (!wasRemoved) {
+        isEmpty = false;
+      }
+    } else {
+      isEmpty = false;
+    }
+  }
+
+  if (!isEmpty) {
+    return false;
+  }
+
+  try {
+    await fsp.rmdir(directory);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export const sanitizePath = (input?: string): string => {
   if (typeof input !== 'string') {
     throw accessDeniedError();

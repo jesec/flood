@@ -71,6 +71,22 @@ export const reannounceTorrentsSchema = strictObject({
 
 export type ReannounceTorrentsOptions = zodInfer<typeof reannounceTorrentsSchema>;
 
+// POST /api/torrents/move
+export const moveTorrentsSchema = strictObject({
+  // Hashes of torrents to be moved
+  hashes: array(string()).nonempty(),
+  // Path of destination
+  destination: string(),
+  // Whether to move data of torrents
+  moveFiles: boolean(),
+  // Whether destination is the base path
+  isBasePath: boolean(),
+  // Whether to check hash after completion
+  isCheckHash: boolean(),
+});
+
+export type MoveTorrentsOptions = zodInfer<typeof moveTorrentsSchema>;
+
 // GET /api/torrents/{hash}/contents/{indices}/data
 export const contentTokenSchema = strictObject({
   username: string(),
