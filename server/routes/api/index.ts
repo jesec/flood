@@ -2,10 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import {notificationStateSchema} from '@shared/schema/Notification';
+import {
+  directoryListQuerySchema,
+  notificationFetchQuerySchema,
+  setFloodSettingsSchema,
+  settingPropertyParamSchema,
+} from '@shared/schema/api/index';
 import {transferHistorySchema} from '@shared/schema/TransferData';
-import type {DirectoryListQuery, DirectoryListResponse, SetFloodSettingsOptions} from '@shared/types/api/index';
-import type {FloodSettings} from '@shared/types/FloodSettings';
-import type {NotificationFetchOptions} from '@shared/types/Notification';
+import type {DirectoryListResponse} from '@shared/types/api/index';
 import type {FastifyInstance, FastifyReply} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
@@ -41,62 +45,64 @@ const apiRoutes = async (fastify: FastifyInstance) => {
 
     protectedRoutes.get('/activity-stream', {sse: true}, async (req, reply) => clientActivityStream(req, reply));
 
-    protectedRoutes.get<{
-      Querystring: DirectoryListQuery;
-    }>('/directory-list', async (req, reply): Promise<FastifyReply> => {
-      const {path: inputPath} = req.query;
+    typedProtectedRoutes.get(
+      '/directory-list',
+      {
+        schema: {
+          querystring: directoryListQuerySchema,
+        },
+      },
+      async (req, reply): Promise<FastifyReply> => {
+        const {path: inputPath} = req.query;
 
-      if (typeof inputPath !== 'string' || !inputPath) {
-        return reply.status(422).send({code: 'EINVAL', message: 'Invalid argument'});
-      }
-
-      const resolvedPath = sanitizePath(inputPath);
-      if (!isAllowedPath(resolvedPath)) {
-        const {code, message} = accessDeniedError();
-        return reply.status(403).send({code, message});
-      }
-
-      const directories: Array<string> = [];
-      const files: Array<string> = [];
-
-      try {
-        const dirents = await fs.promises.readdir(resolvedPath, {withFileTypes: true});
-        await Promise.all(
-          dirents.map(async (dirent) => {
-            if (dirent.isDirectory()) {
-              directories.push(dirent.name);
-            } else if (dirent.isFile()) {
-              files.push(dirent.name);
-            } else if (dirent.isSymbolicLink()) {
-              const stats = await fs.promises.stat(path.join(resolvedPath, dirent.name)).catch(() => undefined);
-              if (!stats) {
-                // do nothing.
-              } else if (stats.isDirectory()) {
-                directories.push(dirent.name);
-              } else if (stats.isFile()) {
-                files.push(dirent.name);
-              }
-            }
-          }),
-        );
-      } catch (e) {
-        const {code, message} = e as NodeJS.ErrnoException;
-        if (code === 'ENOENT') {
-          return reply.status(404).send({code, message});
-        } else if (code === 'EACCES') {
+        const resolvedPath = sanitizePath(inputPath);
+        if (!isAllowedPath(resolvedPath)) {
+          const {code, message} = accessDeniedError();
           return reply.status(403).send({code, message});
-        } else {
-          return reply.status(500).send({code, message});
         }
-      }
 
-      return reply.status(200).send({
-        path: resolvedPath,
-        separator: path.sep,
-        directories,
-        files,
-      } satisfies DirectoryListResponse);
-    });
+        const directories: Array<string> = [];
+        const files: Array<string> = [];
+
+        try {
+          const dirents = await fs.promises.readdir(resolvedPath, {withFileTypes: true});
+          await Promise.all(
+            dirents.map(async (dirent) => {
+              if (dirent.isDirectory()) {
+                directories.push(dirent.name);
+              } else if (dirent.isFile()) {
+                files.push(dirent.name);
+              } else if (dirent.isSymbolicLink()) {
+                const stats = await fs.promises.stat(path.join(resolvedPath, dirent.name)).catch(() => undefined);
+                if (!stats) {
+                  // do nothing.
+                } else if (stats.isDirectory()) {
+                  directories.push(dirent.name);
+                } else if (stats.isFile()) {
+                  files.push(dirent.name);
+                }
+              }
+            }),
+          );
+        } catch (e) {
+          const {code, message} = e as NodeJS.ErrnoException;
+          if (code === 'ENOENT') {
+            return reply.status(404).send({code, message});
+          } else if (code === 'EACCES') {
+            return reply.status(403).send({code, message});
+          } else {
+            return reply.status(500).send({code, message});
+          }
+        }
+
+        return reply.status(200).send({
+          path: resolvedPath,
+          separator: path.sep,
+          directories,
+          files,
+        } satisfies DirectoryListResponse);
+      },
+    );
 
     typedProtectedRoutes.get(
       '/history',
@@ -113,12 +119,11 @@ const apiRoutes = async (fastify: FastifyInstance) => {
       },
     );
 
-    typedProtectedRoutes.get<{
-      Querystring: NotificationFetchOptions;
-    }>(
+    typedProtectedRoutes.get(
       '/notifications',
       {
         schema: {
+          querystring: notificationFetchQuerySchema,
           response: {
             200: notificationStateSchema,
           },
@@ -142,21 +147,33 @@ const apiRoutes = async (fastify: FastifyInstance) => {
       reply.status(200).send(settings);
     });
 
-    protectedRoutes.get<{
-      Params: {property: keyof FloodSettings};
-    }>('/settings/:property', async (request, reply: FastifyReply) => {
-      const authedContext = getAuthedContext(request);
-      const setting = await authedContext.services.settingService.get(request.params.property);
-      reply.status(200).send(setting);
-    });
+    typedProtectedRoutes.get(
+      '/settings/:property',
+      {
+        schema: {
+          params: settingPropertyParamSchema,
+        },
+      },
+      async (request, reply: FastifyReply) => {
+        const authedContext = getAuthedContext(request);
+        const setting = await authedContext.services.settingService.get(request.params.property);
+        reply.status(200).send(setting);
+      },
+    );
 
-    protectedRoutes.patch<{
-      Body: SetFloodSettingsOptions;
-    }>('/settings', async (request, reply: FastifyReply) => {
-      const authedContext = getAuthedContext(request);
-      const savedSettings = await authedContext.services.settingService.set(request.body);
-      reply.status(200).send(savedSettings);
-    });
+    typedProtectedRoutes.patch(
+      '/settings',
+      {
+        schema: {
+          body: setFloodSettingsSchema,
+        },
+      },
+      async (request, reply: FastifyReply) => {
+        const authedContext = getAuthedContext(request);
+        const savedSettings = await authedContext.services.settingService.set(request.body);
+        reply.status(200).send(savedSettings);
+      },
+    );
   });
 };
 

@@ -87,6 +87,59 @@ export const moveTorrentsSchema = strictObject({
 
 export type MoveTorrentsOptions = zodInfer<typeof moveTorrentsSchema>;
 
+const torrentHashesSchema = array(string()).nonempty();
+
+// POST /api/torrents/start
+export const startTorrentsSchema = strictObject({
+  hashes: torrentHashesSchema,
+});
+
+// POST /api/torrents/stop
+export const stopTorrentsSchema = strictObject({
+  hashes: torrentHashesSchema,
+});
+
+// POST /api/torrents/check-hash
+export const checkTorrentsSchema = strictObject({
+  hashes: torrentHashesSchema,
+});
+
+// POST /api/torrents/delete
+export const deleteTorrentsSchema = strictObject({
+  hashes: torrentHashesSchema,
+  deleteData: boolean().optional(),
+});
+
+// PATCH /api/torrents/initial-seeding
+export const setTorrentsInitialSeedingSchema = strictObject({
+  hashes: torrentHashesSchema,
+  isInitialSeeding: boolean(),
+});
+
+// PATCH /api/torrents/priority
+export const setTorrentsPrioritySchema = strictObject({
+  hashes: torrentHashesSchema,
+  priority: number().int().min(0).max(3),
+});
+
+// PATCH /api/torrents/sequential
+export const setTorrentsSequentialSchema = strictObject({
+  hashes: torrentHashesSchema,
+  isSequential: boolean(),
+});
+
+// PATCH /api/torrents/trackers
+export const setTorrentsTrackersSchema = strictObject({
+  hashes: torrentHashesSchema,
+  trackers: array(string()),
+});
+
+// PATCH /api/torrents/{hash}/contents
+export const setTorrentContentsPropertiesSchema = strictObject({
+  indices: array(number().int().nonnegative()).nonempty(),
+  priority: number().int().min(0).max(2),
+});
+
 // GET /api/torrents/{hash}/contents/{indices}/data
 export const contentTokenSchema = strictObject({
   username: string(),
