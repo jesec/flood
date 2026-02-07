@@ -1,4 +1,4 @@
-import {setClientSettingsSchema} from '@shared/schema/api/client';
+import {setClientSettingsSchema} from '@shared/schema/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';

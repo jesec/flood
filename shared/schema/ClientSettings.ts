@@ -27,4 +27,8 @@ export const clientSettingsSchema = strictObject({
   trackersNumWant: number(),
 });
 
+// PATCH /api/client/settings
+export const setClientSettingsSchema = clientSettingsSchema.partial();
+
 export type ClientSettingsSchema = zodInfer<typeof clientSettingsSchema>;
+export type SetClientSettingsSchema = zodInfer<typeof setClientSettingsSchema>;
