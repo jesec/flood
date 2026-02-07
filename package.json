@@ -33,10 +33,6 @@
     "flood": "dist/index.js"
   },
   "pkg": {
-    "assets": [
-      "dist/assets/**/*",
-      "dist/**/*.map"
-    ],
     "targets": [
       "node22-linuxstatic-x64",
       "node22-linuxstatic-arm64",
