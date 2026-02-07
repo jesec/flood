@@ -1,9 +1,6 @@
 name: Update GeoLite2 MMDB
 
 on:
-  push:
-    branches:
-      - master
   schedule:
     # Every week on Monday at 03:17 UTC
     - cron: '17 3 * * 1'
