@@ -1,4 +1,4 @@
-import {floodSettingKeySchema, floodSettingsSchema} from '@shared/schema/FloodSettings';
+import {floodSettingKeySchema, floodSettingsPatchSchema} from '@shared/schema/FloodSettings';
 import {z} from 'zod';
 
 export const directoryListQuerySchema = z
@@ -22,4 +22,4 @@ export const settingPropertyParamSchema = z
   })
   .strict();
 
-export const setFloodSettingsSchema = floodSettingsSchema.partial().strict();
+export const setFloodSettingsSchema = floodSettingsPatchSchema;

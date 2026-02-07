@@ -46,3 +46,9 @@ export interface FloodSettings {
 }
 
 export type FloodSetting = keyof FloodSettings;
+
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends Array<infer U> ? Array<U> : T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
+export type FloodSettingsPatch = DeepPartial<FloodSettings>;

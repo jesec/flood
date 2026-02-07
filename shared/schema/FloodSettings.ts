@@ -36,55 +36,60 @@ export const floodSettingKeySchema = z.enum(
   }) as [keyof FloodSettings, ...Array<keyof FloodSettings>],
 );
 
-const sortTorrentsSchema = z
+const sortTorrentsSchemaBase = z
   .object({
     direction: z.enum(['desc', 'asc']),
     property: torrentListColumnSchema,
   })
-  .strict()
-  .default({
-    direction: 'desc',
-    property: 'dateAdded',
-  });
+  .strict();
 
-const torrentListColumnsSchema = z
-  .array(
-    z
-      .object({
-        id: torrentListColumnSchema,
-        visible: z.boolean(),
-      })
-      .strict(),
-  )
-  .default([
-    {id: 'name', visible: true},
-    {id: 'percentComplete', visible: true},
-    {id: 'downTotal', visible: true},
-    {id: 'downRate', visible: true},
-    {id: 'upTotal', visible: true},
-    {id: 'upRate', visible: true},
-    {id: 'eta', visible: true},
-    {id: 'ratio', visible: true},
-    {id: 'sizeBytes', visible: true},
-    {id: 'peers', visible: true},
-    {id: 'seeds', visible: true},
-    {id: 'dateActive', visible: false},
-    {id: 'dateAdded', visible: true},
-    {id: 'dateCreated', visible: false},
-    {id: 'dateFinished', visible: false},
-    {id: 'directory', visible: false},
-    {id: 'hash', visible: false},
-    {id: 'isPrivate', visible: false},
-    {id: 'message', visible: false},
-    {id: 'trackerURIs', visible: false},
-    {id: 'tags', visible: true},
-  ]);
+const sortTorrentsSchema = sortTorrentsSchemaBase.default({
+  direction: 'desc',
+  property: 'dateAdded',
+});
+
+const sortTorrentsPatchSchema = sortTorrentsSchemaBase.partial().strict();
+
+const torrentListColumnItemSchema = z
+  .object({
+    id: torrentListColumnSchema,
+    visible: z.boolean(),
+  })
+  .strict();
+
+const torrentListColumnsSchema = z.array(torrentListColumnItemSchema).default([
+  {id: 'name', visible: true},
+  {id: 'percentComplete', visible: true},
+  {id: 'downTotal', visible: true},
+  {id: 'downRate', visible: true},
+  {id: 'upTotal', visible: true},
+  {id: 'upRate', visible: true},
+  {id: 'eta', visible: true},
+  {id: 'ratio', visible: true},
+  {id: 'sizeBytes', visible: true},
+  {id: 'peers', visible: true},
+  {id: 'seeds', visible: true},
+  {id: 'dateActive', visible: false},
+  {id: 'dateAdded', visible: true},
+  {id: 'dateCreated', visible: false},
+  {id: 'dateFinished', visible: false},
+  {id: 'directory', visible: false},
+  {id: 'hash', visible: false},
+  {id: 'isPrivate', visible: false},
+  {id: 'message', visible: false},
+  {id: 'trackerURIs', visible: false},
+  {id: 'tags', visible: true},
+]);
+
+const torrentListColumnsPatchSchema = z.array(torrentListColumnItemSchema);
 
 const torrentListColumnWidthShape = Object.fromEntries(
   torrentListColumnKeys.map((key) => [key, z.number().int().nonnegative()]),
 ) as Record<TorrentListColumn, z.ZodNumber>;
 
-const torrentListColumnWidthsSchema = z.object(torrentListColumnWidthShape).strict().default({
+const torrentListColumnWidthsSchemaBase = z.object(torrentListColumnWidthShape).strict();
+
+const torrentListColumnWidthsSchema = torrentListColumnWidthsSchemaBase.default({
   name: 200,
   percentComplete: 100,
   downTotal: 100,
@@ -108,43 +113,48 @@ const torrentListColumnWidthsSchema = z.object(torrentListColumnWidthShape).stri
   tags: 100,
 });
 
-const torrentContextMenuActionsSchema = z
-  .array(
-    z
-      .object({
-        id: torrentContextMenuActionSchema,
-        visible: z.boolean(),
-      })
-      .strict(),
-  )
-  .default([
-    {id: 'start', visible: true},
-    {id: 'stop', visible: true},
-    {id: 'remove', visible: true},
-    {id: 'checkHash', visible: true},
-    {id: 'reannounce', visible: false},
-    {id: 'setTaxonomy', visible: true},
-    {id: 'move', visible: true},
-    {id: 'setTrackers', visible: false},
-    {id: 'torrentDetails', visible: true},
-    {id: 'downloadContents', visible: true},
-    {id: 'downloadMetainfo', visible: false},
-    {id: 'generateMagnet', visible: false},
-    {id: 'setInitialSeeding', visible: false},
-    {id: 'setSequential', visible: false},
-    {id: 'setPriority', visible: false},
-  ]);
+const torrentListColumnWidthsPatchSchema = torrentListColumnWidthsSchemaBase.partial().strict();
 
-const speedLimitsSchema = z
+const torrentContextMenuActionItemSchema = z
+  .object({
+    id: torrentContextMenuActionSchema,
+    visible: z.boolean(),
+  })
+  .strict();
+
+const torrentContextMenuActionsSchema = z.array(torrentContextMenuActionItemSchema).default([
+  {id: 'start', visible: true},
+  {id: 'stop', visible: true},
+  {id: 'remove', visible: true},
+  {id: 'checkHash', visible: true},
+  {id: 'reannounce', visible: false},
+  {id: 'setTaxonomy', visible: true},
+  {id: 'move', visible: true},
+  {id: 'setTrackers', visible: false},
+  {id: 'torrentDetails', visible: true},
+  {id: 'downloadContents', visible: true},
+  {id: 'downloadMetainfo', visible: false},
+  {id: 'generateMagnet', visible: false},
+  {id: 'setInitialSeeding', visible: false},
+  {id: 'setSequential', visible: false},
+  {id: 'setPriority', visible: false},
+]);
+
+const torrentContextMenuActionsPatchSchema = z.array(torrentContextMenuActionItemSchema);
+
+const speedLimitsSchemaBase = z
   .object({
     download: z.array(z.number().int().nonnegative()),
     upload: z.array(z.number().int().nonnegative()),
   })
-  .strict()
-  .default({
-    download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
-    upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
-  });
+  .strict();
+
+const speedLimitsSchema = speedLimitsSchemaBase.default({
+  download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
+  upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
+});
+
+const speedLimitsPatchSchema = speedLimitsSchemaBase.partial().strict();
 
 export const floodSettingsSchema = z
   .object({
@@ -162,6 +172,25 @@ export const floodSettingsSchema = z
     UITagSelectorMode: z.enum(['single', 'multi']).optional(),
     UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
     UIPageTitleSpeedEnabled: z.boolean().default(true),
+  })
+  .strict();
+
+export const floodSettingsPatchSchema = z
+  .object({
+    language: languageSchema.optional(),
+    sortTorrents: sortTorrentsPatchSchema.optional(),
+    torrentListColumns: torrentListColumnsPatchSchema.optional(),
+    torrentListColumnWidths: torrentListColumnWidthsPatchSchema.optional(),
+    torrentContextMenuActions: torrentContextMenuActionsPatchSchema.optional(),
+    torrentListViewSize: z.enum(['condensed', 'expanded']).optional(),
+    speedLimits: speedLimitsPatchSchema.optional(),
+    mountPoints: z.array(z.string()).optional(),
+    deleteTorrentData: z.boolean().optional(),
+    startTorrentsOnLoad: z.boolean().optional(),
+    torrentDestinations: z.record(z.string(), z.string()).optional(),
+    UITagSelectorMode: z.enum(['single', 'multi']).optional(),
+    UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
+    UIPageTitleSpeedEnabled: z.boolean().optional(),
   })
   .strict();
 

@@ -3,7 +3,7 @@ import {makeAutoObservable} from 'mobx';
 import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {FloodSettings} from '@shared/types/FloodSettings';
+import type {FloodSettings, FloodSettingsPatch} from '@shared/types/FloodSettings';
 
 class SettingStore {
   fetchStatus = {
@@ -37,12 +37,12 @@ class SettingStore {
     this.clientSettings = settings;
   }
 
-  handleSettingsFetchSuccess(settings: Partial<FloodSettings>): void {
+  handleSettingsFetchSuccess(settings: FloodSettingsPatch): void {
     this.fetchStatus.floodSettingsFetched = true;
     Object.assign(this.floodSettings, settings);
   }
 
-  saveFloodSettings(settings: Partial<FloodSettings>) {
+  saveFloodSettings(settings: FloodSettingsPatch) {
     Object.assign(this.floodSettings, settings);
   }
 
