@@ -8,40 +8,58 @@ import {
 } from '@shared/schema/api/feed-monitor';
 import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
+import {z} from 'zod';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getAuthedContext} from './requestContext';
 
 const feedMonitorRoutes = async (fastify: FastifyInstance) => {
   const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
+  const errorResponseSchema = z
+    .object({
+      code: z.string().optional(),
+      message: z.string().optional(),
+    })
+    .strict();
 
-  typedFastify.get('/', async (request, reply) => {
-    const authedContext = getAuthedContext(request);
-    const {services} = authedContext;
-    try {
-      const feedsAndRules = await services.feedService.getAll();
-      reply.status(200).send(feedsAndRules);
-    } catch ({code, message}) {
-      reply.status(500).send({code, message});
-    }
-  });
+  typedFastify.get(
+    '/',
+    {
+      schema: {
+        summary: 'Get feeds and rules',
+        description: 'Fetch all feeds and rules.',
+        tags: ['Feeds'],
+        security: [{User: []}],
+        response: {
+          200: z.unknown(),
+        },
+      },
+    },
+    async (request) => {
+      const authedContext = getAuthedContext(request);
+      const {services} = authedContext;
+      return services.feedService.getAll();
+    },
+  );
 
   typedFastify.delete(
     '/:id',
     {
       schema: {
+        summary: 'Delete feed',
+        description: 'Remove a feed by id.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         params: feedIdParamSchema,
+        response: {
+          200: z.unknown(),
+        },
       },
     },
-    async (request, reply) => {
+    async (request) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
-      try {
-        const response = await services.feedService.removeItem(request.params.id);
-        reply.status(200).send(response);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      return services.feedService.removeItem(request.params.id);
     },
   );
 
@@ -49,18 +67,20 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
     '/feeds/:id?',
     {
       schema: {
+        summary: 'Get feeds',
+        description: 'Fetch feeds, optionally filtered by id.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         params: feedIdOptionalParamSchema,
+        response: {
+          200: z.unknown(),
+        },
       },
     },
-    async (request, reply) => {
+    async (request) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
-      try {
-        const feeds = await services.feedService.getFeeds(request.params.id);
-        reply.status(200).send(feeds);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      return services.feedService.getFeeds(request.params.id);
     },
   );
 
@@ -68,18 +88,20 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
     '/feeds',
     {
       schema: {
+        summary: 'Add feed',
+        description: 'Add a new feed.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         body: addFeedSchema,
+        response: {
+          200: z.unknown(),
+        },
       },
     },
-    async (request, reply) => {
+    async (request) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
-      try {
-        const feed = await services.feedService.addFeed(request.body);
-        reply.status(200).send(feed);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      return services.feedService.addFeed(request.body);
     },
   );
 
@@ -87,19 +109,21 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
     '/feeds/:id',
     {
       schema: {
+        summary: 'Modify feed',
+        description: 'Update a feed by id.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         body: modifyFeedSchema,
         params: feedIdParamSchema,
+        response: {
+          200: z.unknown(),
+        },
       },
     },
-    async (request, reply) => {
+    async (request) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
-      try {
-        const response = await services.feedService.modifyFeed(request.params.id, request.body);
-        reply.status(200).send(response);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      return services.feedService.modifyFeed(request.params.id, request.body);
     },
   );
 
@@ -107,38 +131,57 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
     '/feeds/:id/items',
     {
       schema: {
+        summary: 'Get feed items',
+        description: 'Fetch items for a feed by id.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         params: feedIdParamSchema,
         querystring: feedItemsQuerySchema,
+        response: {
+          200: z.unknown(),
+        },
       },
     },
-    async (request, reply) => {
+    async (request) => {
       const authedContext = getAuthedContext(request);
       const {services} = authedContext;
-      try {
-        const items = await services.feedService.getItems(request.params.id, request.query.search ?? '');
-        reply.status(200).send(items);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      return services.feedService.getItems(request.params.id, request.query.search ?? '');
     },
   );
 
-  typedFastify.get('/rules', async (request, reply) => {
-    const authedContext = getAuthedContext(request);
-    const {services} = authedContext;
-    try {
-      const rules = await services.feedService.getRules();
-      reply.status(200).send(rules);
-    } catch ({code, message}) {
-      reply.status(500).send({code, message});
-    }
-  });
+  typedFastify.get(
+    '/rules',
+    {
+      schema: {
+        summary: 'Get rules',
+        description: 'Fetch all rules.',
+        tags: ['Feeds'],
+        security: [{User: []}],
+        response: {
+          200: z.unknown(),
+        },
+      },
+    },
+    async (request) => {
+      const authedContext = getAuthedContext(request);
+      const {services} = authedContext;
+      return services.feedService.getRules();
+    },
+  );
 
   typedFastify.put(
     '/rules',
     {
       schema: {
+        summary: 'Add rule',
+        description: 'Add a new rule for feeds.',
+        tags: ['Feeds'],
+        security: [{User: []}],
         body: addRuleSchema,
+        response: {
+          200: z.unknown(),
+          403: errorResponseSchema,
+        },
       },
     },
     async (request, reply) => {
@@ -157,15 +200,11 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
         return;
       }
 
-      try {
-        const rule = await services.feedService.addRule({
-          ...request.body,
-          destination: sanitizedPath,
-        });
-        reply.status(200).send(rule);
-      } catch ({code, message}) {
-        reply.status(500).send({code, message});
-      }
+      const rule = await services.feedService.addRule({
+        ...request.body,
+        destination: sanitizedPath,
+      });
+      return rule;
     },
   );
 };
