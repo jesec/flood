@@ -18,7 +18,10 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   await Users.bootstrapServicesForAllUsers();
 
   fastify.setValidatorCompiler(validatorCompiler);
-  fastify.setSerializerCompiler(serializerCompiler);
+  // fastify.setSerializerCompiler(serializerCompiler);
+  fastify.setSerializerCompiler(({schema, method, url, httpStatus, contentType}) => {
+    return (data) => JSON.stringify(data);
+  });
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
@@ -80,7 +83,9 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
 
   // enforce `/` at end
   const routePrefix = servedPath.endsWith('/') ? servedPath : servedPath + '/';
-  await fastify.register(registerScopedRoutes, {prefix: routePrefix});
+  await fastify.register(registerScopedRoutes, {
+    prefix: routePrefix,
+  });
 };
 
 const registerScopedRoutes = async (scoped: FastifyInstance) => {
