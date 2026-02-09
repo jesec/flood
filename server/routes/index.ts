@@ -19,7 +19,7 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
 
   fastify.setValidatorCompiler(validatorCompiler);
   // fastify.setSerializerCompiler(serializerCompiler);
-  fastify.setSerializerCompiler(({schema, method, url, httpStatus, contentType}) => {
+  fastify.setSerializerCompiler(() => {
     return (data) => JSON.stringify(data);
   });
 
