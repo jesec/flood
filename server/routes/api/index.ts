@@ -4,7 +4,6 @@ import path from 'node:path';
 import {
   directoryListQuerySchema,
   notificationFetchQuerySchema,
-  setFloodSettingsSchema,
   settingPropertyParamSchema,
 } from '@shared/schema/api/index';
 import {floodSettingsSchema} from '@shared/schema/FloodSettings';
