@@ -146,21 +146,23 @@ const speedLimitsSchema = speedLimitsSchemaBase.default({
   upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
 });
 
-export const floodSettingsSchema = z.object({
-  language: languageSchema.default('auto'),
-  sortTorrents: sortTorrentsSchema,
-  torrentListColumns: torrentListColumnsSchema,
-  torrentListColumnWidths: torrentListColumnWidthsSchema,
-  torrentContextMenuActions: torrentContextMenuActionsSchema,
-  torrentListViewSize: z.enum(['condensed', 'expanded']).default('condensed'),
-  speedLimits: speedLimitsSchema,
-  mountPoints: z.array(z.string()).default([]),
-  deleteTorrentData: z.boolean().default(true),
-  startTorrentsOnLoad: z.boolean().default(true),
-  torrentDestinations: z.record(z.string(), z.string()).optional(),
-  UITagSelectorMode: z.enum(['single', 'multi']).optional(),
-  UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
-  UIPageTitleSpeedEnabled: z.boolean().default(true),
-});
+export const floodSettingsSchema = z
+  .object({
+    language: languageSchema.default('auto'),
+    sortTorrents: sortTorrentsSchema,
+    torrentListColumns: torrentListColumnsSchema,
+    torrentListColumnWidths: torrentListColumnWidthsSchema,
+    torrentContextMenuActions: torrentContextMenuActionsSchema,
+    torrentListViewSize: z.enum(['condensed', 'expanded']).default('condensed'),
+    speedLimits: speedLimitsSchema,
+    mountPoints: z.array(z.string()).default([]),
+    deleteTorrentData: z.boolean().default(true),
+    startTorrentsOnLoad: z.boolean().default(true),
+    torrentDestinations: z.record(z.string(), z.string()).optional(),
+    UITagSelectorMode: z.enum(['single', 'multi']).optional(),
+    UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
+    UIPageTitleSpeedEnabled: z.boolean().default(true),
+  })
+  .strip();
 
 export const defaultFloodSettings = floodSettingsSchema.parse({});
