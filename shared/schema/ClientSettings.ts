@@ -25,10 +25,10 @@ export const clientSettingsSchema = strictObject({
   throttleMinPeersNormal: number(),
   throttleMinPeersSeed: number(),
   trackersNumWant: number(),
-});
+}).strip();
 
 // PATCH /api/client/settings
-export const setClientSettingsSchema = clientSettingsSchema.partial();
+export const setClientSettingsSchema = clientSettingsSchema.partial().strip();
 
 export type ClientSettingsSchema = zodInfer<typeof clientSettingsSchema>;
 export type SetClientSettingsSchema = zodInfer<typeof setClientSettingsSchema>;
