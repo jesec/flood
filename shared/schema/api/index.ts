@@ -22,4 +22,4 @@ export const settingPropertyParamSchema = z
   })
   .strip();
 
-export const setFloodSettingsSchema = floodSettingsSchema.partial().strip();
+export const setFloodSettingsSchema = floodSettingsSchema.partial().strict();

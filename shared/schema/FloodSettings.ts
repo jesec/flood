@@ -163,6 +163,6 @@ export const floodSettingsSchema = z
     UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
     UIPageTitleSpeedEnabled: z.boolean().default(true),
   })
-  .strip();
+  .strict();
 
 export const defaultFloodSettings = floodSettingsSchema.parse({});
