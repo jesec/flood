@@ -4,7 +4,7 @@ import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import swagger from '@fastify/swagger';
 import type {FastifyError, FastifyInstance} from 'fastify';
-import {jsonSchemaTransform, serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import {jsonSchemaTransform, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
 
 import config from '../../config';
