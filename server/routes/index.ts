@@ -4,7 +4,7 @@ import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import swagger from '@fastify/swagger';
 import type {FastifyError, FastifyInstance} from 'fastify';
-import {jsonSchemaTransform, serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import {jsonSchemaTransform, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
 
 import config from '../../config';
@@ -18,7 +18,10 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   await Users.bootstrapServicesForAllUsers();
 
   fastify.setValidatorCompiler(validatorCompiler);
-  fastify.setSerializerCompiler(serializerCompiler);
+  // fastify.setSerializerCompiler(serializerCompiler);
+  fastify.setSerializerCompiler(() => {
+    return (data) => JSON.stringify(data);
+  });
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
@@ -80,7 +83,9 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
 
   // enforce `/` at end
   const routePrefix = servedPath.endsWith('/') ? servedPath : servedPath + '/';
-  await fastify.register(registerScopedRoutes, {prefix: routePrefix});
+  await fastify.register(registerScopedRoutes, {
+    prefix: routePrefix,
+  });
 };
 
 const registerScopedRoutes = async (scoped: FastifyInstance) => {

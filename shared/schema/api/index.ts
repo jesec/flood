@@ -5,7 +5,7 @@ export const directoryListQuerySchema = z
   .object({
     path: z.string().min(1),
   })
-  .strict();
+  .strip();
 
 export const notificationFetchQuerySchema = z
   .object({
@@ -14,12 +14,12 @@ export const notificationFetchQuerySchema = z
     start: z.coerce.number().int().nonnegative().default(0),
     allNotifications: z.coerce.boolean().optional(),
   })
-  .strict();
+  .strip();
 
 export const settingPropertyParamSchema = z
   .object({
     property: floodSettingKeySchema,
   })
-  .strict();
+  .strip();
 
 export const setFloodSettingsSchema = floodSettingsSchema.partial().strict();

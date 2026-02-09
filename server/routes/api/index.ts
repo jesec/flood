@@ -4,14 +4,13 @@ import path from 'node:path';
 import {
   directoryListQuerySchema,
   notificationFetchQuerySchema,
-  setFloodSettingsSchema,
   settingPropertyParamSchema,
 } from '@shared/schema/api/index';
 import {floodSettingsSchema} from '@shared/schema/FloodSettings';
 import {notificationStateSchema} from '@shared/schema/Notification';
 import {transferHistorySchema} from '@shared/schema/TransferData';
-import type {DirectoryListResponse} from '@shared/types/api/index';
-import type {FastifyInstance} from 'fastify';
+import type {DirectoryListResponse, SetFloodSettingsOptions} from '@shared/types/api/index';
+import type {FastifyInstance, FastifyReply} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {z} from 'zod';
 
@@ -240,26 +239,37 @@ const apiRoutes = async (fastify: FastifyInstance) => {
       },
     );
 
-    typedProtectedRoutes.patch(
-      '/settings',
-      {
-        schema: {
-          summary: 'Update settings',
-          description: 'Update Flood settings for the current user.',
-          tags: ['Settings'],
-          security: [{User: []}],
-          body: setFloodSettingsSchema,
-          response: {
-            200: floodSettingsSchema,
-          },
-        },
-      },
-      async (request) => {
-        const authedContext = getAuthedContext(request);
-        const savedSettings = await authedContext.services.settingService.set(request.body);
-        return savedSettings;
-      },
-    );
+    // typedProtectedRoutes.patch(
+    //   '/settings',
+    //   {
+    //     schema: {
+    //       summary: 'Update settings',
+    //       description: 'Update Flood settings for the current user.',
+    //       tags: ['Settings'],
+    //       security: [{User: []}],
+    //       body: setFloodSettingsSchema,
+    //       // response: {
+    //       // 200: floodSettingsSchema,
+    //       // },
+    //     },
+    //   },
+    //   async (request) => {
+    //     const authedContext = getAuthedContext(request);
+    //     const savedSettings = await authedContext.services.settingService.set(request.body);
+    //     return savedSettings;
+    //   },
+    // );
+
+    // TODO: validate request body
+    protectedRoutes.patch<{
+      Body: SetFloodSettingsOptions;
+    }>('/settings', async (req, reply: FastifyReply) => {
+      const authedContext = getAuthedContext(req);
+      return authedContext.services.settingService.set(req.body).then(
+        (savedSettings) => reply.status(200).send(savedSettings),
+        ({code, message}) => reply.status(500).send({code, message}),
+      );
+    });
   });
 };
 

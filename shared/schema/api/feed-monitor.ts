@@ -6,19 +6,19 @@ export const feedIdParamSchema = z
   .object({
     id: z.string().min(1),
   })
-  .strict();
+  .strip();
 
 export const feedIdOptionalParamSchema = z
   .object({
     id: z.string().min(1).optional(),
   })
-  .strict();
+  .strip();
 
 export const feedItemsQuerySchema = z
   .object({
     search: z.string().optional(),
   })
-  .strict();
+  .strip();
 
 export const addFeedSchema = z
   .object({
@@ -26,9 +26,9 @@ export const addFeedSchema = z
     url: z.string().min(1),
     interval: z.number().int().positive(),
   })
-  .strict();
+  .strip();
 
-export const modifyFeedSchema = addFeedSchema.partial().strict();
+export const modifyFeedSchema = addFeedSchema.partial().strip();
 
 export const addRuleSchema = z
   .object({
@@ -42,4 +42,4 @@ export const addRuleSchema = z
     startOnLoad: z.boolean(),
     isBasePath: z.boolean().optional(),
   })
-  .strict();
+  .strip();

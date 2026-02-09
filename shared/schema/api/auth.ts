@@ -7,10 +7,12 @@ import {AccessLevel} from '../constants/Auth';
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
-export const authAuthenticationSchema = credentialsSchema.pick({
-  username: true,
-  password: true,
-});
+export const authAuthenticationSchema = credentialsSchema
+  .pick({
+    username: true,
+    password: true,
+  })
+  .strip();
 export type AuthAuthenticationOptions = Required<zodInfer<typeof authAuthenticationSchema>>;
 
 // POST /api/auth/authenticate - success response
@@ -29,7 +31,7 @@ export const authAuthenticationResponseSchema = z
   .strict();
 
 // POST /api/auth/register
-export const authRegistrationSchema = credentialsSchema;
+export const authRegistrationSchema = credentialsSchema.strip();
 export type AuthRegistrationOptions = Required<zodInfer<typeof authRegistrationSchema>>;
 
 // POST /api/auth/register - success response
@@ -45,7 +47,7 @@ export const authRegistrationResponseSchema = z
   .strict();
 
 // PATCH /api/auth/users/{username}
-export const authUpdateUserSchema = credentialsSchema.partial();
+export const authUpdateUserSchema = credentialsSchema.partial().strip();
 export type AuthUpdateUserOptions = zodInfer<typeof authUpdateUserSchema>;
 
 // GET /api/auth/verify - preload configurations

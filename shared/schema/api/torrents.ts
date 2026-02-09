@@ -55,7 +55,7 @@ export const setTorrentsTagsSchema = strictObject({
   hashes: array(string()).nonempty(),
   // An array of string representing tags
   tags: array(tagSchema),
-});
+}).strip();
 
 export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;
 
@@ -63,7 +63,7 @@ export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;
 export const reannounceTorrentsSchema = strictObject({
   // An array of string representing hashes of torrents to be reannounced
   hashes: array(string()).nonempty(),
-});
+}).strip();
 
 export type ReannounceTorrentsOptions = zodInfer<typeof reannounceTorrentsSchema>;
 
@@ -79,7 +79,7 @@ export const moveTorrentsSchema = strictObject({
   isBasePath: boolean(),
   // Whether to check hash after completion
   isCheckHash: boolean(),
-});
+}).strip();
 
 export type MoveTorrentsOptions = zodInfer<typeof moveTorrentsSchema>;
 
@@ -88,53 +88,53 @@ const torrentHashesSchema = array(string()).nonempty();
 // POST /api/torrents/start
 export const startTorrentsSchema = strictObject({
   hashes: torrentHashesSchema,
-});
+}).strip();
 
 // POST /api/torrents/stop
 export const stopTorrentsSchema = strictObject({
   hashes: torrentHashesSchema,
-});
+}).strip();
 
 // POST /api/torrents/check-hash
 export const checkTorrentsSchema = strictObject({
   hashes: torrentHashesSchema,
-});
+}).strip();
 
 // POST /api/torrents/delete
 export const deleteTorrentsSchema = strictObject({
   hashes: torrentHashesSchema,
   deleteData: boolean().optional(),
-});
+}).strip();
 
 // PATCH /api/torrents/initial-seeding
 export const setTorrentsInitialSeedingSchema = strictObject({
   hashes: torrentHashesSchema,
   isInitialSeeding: boolean(),
-});
+}).strip();
 
 // PATCH /api/torrents/priority
 export const setTorrentsPrioritySchema = strictObject({
   hashes: torrentHashesSchema,
   priority: number().int().min(0).max(3),
-});
+}).strip();
 
 // PATCH /api/torrents/sequential
 export const setTorrentsSequentialSchema = strictObject({
   hashes: torrentHashesSchema,
   isSequential: boolean(),
-});
+}).strip();
 
 // PATCH /api/torrents/trackers
 export const setTorrentsTrackersSchema = strictObject({
   hashes: torrentHashesSchema,
   trackers: array(string()),
-});
+}).strip();
 
 // PATCH /api/torrents/{hash}/contents
 export const setTorrentContentsPropertiesSchema = strictObject({
   indices: array(number().int().nonnegative()).nonempty(),
   priority: number().int().min(0).max(2),
-});
+}).strip();
 
 // GET /api/torrents/{hash}/contents/{indices}/data
 export const contentTokenSchema = strictObject({
@@ -145,6 +145,6 @@ export const contentTokenSchema = strictObject({
   iat: number(),
   // expiration
   exp: number(),
-});
+}).strip();
 
 export type ContentToken = zodInfer<typeof contentTokenSchema>;
