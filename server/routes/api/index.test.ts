@@ -41,7 +41,7 @@ describe('PATCH /api/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/);
 
-    expect(res.body).toStrictEqual({...defaultFloodSettings, ...settings});
+    expect(res.body).toStrictEqual({...settings});
   });
 });
 
