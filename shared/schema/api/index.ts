@@ -22,14 +22,4 @@ export const settingPropertyParamSchema = z
   })
   .strip();
 
-// Allow clients to send extra keys and normalize null -> undefined for legacy callers.
-export const setFloodSettingsSchema = z.preprocess((raw) => {
-  if (raw == null || typeof raw !== 'object') return raw;
-
-  const entries = Object.entries(raw as Record<string, unknown>).map(([key, value]) => [
-    key,
-    value === null ? undefined : value,
-  ]);
-
-  return Object.fromEntries(entries);
-}, floodSettingsSchema.partial().strip());
+export const setFloodSettingsSchema = floodSettingsSchema.partial().strip();
