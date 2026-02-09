@@ -23,7 +23,7 @@ export const addTorrentByURLSchema = strictObject({
   isInitialSeeding: boolean().optional(),
   // Whether to start torrent [default: false]
   start: boolean().optional(),
-}).strip();
+}).strict();
 
 export type AddTorrentByURLOptions = zodInfer<typeof addTorrentByURLSchema>;
 
