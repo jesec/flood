@@ -253,7 +253,7 @@
   "torrents.add.tab.file.browse": "or click to browse",
   "torrents.add.tab.file.drop": "Drop some files here,",
   "torrents.add.tab.file.title": "By File",
-  "torrents.add.tab.url.input.placeholder": "Torrent URL or Magnet Link",
+  "torrents.add.tab.url.input.placeholder": "Torrent URL, Magnet Link, or Info Hash",
   "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.url.title": "By URL",
   "torrents.add.tags": "Tags",

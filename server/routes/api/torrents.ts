@@ -40,6 +40,7 @@ import {
   isAllowedPathAsync,
   sanitizePath,
 } from '../../util/fileUtil';
+import {normalizeTorrentUrl} from '../../util/torrentUrlUtil';
 import {rateLimit} from '../utils';
 import {getAuthedContext} from './requestContext';
 
@@ -166,6 +167,8 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
         request.body;
 
+      const normalizedUrls = urls.map((url) => normalizeTorrentUrl(url));
+
       const finalDestination = await getDestination(authedContext.services, {
         destination,
         tags,
@@ -177,7 +180,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       }
 
       const response = await authedContext.services.clientGatewayService.addTorrentsByURL({
-        urls,
+        urls: normalizedUrls,
         cookies: cookies != null ? cookies : {},
         destination: finalDestination,
         tags: tags ?? [],
@@ -192,7 +195,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       if (response.length === 0) {
         return reply.status(202).send(response);
       }
-      if (response.length < urls.length) {
+      if (response.length < normalizedUrls.length) {
         return reply.status(207).send(response);
       }
       return response;
