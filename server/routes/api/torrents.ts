@@ -2,6 +2,7 @@ import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
 import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
@@ -40,7 +41,6 @@ import {
   isAllowedPathAsync,
   sanitizePath,
 } from '../../util/fileUtil';
-import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
 import {rateLimit} from '../utils';
 import {getAuthedContext} from './requestContext';
 
