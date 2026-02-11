@@ -12,6 +12,7 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": "../",
     "paths": {
+      "@server/*": ["server/*"],
       "@shared/*": ["shared/*"]
     },
     "outDir": "../dist"
