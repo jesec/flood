@@ -555,6 +555,18 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
         }
       }
     }
+
+    .progress-bar--with-percent {
+      .progress-bar__fill__wrapper {
+        border-radius: 7px;
+        height: 14px;
+      }
+
+      .progress-bar__fill {
+        border-radius: 7px;
+        height: 100%;
+      }
+    }
   }
 
   &__more-info {
