@@ -156,4 +156,21 @@ $progress-bar--height: 3px;
       }
     }
   }
+
+  &__percent {
+    @include themes.theme('color', 'torrent-list--background');
+    font-size: 0.7rem;
+    font-weight: 600;
+    left: 50%;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+
+    .torrent--is-selected & {
+      @include themes.theme('color', 'torrent--background--selected');
+    }
+  }
 }

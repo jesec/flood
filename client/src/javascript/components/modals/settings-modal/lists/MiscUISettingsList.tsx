@@ -1,4 +1,4 @@
-import {FC, useRef} from 'react';
+import {FC, useState} from 'react';
 
 import SettingStore from '@client/stores/SettingStore';
 import ToggleList from '@client/components/general/ToggleList';
@@ -10,20 +10,22 @@ interface MiscUISettingsListProps {
 }
 
 const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: MiscUISettingsListProps) => {
-  const changedUIPageTitleSpeedEnabledRef = useRef<FloodSettings['UIPageTitleSpeedEnabled']>(
+  const [pageTitleSpeedEnabled, setPageTitleSpeedEnabled] = useState<FloodSettings['UIPageTitleSpeedEnabled']>(
     SettingStore.floodSettings.UIPageTitleSpeedEnabled,
   );
 
+  const handlePageTitleSpeedToggle = () => {
+    const nextValue = !pageTitleSpeedEnabled;
+    setPageTitleSpeedEnabled(nextValue);
+    onSettingsChange({UIPageTitleSpeedEnabled: nextValue});
+  };
   return (
     <ToggleList
       items={[
         {
           label: 'settings.ui.page.title.speed',
-          defaultChecked: changedUIPageTitleSpeedEnabledRef.current,
-          onClick: () => {
-            changedUIPageTitleSpeedEnabledRef.current = !changedUIPageTitleSpeedEnabledRef.current;
-            onSettingsChange({UIPageTitleSpeedEnabled: changedUIPageTitleSpeedEnabledRef.current});
-          },
+          checked: pageTitleSpeedEnabled,
+          onClick: handlePageTitleSpeedToggle,
         },
       ]}
     />

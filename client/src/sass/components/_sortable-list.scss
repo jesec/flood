@@ -40,6 +40,13 @@ $sortable-list--item--border--preview: color.adjust($sortable-list--item--border
     height: 30px;
     padding: 0 math.div(variables.$spacing-unit * 1, 5);
 
+    &--stacked {
+      align-items: stretch;
+      height: auto;
+      padding-bottom: math.div(variables.$spacing-unit * 1, 5);
+      padding-top: math.div(variables.$spacing-unit * 1, 5);
+    }
+
     &:first-child {
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
@@ -118,6 +125,26 @@ $sortable-list--item--border--preview: color.adjust($sortable-list--item--border
       align-items: center;
       display: flex;
       flex: 1 1 auto;
+
+      &--stacked {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+
+    &__row {
+      align-items: center;
+      display: flex;
+      width: 100%;
+    }
+
+    &__child {
+      margin-left: math.div(variables.$spacing-unit * 2, 5);
+      margin-top: math.div(variables.$spacing-unit * 1, 5);
+
+      .toggle-input__label {
+        font-size: 0.9em;
+      }
     }
 
     &--primary {
