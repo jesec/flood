@@ -155,7 +155,7 @@ export const floodSettingsSchema = z
     torrentListColumnWidths: torrentListColumnWidthsSchema,
     torrentContextMenuActions: torrentContextMenuActionsSchema,
     torrentListViewSize: z.enum(['condensed', 'expanded']).default('condensed'),
-    torrentListShowProgressPercent: z.boolean().default(true),
+    torrentListShowProgressPercent: z.boolean().default(false),
     speedLimits: speedLimitsSchema,
     mountPoints: z.array(z.string()).default([]),
     deleteTorrentData: z.boolean().default(true),
