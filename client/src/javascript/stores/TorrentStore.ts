@@ -37,7 +37,11 @@ class TorrentStore {
     }
 
     if (searchFilter !== '') {
-      filteredTorrents = termMatch(filteredTorrents, (properties) => properties.name, searchFilter);
+      filteredTorrents = termMatch(
+        filteredTorrents,
+        (properties) => `${properties.name} ${properties.hash}`,
+        searchFilter,
+      );
     }
 
     if (statusFilter.length) {
