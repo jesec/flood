@@ -253,7 +253,6 @@
   "torrents.add.tab.file.browse": "або клацніть для перегляду",
   "torrents.add.tab.file.drop": "Перетягніть сюди файли,",
   "torrents.add.tab.file.title": "За файлом",
-  "torrents.add.tab.url.input.placeholder": "Адреса торенту або Magnet-посилання",
   "torrents.add.tab.url.register.magnet.handler": "Реєструйтесь для обробки Magnet-посилань",
   "torrents.add.tab.url.title": "За URL",
   "torrents.add.tags": "Мітки",

@@ -245,7 +245,6 @@
   "torrents.add.tab.file.browse": "ή κάντε κλικ για αναζήτηση",
   "torrents.add.tab.file.drop": "Αποθέστε κάποια αρχεία εδώ,",
   "torrents.add.tab.file.title": "Με αρχείο",
-  "torrents.add.tab.url.input.placeholder": "URL Torrent ή Σύνδεσμος Magnet",
   "torrents.add.tab.url.register.magnet.handler": "Εγγραφή για χειρισμό συνδέσμων magnet",
   "torrents.add.tab.url.title": "Με URL",
   "torrents.add.tags": "Ετικέτες",

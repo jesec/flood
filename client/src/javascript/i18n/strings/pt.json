@@ -253,7 +253,6 @@
   "torrents.add.tab.file.browse": "ou clique para navegar",
   "torrents.add.tab.file.drop": "Solte alguns arquivos aqui,",
   "torrents.add.tab.file.title": "Por Arquivo",
-  "torrents.add.tab.url.input.placeholder": "URL do Torrent ou Link Magnet",
   "torrents.add.tab.url.register.magnet.handler": "Registre-se para lidar com links magnéticos",
   "torrents.add.tab.url.title": "Por URL",
   "torrents.add.tags": "Etiquetas",
