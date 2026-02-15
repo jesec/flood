@@ -253,7 +253,6 @@
   "torrents.add.tab.file.browse": "或点击浏览",
   "torrents.add.tab.file.drop": "将文件拖至此处,",
   "torrents.add.tab.file.title": "上传文件",
-  "torrents.add.tab.url.input.placeholder": "种子网址或磁力链接",
   "torrents.add.tab.url.register.magnet.handler": "注册以处理磁力链接",
   "torrents.add.tab.url.title": "从网址",
   "torrents.add.tags": "标签",
