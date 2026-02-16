@@ -37,10 +37,15 @@ class TorrentStore {
     }
 
     if (searchFilter !== '') {
-      filteredTorrents = termMatch(
-        filteredTorrents,
-        (properties) => `${properties.name} ${properties.hash}`,
-        searchFilter,
+      const nameMatchedHashes = new Set(
+        termMatch(filteredTorrents, (properties) => properties.name, searchFilter).map((p) => p.hash),
+      );
+      const normalizedSearchFilter = searchFilter.trim().toLowerCase();
+
+      filteredTorrents = filteredTorrents.filter(
+        (properties) =>
+          nameMatchedHashes.has(properties.hash) ||
+          (normalizedSearchFilter !== '' && properties.hash.toLowerCase() === normalizedSearchFilter),
       );
     }
 
