@@ -40,6 +40,7 @@ class TorrentStore {
       const nameMatchedHashes = new Set(
         termMatch(filteredTorrents, (properties) => properties.name, searchFilter).map((p) => p.hash),
       );
+      // Fuzzy match torrent names, exact match infohash (after trim/lowercase).
       const normalizedSearchFilter = searchFilter.trim().toLowerCase();
 
       filteredTorrents = filteredTorrents.filter(
