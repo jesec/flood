@@ -357,6 +357,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     property: 'dateAdded',
   },
   torrentListViewSize: 'expanded',
+  torrentListShowProgressPercent: true,
   torrentListColumns: [
     {id: 'name', visible: true},
     {id: 'percentComplete', visible: true},
