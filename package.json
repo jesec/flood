@@ -1,6 +1,6 @@
 {
   "name": "flood",
-  "version": "4.12.6",
+  "version": "4.13.0",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
   "keywords": [
     "typescript",
