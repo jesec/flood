@@ -92,6 +92,7 @@ class UIStore {
   activeContextMenu: ActiveContextMenu | null = null;
   activeDropdownMenu: string | null = null;
   activeModal: Modal | null = null;
+  isSidebarAlternativeState = false;
   dependencies: Dependencies = {};
   globalStyles: Array<string> = [];
   haveUIDependenciesResolved = false;
@@ -183,6 +184,10 @@ class UIStore {
 
   setActiveModal(modal: this['activeModal']) {
     this.activeModal = modal;
+  }
+
+  toggleSidebarAlternativeState() {
+    this.isSidebarAlternativeState = !this.isSidebarAlternativeState;
   }
 
   verifyDependencies() {
