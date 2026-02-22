@@ -49,6 +49,13 @@ class Users {
     return this.configUser;
   }
 
+  private async lookupByUsername(username: string): Promise<UserInDatabase | null> {
+    const normalizedUsername = username.toLowerCase();
+    const users = await this.db.findAsync<UserInDatabase>({});
+
+    return users.find((user) => user.username.toLowerCase() === normalizedUsername) ?? null;
+  }
+
   async bootstrapServicesForAllUsers(): Promise<void> {
     return this.listUsers()
       .then((users) => Promise.all(users.map((user) => bootstrapServicesForUser(user))))
@@ -62,7 +69,7 @@ class Users {
    * @return {Promise<AccessLevel>} - Returns access level of the user if matched or rejects with error.
    */
   async comparePassword(credentials: Pick<Credentials, 'username' | 'password'>): Promise<AccessLevel> {
-    return this.db.findOneAsync<Credentials>({username: credentials.username}).then((user) => {
+    return this.lookupByUsername(credentials.username).then((user) => {
       // Wrong data provided
       if (credentials?.password == null) {
         throw new Error();
@@ -96,6 +103,11 @@ class Users {
    */
   async createUser(credentials: Credentials, shouldHash = true): Promise<UserInDatabase> {
     const hashed = shouldHash ? await hashPassword(credentials.password).catch(() => undefined) : credentials.password;
+    const existingUser = await this.lookupByUsername(credentials.username);
+
+    if (existingUser != null) {
+      throw new Error('Username already exists.');
+    }
 
     if (this.db == null || hashed == null) {
       throw new Error();
@@ -143,6 +155,14 @@ class Users {
   async updateUser(username: string, userRecordPatch: Partial<Credentials>): Promise<string> {
     const patch: Omit<Partial<UserInDatabase>, '_id'> = userRecordPatch;
 
+    if (patch.username != null && patch.username.toLowerCase() !== username.toLowerCase()) {
+      const existingUser = await this.lookupByUsername(patch.username);
+
+      if (existingUser != null) {
+        throw new Error('Username already exists.');
+      }
+    }
+
     if (patch.password != null) {
       patch.password = await hashPassword(patch.password);
     }
@@ -164,14 +184,14 @@ class Users {
    * Looks up a user.
    *
    * @param {string} username - Name of the user to be updated.
-   * @return {Promise<UserInDatabase>} - Returns a user or rejects with error.
+   * @return {Promise<UserInDatabase | null>} - Returns a user or null if not found.
    */
-  async lookupUser(username: string): Promise<UserInDatabase> {
+  async lookupUser(username: string): Promise<UserInDatabase | null> {
     if (config.authMethod === 'none') {
       return this.getConfigUser();
     }
 
-    return this.db.findOneAsync<UserInDatabase>({username});
+    return this.lookupByUsername(username);
   }
 
   /**

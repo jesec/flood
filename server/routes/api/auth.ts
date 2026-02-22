@@ -346,6 +346,10 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
           const user = await Users.lookupUser(newUsername);
 
+          if (user == null) {
+            throw new Error();
+          }
+
           await destroyUserServices(user._id);
 
           bootstrapServicesForUser(user);
