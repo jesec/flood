@@ -11,12 +11,59 @@ on:
     types: [submitted]
 
 jobs:
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+    outputs:
+      should_run: ${{ steps.evaluate.outputs.should_run }}
+    steps:
+      - name: Evaluate trigger source
+        id: evaluate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const repoFullName = `${context.repo.owner}/${context.repo.repo}`;
+            const eventName = context.eventName;
+
+            let tagged = false;
+            let isExternal = false;
+
+            if (eventName === 'issue_comment') {
+              const body = context.payload.comment?.body ?? '';
+              tagged = body.includes('@claude');
+
+              if (context.payload.issue?.pull_request) {
+                const prNumber = context.payload.issue.number;
+                const {data: pr} = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                });
+
+                isExternal = pr.head.repo.full_name !== repoFullName;
+              }
+            } else if (eventName === 'pull_request_review_comment') {
+              const body = context.payload.comment?.body ?? '';
+              tagged = body.includes('@claude');
+              isExternal = (context.payload.pull_request?.head?.repo?.full_name ?? repoFullName) !== repoFullName;
+            } else if (eventName === 'pull_request_review') {
+              const body = context.payload.review?.body ?? '';
+              tagged = body.includes('@claude');
+              isExternal = (context.payload.pull_request?.head?.repo?.full_name ?? repoFullName) !== repoFullName;
+            } else if (eventName === 'issues') {
+              const issueBody = context.payload.issue?.body ?? '';
+              const issueTitle = context.payload.issue?.title ?? '';
+              tagged = issueBody.includes('@claude') || issueTitle.includes('@claude');
+            }
+
+            core.setOutput('should_run', String(tagged && !isExternal));
+
   claude:
-    if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    needs: guard
+    if: needs.guard.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
