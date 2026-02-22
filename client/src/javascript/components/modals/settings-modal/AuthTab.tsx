@@ -125,7 +125,7 @@ const AuthTab: FC = observer(() => {
               .slice()
               .sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username))
               .map((user: Credentials) => {
-                const isCurrentUser = user.username === AuthStore.currentUser.username;
+                const isCurrentUser = user.username.toLowerCase() === AuthStore.currentUser.username?.toLowerCase();
                 let badge = null;
                 let removeIcon = null;
 

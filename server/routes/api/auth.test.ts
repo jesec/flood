@@ -394,6 +394,26 @@ describe('DELETE /api/auth/users/{username}', () => {
       .expect(403);
   });
 
+  it('Prevents deleting currently logged in user regardless of username case', async () => {
+    const authRes = await request
+      .post('/api/auth/authenticate')
+      .send({
+        username: testAdminUser.username.toUpperCase(),
+        password: testAdminUser.password,
+      })
+      .set('Accept', 'application/json')
+      .expect(200);
+
+    const [mixedCaseAdminToken] = authRes.headers['set-cookie'];
+
+    await request
+      .delete(`/api/auth/users/${testAdminUser.username}`)
+      .send()
+      .set('Accept', 'application/json')
+      .set('Cookie', [mixedCaseAdminToken])
+      .expect(400);
+  });
+
   it('Deletes an existing user with admin credentials', async () => {
     const res = await request
       .delete(`/api/auth/users/${testNonAdminUser.username}`)

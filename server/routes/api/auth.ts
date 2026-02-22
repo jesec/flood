@@ -18,7 +18,7 @@ import {
 } from '../../../shared/schema/api/auth';
 import {type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
-import {NotFoundError} from '../../errors';
+import {NotFoundError, UnauthorizedError} from '../../errors';
 import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
@@ -314,10 +314,24 @@ const authRoutes = async (fastify: FastifyInstance) => {
                   username: z.string(),
                 })
                 .strict(),
+              400: z
+                .object({
+                  message: z.string(),
+                })
+                .strict(),
             },
           },
         },
         async (req, reply): Promise<void> => {
+          if (req.user?.username == null) {
+            throw new UnauthorizedError();
+          }
+
+          if (req.user.username.toLowerCase() === req.params.username.toLowerCase()) {
+            reply.status(400).send({message: 'Cannot delete currently logged in user.'});
+            return;
+          }
+
           await Users.removeUser(req.params.username);
           reply.send({username: req.params.username});
         },
