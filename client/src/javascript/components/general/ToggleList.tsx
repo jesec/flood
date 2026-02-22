@@ -13,7 +13,8 @@ interface ToggleListProps {
     id?: string;
     label: string;
     isLocked?: boolean;
-    defaultChecked: boolean;
+    checked?: boolean;
+    defaultChecked?: boolean;
     onClick?: (checked: boolean) => void;
   }>;
 }
@@ -32,7 +33,9 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
       )}
     >
       {items.map((item) => {
-        const {id, label, isLocked = false, defaultChecked, onClick} = item;
+        const {id, label, isLocked = false, checked, defaultChecked, onClick} = item;
+        const checkboxStateProps = checked == null ? {defaultChecked} : {checked};
+
         return (
           <li
             className={classnames('sortable-list__item', {
@@ -48,7 +51,7 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
               {isLocked ? null : (
                 <span className="sortable-list__content sortable-list__content--secondary">
                   <Checkbox
-                    defaultChecked={defaultChecked}
+                    {...checkboxStateProps}
                     id={id}
                     onClick={(event) => onClick?.((event.target as HTMLInputElement).checked)}
                   >

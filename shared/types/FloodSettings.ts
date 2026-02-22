@@ -18,6 +18,7 @@ export interface FloodSettings {
     visible: boolean;
   }>;
   torrentListViewSize: 'condensed' | 'expanded';
+  torrentListShowProgressPercent: boolean;
   speedLimits: {
     download: Array<number>;
     upload: Array<number>;
