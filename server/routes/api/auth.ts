@@ -4,9 +4,10 @@ import {strictObject, string, z} from 'zod';
 
 import config from '../../../config';
 import {
+  authAuthenticationRequestSchema,
+  authAuthenticationRequiredSchema,
   type AuthAuthenticationResponse,
   authAuthenticationResponseSchema,
-  authAuthenticationSchema,
   authRegistrationResponseSchema,
   authRegistrationSchema,
   authUpdateUserSchema,
@@ -68,9 +69,14 @@ const authRoutes = async (fastify: FastifyInstance) => {
         summary: 'Authenticate user',
         description: 'Authenticate a user and set auth cookie.',
         tags: ['Auth'],
-        body: authAuthenticationSchema,
+        body: authAuthenticationRequestSchema,
         response: {
           200: authAuthenticationResponseSchema,
+          400: z
+            .object({
+              message: z.string(),
+            })
+            .strict(),
           401: z
             .object({
               message: z.string(),
@@ -80,11 +86,22 @@ const authRoutes = async (fastify: FastifyInstance) => {
       },
       ...(authRateLimitOptions ?? {}),
     },
-    async ({body: credentials}, reply): Promise<void> => {
+    async (req, reply): Promise<void> => {
       if (config.authMethod === 'none') {
         sendAuthenticationResponse(reply, Users.getConfigUser());
         return;
       }
+
+      const parsedCredentials = authAuthenticationRequiredSchema.safeParse(req.body);
+
+      if (!parsedCredentials.success) {
+        reply.status(400).send({
+          message: 'Missing username or password.',
+        });
+        return;
+      }
+
+      const credentials = parsedCredentials.data;
 
       try {
         const level = await Users.comparePassword(credentials);
