@@ -388,6 +388,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 trackerURIs = [],
               } = this.cachedProperties[info.hash] || {};
 
+              const isSeeding = info.state.endsWith('UP');
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
                 comment: comment,
@@ -398,7 +399,9 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 directory: info.save_path,
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
-                eta: info.eta >= 8640000 ? -1 : info.eta,
+                // Seeding states have ETA until seeding goal (ratio/time); show it when valid.
+                // For non-seeding states, hide ETA when dlspeed is 0 to avoid showing stale values.
+                eta: info.eta >= 8640000 || (!isSeeding && info.dlspeed === 0) ? -1 : info.eta,
                 hash: info.hash.toUpperCase(),
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
