@@ -9,9 +9,10 @@ import type {
   AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
+import type {ContentToken} from '../../../shared/schema/api/torrents';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
-import {getAuthToken} from '../../util/authUtil';
+import {getAuthToken, getToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
 vi.useRealTimers();
@@ -200,6 +201,75 @@ describe('GET /api/auth/verify', () => {
       .expect(401);
 
     expect(res.body.configs).toBeDefined();
+  });
+});
+
+describe('Query string token authentication', () => {
+  it('Authenticates with a valid auth token in query string', async () => {
+    const token = getAuthToken(testAdminUser.username);
+    const res = await request
+      .get(`/api/auth/verify?token=${token}`)
+      .send()
+      .set('Accept', 'application/json')
+      .expect(200);
+
+    const verificationResponse: AuthVerificationResponse = res.body;
+    expect(verificationResponse.initialUser).toBe(false);
+    if (verificationResponse.initialUser === false) {
+      expect(verificationResponse.username).toBe(testAdminUser.username);
+    }
+  });
+
+  it('Authenticates with a content token (extra fields) in query string', async () => {
+    const token = getToken<ContentToken>({
+      username: testAdminUser.username,
+      hash: 'abc123',
+      indices: '0,1,2',
+    });
+    const res = await request
+      .get(`/api/auth/verify?token=${token}`)
+      .send()
+      .set('Accept', 'application/json')
+      .expect(200);
+
+    const verificationResponse: AuthVerificationResponse = res.body;
+    expect(verificationResponse.initialUser).toBe(false);
+    if (verificationResponse.initialUser === false) {
+      expect(verificationResponse.username).toBe(testAdminUser.username);
+    }
+  });
+
+  it('Rejects an invalid query string token', async () => {
+    await request
+      .get('/api/auth/verify?token=invalid-token')
+      .send()
+      .set('Accept', 'application/json')
+      .expect(401);
+  });
+
+  it('Rejects a query string token for a nonexistent user', async () => {
+    const token = getAuthToken('nonExistentUser');
+    await request
+      .get(`/api/auth/verify?token=${token}`)
+      .send()
+      .set('Accept', 'application/json')
+      .expect(401);
+  });
+
+  it('Prefers cookie over query string token', async () => {
+    const queryToken = getAuthToken('nonExistentUser');
+    const res = await request
+      .get(`/api/auth/verify?token=${queryToken}`)
+      .send()
+      .set('Accept', 'application/json')
+      .set('Cookie', [testAdminUserToken])
+      .expect(200);
+
+    const verificationResponse: AuthVerificationResponse = res.body;
+    expect(verificationResponse.initialUser).toBe(false);
+    if (verificationResponse.initialUser === false) {
+      expect(verificationResponse.username).toBe(testAdminUser.username);
+    }
   });
 });
 
