@@ -11,8 +11,9 @@ type AuthenticateOptions = {
   attachOnly?: boolean;
 };
 
-// Lenient schema for extracting authentication fields from tokens that may
-// include additional fields (e.g., content download tokens with hash/indices).
+// Lenient (non-strict) schema for extracting authentication fields from tokens
+// that include additional fields beyond authTokenSchema. This supports content
+// download tokens which contain hash and indices fields alongside username/iat.
 const tokenAuthFieldsSchema = object({
   username: string(),
   iat: number(),
