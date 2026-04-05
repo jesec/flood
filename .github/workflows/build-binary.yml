@@ -58,17 +58,18 @@ jobs:
           mkdir package
           tar -xzf "${{ steps.package.outputs.tarball }}" -C package --strip-components=1
 
+      - uses: pnpm/action-setup@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs['node-version'] }}
-
-      - name: Upgrade npm for OIDC
-        run: npm install -g npm@latest
+          cache: pnpm
+          cache-dependency-path: package/pnpm-lock.yaml
 
       - name: Install build dependencies
         working-directory: package
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Set up QEMU
         run: |
@@ -81,11 +82,11 @@ jobs:
           sudo chmod +x /usr/local/bin/ldid
 
       - name: Install pkg
-        run: sudo npm i -g @yao-pkg/pkg
+        run: pnpm add -g @yao-pkg/pkg
 
       - name: Build executables
         working-directory: package
-        run: npm run pkg
+        run: pnpm run pkg
 
       - name: Normalize linux artifact names
         working-directory: package

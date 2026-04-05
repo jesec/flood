@@ -28,7 +28,7 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: npm run ${{ matrix.check }}
+      - run: pnpm run ${{ matrix.check }}
 
   check:
     # so we do not need to update GitHub repo config

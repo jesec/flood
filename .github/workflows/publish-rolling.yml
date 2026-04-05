@@ -47,14 +47,12 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
+      - uses: pnpm/action-setup@v4
 
       - name: Publish to npm with provenance
         env:
           NODE_AUTH_TOKEN: ''
-          npm_config_ignore_scripts: 'true'
-        run: npm publish --access public --provenance --tag master "./${{ steps.package_tarball.outputs.path }}"
+        run: pnpm publish --access public --provenance --tag master --ignore-scripts "./${{ steps.package_tarball.outputs.path }}"
 
   docker:
     needs: package

@@ -68,11 +68,15 @@ jobs:
 
       - name: Set package version
         if: inputs.package-version != ''
-        run: npm pkg set version="${{ steps.resolved_version.outputs.version }}"
+        run: |
+          jq --arg version "${{ steps.resolved_version.outputs.version }}" '.version=$version' package.json > package.json.tmp
+          mv package.json.tmp package.json
 
       - name: Override package name
         if: inputs.package-name != ''
-        run: npm pkg set name="${{ inputs.package-name }}"
+        run: |
+          jq --arg name "${{ inputs.package-name }}" '.name=$name' package.json > package.json.tmp
+          mv package.json.tmp package.json
 
       - run: pnpm run build
 
@@ -87,8 +91,9 @@ jobs:
           npm_config_loglevel: 'error'
         run: |
           mkdir -p artifacts
-          tarball=$(npm pack --pack-destination artifacts --json | jq -r '.[0].filename')
-          echo "tarball=artifacts/$tarball" >> "$GITHUB_OUTPUT"
+          pnpm pack --pack-destination artifacts
+          tarball=$(ls artifacts/*.tgz | head -n 1)
+          echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
