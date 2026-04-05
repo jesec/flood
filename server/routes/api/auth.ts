@@ -19,7 +19,12 @@ import {
 import {type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
 import {NotFoundError, UnauthorizedError} from '../../errors';
-import {authenticateHook, resolveRequestUser, setAuthContext} from '../../middleware/authenticate';
+import {
+  authenticateHook,
+  getRequiredAuthContext,
+  resolveRequestUser,
+  setAuthContext,
+} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
 import {bootstrapServicesForUser, destroyUserServices, getAllServices} from '../../services';
@@ -254,7 +259,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
           },
         },
       },
-      (_req, reply) => {
+      (req, reply) => {
+        getRequiredAuthContext(req);
         clearAuthCookie(reply);
         reply.send();
       },
