@@ -80,6 +80,9 @@ jobs:
 
       - run: pnpm run build
 
+      - name: Remove prepare script
+        run: jq 'del(.scripts.prepare)' package.json > package.json.tmp && mv package.json.tmp package.json
+
       - name: Capture package metadata
         id: meta
         run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
