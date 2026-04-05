@@ -18,11 +18,16 @@ import {
 } from '../../../shared/schema/api/auth';
 import {type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
-import {NotFoundError} from '../../errors';
-import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
+import {NotFoundError, UnauthorizedError} from '../../errors';
+import {
+  authenticateHook,
+  getRequiredAuthContext,
+  resolveRequestUser,
+  setAuthContext,
+} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
-import {bootstrapServicesForUser, destroyUserServices} from '../../services';
+import {bootstrapServicesForUser, destroyUserServices, getAllServices} from '../../services';
 import {clearAuthCookie, getAuthToken, setAuthCookie} from '../../util/authUtil';
 import {rateLimit} from '../utils';
 
@@ -119,7 +124,11 @@ const authRoutes = async (fastify: FastifyInstance) => {
     await Users.initialUserGate({
       handleInitialUser: () => undefined,
       handleSubsequentUser: async () => {
-        await authenticateRequest(req);
+        const user = await resolveRequestUser(req);
+        if (user == null) {
+          throw new UnauthorizedError();
+        }
+        setAuthContext(req, {user, services: getAllServices(user)!});
         if (reply.sent) {
           return;
         }
@@ -209,9 +218,9 @@ const authRoutes = async (fastify: FastifyInstance) => {
           reply.send(response);
         },
         handleSubsequentUser: async () => {
-          const isAuthenticated = await authenticateRequest(req, {attachOnly: true});
+          const user = await resolveRequestUser(req);
 
-          if (!isAuthenticated || req.user == null) {
+          if (user == null) {
             reply.status(401).send({
               configs: preloadConfigs,
             });
@@ -220,8 +229,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
           const response: AuthVerificationResponse = {
             initialUser: false,
-            username: req.user.username,
-            level: req.user.level,
+            username: user.username,
+            level: user.level,
             configs: preloadConfigs,
           };
 
@@ -250,7 +259,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
           },
         },
       },
-      (_req, reply) => {
+      (req, reply) => {
+        getRequiredAuthContext(req);
         clearAuthCookie(reply);
         reply.send();
       },

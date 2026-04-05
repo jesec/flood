@@ -14,14 +14,13 @@ import type {FastifyInstance, FastifyReply} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {z} from 'zod';
 
-import appendUserServices from '../../middleware/appendUserServices';
 import {authenticateHook} from '../../middleware/authenticate';
+import {getRequiredAuthContext} from '../../middleware/authenticate';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import authRoutes from './auth';
 import clientRoutes from './client';
 import feedMonitorRoutes from './feed-monitor';
-import {getAuthedContext} from './requestContext';
 import torrentsRoutes from './torrents';
 
 const apiRoutes = async (fastify: FastifyInstance) => {
@@ -44,7 +43,6 @@ const apiRoutes = async (fastify: FastifyInstance) => {
   await fastify.register(async (protectedRoutes) => {
     const typedProtectedRoutes = protectedRoutes.withTypeProvider<ZodTypeProvider>();
     protectedRoutes.addHook('preHandler', authenticateHook);
-    protectedRoutes.addHook('preHandler', appendUserServices);
 
     protectedRoutes.register(clientRoutes, {prefix: '/client'});
     protectedRoutes.register(feedMonitorRoutes, {prefix: '/feed-monitor'});
@@ -154,7 +152,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
         },
       },
       async (request) => {
-        const authedContext = getAuthedContext(request);
+        const authedContext = getRequiredAuthContext(request);
         return authedContext.services.historyService.getHistory();
       },
     );
@@ -174,7 +172,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
         },
       },
       async (request) => {
-        const authedContext = getAuthedContext(request);
+        const authedContext = getRequiredAuthContext(request);
         return authedContext.services.notificationService.getNotifications(request.query);
       },
     );
@@ -193,7 +191,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
         },
       },
       async (request) => {
-        const authedContext = getAuthedContext(request);
+        const authedContext = getRequiredAuthContext(request);
         await authedContext.services.notificationService.clearNotifications();
       },
     );
@@ -212,7 +210,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
         },
       },
       async (request) => {
-        const authedContext = getAuthedContext(request);
+        const authedContext = getRequiredAuthContext(request);
         const settings = await authedContext.services.settingService.get(null);
         return settings;
       },
@@ -233,7 +231,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
         },
       },
       async (request) => {
-        const authedContext = getAuthedContext(request);
+        const authedContext = getRequiredAuthContext(request);
         const setting = await authedContext.services.settingService.get(request.params.property);
         return setting;
       },
@@ -254,7 +252,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
     //     },
     //   },
     //   async (request) => {
-    //     const authedContext = getAuthedContext(request);
+    //     const authedContext = getRequiredAuthContext(request);
     //     const savedSettings = await authedContext.services.settingService.set(request.body);
     //     return savedSettings;
     //   },
@@ -264,7 +262,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
     protectedRoutes.patch<{
       Body: SetFloodSettingsOptions;
     }>('/settings', async (req, reply: FastifyReply) => {
-      const authedContext = getAuthedContext(req);
+      const authedContext = getRequiredAuthContext(req);
       return authedContext.services.settingService.set(req.body).then(
         (savedSettings) => reply.status(200).send(savedSettings),
         ({code, message}) => reply.status(500).send({code, message}),
