@@ -240,20 +240,12 @@ describe('Query string token authentication', () => {
   });
 
   it('Rejects an invalid query string token', async () => {
-    await request
-      .get('/api/auth/verify?token=invalid-token')
-      .send()
-      .set('Accept', 'application/json')
-      .expect(401);
+    await request.get('/api/auth/verify?token=invalid-token').send().set('Accept', 'application/json').expect(401);
   });
 
   it('Rejects a query string token for a nonexistent user', async () => {
     const token = getAuthToken('nonExistentUser');
-    await request
-      .get(`/api/auth/verify?token=${token}`)
-      .send()
-      .set('Accept', 'application/json')
-      .expect(401);
+    await request.get(`/api/auth/verify?token=${token}`).send().set('Accept', 'application/json').expect(401);
   });
 
   it('Prefers cookie over query string token', async () => {
