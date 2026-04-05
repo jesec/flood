@@ -39,7 +39,7 @@ jobs:
       - name: Publish to npm with provenance
         env:
           NODE_AUTH_TOKEN: ''
-        run: pnpm publish --access public --provenance --ignore-scripts "./${{ steps.package_tarball.outputs.path }}"
+        run: pnpm publish --access public --provenance --ignore-scripts --no-git-checks "./${{ steps.package_tarball.outputs.path }}"
 
   pkg:
     needs: package
