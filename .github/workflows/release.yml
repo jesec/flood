@@ -33,6 +33,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Publish to npm with provenance
         env:
