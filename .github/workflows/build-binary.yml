@@ -63,6 +63,9 @@ jobs:
         with:
           node-version: ${{ inputs['node-version'] }}
 
+      - name: Upgrade npm for OIDC
+        run: npm install -g npm@latest
+
       - name: Install build dependencies
         working-directory: package
         run: npm install
