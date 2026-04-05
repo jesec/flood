@@ -5,8 +5,8 @@ import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {boolean, strictObject, z} from 'zod';
 
+import {getRequiredAuthContext} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
-import {getAuthedContext} from './requestContext';
 
 const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownSpeed', 'throttleGlobalUpSpeed'];
 
@@ -29,7 +29,7 @@ const clientRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (req): Promise<{isConnected: boolean}> => {
-      const authedContext = getAuthedContext(req);
+      const authedContext = getRequiredAuthContext(req);
       await authedContext.services.clientGatewayService.testGateway();
       return {isConnected: true};
     },
@@ -49,7 +49,7 @@ const clientRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (req): Promise<ClientSettings> => {
-      const authedContext = getAuthedContext(req);
+      const authedContext = getRequiredAuthContext(req);
       return authedContext.services.clientGatewayService.getClientSettings();
     },
   );
@@ -58,7 +58,7 @@ const clientRoutes = async (fastify: FastifyInstance) => {
     req: FastifyRequest<{Body: SetClientSettingsOptions}>,
     reply: FastifyReply,
   ) => {
-    getAuthedContext(req);
+    getRequiredAuthContext(req);
     if (
       Object.keys(req.body ?? {}).some((key) => {
         return !SAFE_CLIENT_SETTINGS.includes(key as keyof ClientSettings);
@@ -84,7 +84,7 @@ const clientRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (req: FastifyRequest<{Body: SetClientSettingsOptions}>) => {
-      const authedContext = getAuthedContext(req);
+      const authedContext = getRequiredAuthContext(req);
       return authedContext.services.clientGatewayService.setClientSettings(req.body);
     },
   );
