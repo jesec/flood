@@ -32,11 +32,35 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install npm 11
-        run: npm install -g npm@11
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Exchange OIDC token for npm publish token
+        id: npm_token
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const idToken = await core.getIDToken('npm:registry.npmjs.org');
+            const res = await fetch('https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/flood', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${idToken}`,
+                'Content-Type': 'application/json',
+              },
+            });
+            if (!res.ok) {
+              const body = await res.text();
+              throw new Error(`Token exchange failed (${res.status}): ${body}`);
+            }
+            const { token } = await res.json();
+            core.setSecret(token);
+            core.setOutput('token', token);
 
       - name: Publish to npm with provenance
-        run: npm publish --access public --provenance --ignore-scripts "./${{ steps.package_tarball.outputs.path }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ steps.npm_token.outputs.token }}
+        run: pnpm publish --access public --provenance --ignore-scripts --no-git-checks "./${{ steps.package_tarball.outputs.path }}"
 
   pkg:
     needs: package
