@@ -7,6 +7,7 @@ import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
 import type {CreateTorrentOptions, TorrentInput} from 'create-torrent';
+import mime from 'mime-types';
 import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import sanitize from 'sanitize-filename';
@@ -822,17 +823,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         const fileName = path.basename(file);
         const fileExt = path.extname(file);
 
-        let processedType: string = fileExt;
-        switch (fileExt) {
-          case '.mkv':
-            processedType = 'video/webm';
-            break;
-          case '.flac':
-            processedType = 'audio/flac';
-            break;
-          default:
-            break;
-        }
+        const processedType: string = mime.lookup(fileExt) || 'application/octet-stream';
 
         reply.type(processedType);
         reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
