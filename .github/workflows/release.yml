@@ -32,14 +32,11 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Install npm 11
+        run: npm install -g npm@11
 
       - name: Publish to npm with provenance
-        env:
-          NODE_AUTH_TOKEN: ''
-        run: pnpm publish --access public --provenance --ignore-scripts --no-git-checks "./${{ steps.package_tarball.outputs.path }}"
+        run: npm publish --access public --provenance --ignore-scripts "./${{ steps.package_tarball.outputs.path }}"
 
   pkg:
     needs: package
