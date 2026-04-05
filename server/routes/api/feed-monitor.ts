@@ -10,8 +10,8 @@ import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {z} from 'zod';
 
+import {getRequiredAuthContext} from '../../middleware/authenticate';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import {getAuthedContext} from './requestContext';
 
 const feedMonitorRoutes = async (fastify: FastifyInstance) => {
   const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
@@ -36,7 +36,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.getAll();
     },
@@ -57,7 +57,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.removeItem(request.params.id);
     },
@@ -78,7 +78,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.getFeeds(request.params.id);
     },
@@ -99,7 +99,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.addFeed(request.body);
     },
@@ -121,7 +121,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.modifyFeed(request.params.id, request.body);
     },
@@ -143,7 +143,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.getItems(request.params.id, request.query.search ?? '');
     },
@@ -163,7 +163,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       return services.feedService.getRules();
     },
@@ -185,7 +185,7 @@ const feedMonitorRoutes = async (fastify: FastifyInstance) => {
       },
     },
     async (request, reply) => {
-      const authedContext = getAuthedContext(request);
+      const authedContext = getRequiredAuthContext(request);
       const {services} = authedContext;
       let sanitizedPath: string | null = null;
       try {

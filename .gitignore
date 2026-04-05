@@ -87,3 +87,4 @@ storybook-static
 
 # Local scratch
 tmp/
+package-lock.json

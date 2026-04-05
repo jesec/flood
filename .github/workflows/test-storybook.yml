@@ -29,16 +29,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Build Storybook
-        run: npm run build-storybook
+        run: pnpm run build-storybook
 
       - name: Serve Storybook and run tests
         run: |
-          npx http-server storybook-static --port 6006 --silent &
-          npx wait-on tcp:127.0.0.1:6006
-          npm run test-storybook
+          pnpm dlx http-server storybook-static --port 6006 --silent &
+          pnpm dlx wait-on tcp:127.0.0.1:6006
+          pnpm run test-storybook
 
   test-storybook:
     # so we do not need to update GitHub repo config
