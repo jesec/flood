@@ -48,9 +48,9 @@ docker-build:
     - docker build
       --build-arg PACKAGE_TARBALL=$PACKAGE_TARBALL
       -f distribution/containers/Dockerfile.release
-      -t $IMAGE_NAME:$CI_COMMIT_REF_NAME .
+      -t $REGISTRY_URL/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
     # Push the image to your configurable registry
-    - docker push $IMAGE_NAME:$CI_COMMIT_REF_NAME
+    - docker push $REGISTRY_URL/$IMAGE_NAME:$CI_COMMIT_REF_NAME
   only:
     - master
     - tags
