@@ -830,6 +830,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
 
         const result = await send(request.raw, file, {
           acceptRanges: true,
+          lastModified: true,
         });
         if (result.type === 'error') {
           return reply.status(result.statusCode as any).send(result.metadata.error);
@@ -847,7 +848,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
 
         reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
 
-        return result.stream.pipe(reply.raw);
+        return reply.send(result.stream);
       }
 
       const archiveRootFolder = sanitizePath(selectedTorrent.directory);
