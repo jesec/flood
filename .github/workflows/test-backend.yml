@@ -48,5 +48,9 @@ jobs:
     runs-on: ubuntu-slim
     needs:
       - test-backend-matrix
+    if: always()
     steps:
-      - run: echo pass
+      - run: |
+          if [[ "${{ needs.test-backend-matrix.result }}" != "success" ]]; then
+            exit 1
+          fi

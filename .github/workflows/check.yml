@@ -35,5 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check-matrix
+    if: always()
     steps:
-      - run: echo ok
+      - run: |
+          if [[ "${{ needs.check-matrix.result }}" != "success" ]]; then
+            exit 1
+          fi

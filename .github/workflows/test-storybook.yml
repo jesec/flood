@@ -45,5 +45,9 @@ jobs:
     runs-on: ubuntu-slim
     needs:
       - test-storybook-matrix
+    if: always()
     steps:
-      - run: echo ok
+      - run: |
+          if [[ "${{ needs.test-storybook-matrix.result }}" != "success" ]]; then
+            exit 1
+          fi
