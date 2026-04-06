@@ -2,6 +2,7 @@ import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import send from '@fastify/send';
 import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
 import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
@@ -757,8 +758,12 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         }),
         response: {
           200: z.unknown(),
+          206: z.unknown(),
+          304: z.unknown(),
+          400: z.unknown(),
           403: errorResponseSchema,
           404: z.unknown(),
+          416: z.unknown(),
           500: errorResponseSchema,
         },
       },
@@ -823,12 +828,26 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         const fileName = path.basename(file);
         const fileExt = path.extname(file);
 
-        const processedType: string = mime.lookup(fileExt) || 'application/octet-stream';
+        const result = await send(request.raw, file, {
+          acceptRanges: true,
+        });
+        if (result.type === 'error') {
+          return reply.status(result.statusCode as any).send(result.metadata.error);
+        }
 
-        reply.type(processedType);
+        reply.status(result.statusCode as any);
+        for (const [key, value] of Object.entries(result.headers)) {
+          reply.header(key, value);
+        }
+
+        const processedType: string = mime.lookup(fileExt) || 'application/octet-stream';
+        if (!result.headers['content-type'] && !result.headers['Content-Type']) {
+          reply.type(processedType);
+        }
+
         reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
 
-        return reply.send(fs.createReadStream(file));
+        return result.stream.pipe(reply.raw);
       }
 
       const archiveRootFolder = sanitizePath(selectedTorrent.directory);
