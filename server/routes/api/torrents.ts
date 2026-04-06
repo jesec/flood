@@ -846,7 +846,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           reply.type(processedType);
         }
 
-        reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+        reply.header('Content-Disposition', contentDisposition(fileName, {type: 'inline'}));
 
         return reply.send(result.stream);
       }
