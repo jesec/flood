@@ -2,6 +2,7 @@ import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import send from '@fastify/send';
 import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
 import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
@@ -757,8 +758,12 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         }),
         response: {
           200: z.unknown(),
+          206: z.unknown(),
+          304: z.unknown(),
+          400: z.unknown(),
           403: errorResponseSchema,
           404: z.unknown(),
+          416: z.unknown(),
           500: errorResponseSchema,
         },
       },
@@ -823,12 +828,59 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         const fileName = path.basename(file);
         const fileExt = path.extname(file);
 
+        const result = await send(request.raw, file, {
+          acceptRanges: true,
+          lastModified: true,
+        });
+
+        const statusCode = result.statusCode;
+        if (result.type === 'error') {
+          if (statusCode === 404) {
+            const {code, message} = fileNotFoundError();
+            return reply.status(404).send({code, message});
+          }
+
+          if (statusCode === 403) {
+            const {code, message} = accessDeniedError();
+            return reply.status(403).send({code, message});
+          }
+
+          if (statusCode === 416) {
+            return reply.status(416).send({
+              code: 'ERR_RANGE_NOT_SATISFIABLE',
+              message: 'Range Not Satisfiable',
+            });
+          }
+
+          if (statusCode === 400) {
+            return reply.status(400).send({
+              code: 'ERR_BAD_REQUEST',
+              message: 'Bad Request',
+            });
+          }
+
+          return reply.status(500).send({
+            code: 'ERR_FILE_SEND',
+            message: 'Failed to send file.',
+          });
+        }
+
+        const successStatusCode = statusCode === 206 || statusCode === 304 ? statusCode : 200;
+        reply.status(successStatusCode);
+        reply.headers(result.headers);
+
+        if (statusCode === 304) {
+          return reply.send();
+        }
+
         const processedType: string = mime.lookup(fileExt) || 'application/octet-stream';
+        if (!result.headers['content-type'] && !result.headers['Content-Type']) {
+          reply.type(processedType);
+        }
 
-        reply.type(processedType);
-        reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+        reply.header('Content-Disposition', contentDisposition(fileName, {type: 'inline'}));
 
-        return reply.send(fs.createReadStream(file));
+        return reply.send(result.stream);
       }
 
       const archiveRootFolder = sanitizePath(selectedTorrent.directory);

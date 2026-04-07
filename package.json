@@ -77,6 +77,7 @@
     "@fastify/compress": "^8.3.0",
     "@fastify/cookie": "^10.0.1",
     "@fastify/rate-limit": "^10.3.0",
+    "@fastify/send": "^4.1.0",
     "@fastify/sse": "^0.4.0",
     "@fastify/static": "^8.3.0",
     "@fastify/swagger": "^9.6.0",
