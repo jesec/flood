@@ -832,13 +832,45 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           acceptRanges: true,
           lastModified: true,
         });
+
+        const statusCode = result.statusCode;
         if (result.type === 'error') {
-          return reply.status(result.statusCode as any).send(result.metadata.error);
+          if (statusCode === 404) {
+            const {code, message} = fileNotFoundError();
+            return reply.status(404).send({code, message});
+          }
+
+          if (statusCode === 403) {
+            const {code, message} = accessDeniedError();
+            return reply.status(403).send({code, message});
+          }
+
+          if (statusCode === 416) {
+            return reply.status(416).send({
+              code: 'ERR_RANGE_NOT_SATISFIABLE',
+              message: 'Range Not Satisfiable',
+            });
+          }
+
+          if (statusCode === 400) {
+            return reply.status(400).send({
+              code: 'ERR_BAD_REQUEST',
+              message: 'Bad Request',
+            });
+          }
+
+          return reply.status(500).send({
+            code: 'ERR_FILE_SEND',
+            message: 'Failed to send file.',
+          });
         }
 
-        reply.status(result.statusCode as any);
-        for (const [key, value] of Object.entries(result.headers)) {
-          reply.header(key, value);
+        const successStatusCode = statusCode === 206 || statusCode === 304 ? statusCode : 200;
+        reply.status(successStatusCode);
+        reply.headers(result.headers);
+
+        if (statusCode === 304) {
+          return reply.send();
         }
 
         const processedType: string = mime.lookup(fileExt) || 'application/octet-stream';
@@ -846,7 +878,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           reply.type(processedType);
         }
 
-        reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+        reply.header('Content-Disposition', contentDisposition(fileName, {type: 'inline'}));
 
         return reply.send(result.stream);
       }
