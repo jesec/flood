@@ -1,9 +1,9 @@
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
+import config from '@server/config';
 import type {FeedItem} from 'feedsub';
 
-import config from '../../config';
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../shared/types/api/feed-monitor';
 import type {Feed, Item, MatchedTorrents, Rule} from '../../shared/types/Feed';
 import type {FeedReaderOptions} from '../models/FeedReader';

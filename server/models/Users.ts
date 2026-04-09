@@ -3,9 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
+import config from '@server/config';
 import {argon2id, argon2Verify} from 'hash-wasm';
 
-import config from '../../config';
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
 import {AccessLevel} from '../../shared/schema/constants/Auth';

@@ -1,0 +1,4 @@
+packages:
+  - shared
+  - client
+  - server

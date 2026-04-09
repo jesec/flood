@@ -1,7 +1,7 @@
+import config from '@server/config';
 import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import jsonpatch, {Operation} from 'fast-json-patch';
 
-import config from '../../config';
 import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 import BaseService from './BaseService';
 

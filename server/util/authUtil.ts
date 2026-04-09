@@ -1,9 +1,8 @@
 import type {CookieSerializeOptions} from '@fastify/cookie';
+import config from '@server/config';
 import type {AuthToken} from '@shared/schema/Auth';
 import type {FastifyReply} from 'fastify';
 import jwt from 'jsonwebtoken';
-
-import config from '../../config';
 
 const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
 

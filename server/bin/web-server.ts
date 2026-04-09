@@ -2,10 +2,10 @@ import fs from 'node:fs';
 import type {Server} from 'node:http';
 import type {Http2SecureServer} from 'node:http2';
 
+import config from '@server/config';
 import type {FastifyInstance} from 'fastify';
 import fastify from 'fastify';
 
-import config from '../../config';
 import packageJSON from '../../package.json';
 import constructRoutes from '../routes';
 import {createLogger} from '../util/logger';

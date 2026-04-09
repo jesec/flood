@@ -8,15 +8,15 @@
 import type {Notification} from '@shared/types/Notification';
 import {compare} from 'fast-json-patch';
 
-import ClientStatusStore from '../../client/src/javascript/stores/ClientStatusStore';
-import ConfigStore from '../../client/src/javascript/stores/ConfigStore';
-import DiskUsageStore from '../../client/src/javascript/stores/DiskUsageStore';
-import NotificationStore from '../../client/src/javascript/stores/NotificationStore';
-import SettingStore from '../../client/src/javascript/stores/SettingStore';
-import TorrentFilterStore from '../../client/src/javascript/stores/TorrentFilterStore';
-import TorrentStore from '../../client/src/javascript/stores/TorrentStore';
-import TransferDataStore from '../../client/src/javascript/stores/TransferDataStore';
-import UIStore from '../../client/src/javascript/stores/UIStore';
+import ClientStatusStore from '../../src/javascript/stores/ClientStatusStore';
+import ConfigStore from '../../src/javascript/stores/ConfigStore';
+import DiskUsageStore from '../../src/javascript/stores/DiskUsageStore';
+import NotificationStore from '../../src/javascript/stores/NotificationStore';
+import SettingStore from '../../src/javascript/stores/SettingStore';
+import TorrentFilterStore from '../../src/javascript/stores/TorrentFilterStore';
+import TorrentStore from '../../src/javascript/stores/TorrentStore';
+import TransferDataStore from '../../src/javascript/stores/TransferDataStore';
+import UIStore from '../../src/javascript/stores/UIStore';
 import {MOCK_DIRECTORY_LIST, MOCK_DISK_USAGE} from './_fixtures';
 import mockStateStore from './MockStateStore';
 

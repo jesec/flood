@@ -6,7 +6,7 @@
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import SettingStore from '../../client/src/javascript/stores/SettingStore';
+import SettingStore from '../../src/javascript/stores/SettingStore';
 import mockStateStore from './MockStateStore';
 
 const SettingActions = {

@@ -1,3 +1,4 @@
+import config from '@server/config';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
@@ -25,7 +26,6 @@ import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
-import config from '../../config';
 import BaseService from './BaseService';
 
 type ClientGatewayServiceEvents = {

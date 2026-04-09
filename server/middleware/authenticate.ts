@@ -1,10 +1,10 @@
+import config from '@server/config';
 import type {UserInDatabase} from '@shared/schema/Auth';
 import {authTokenSchema} from '@shared/schema/Auth';
 import type {FastifyReply, FastifyRequest} from 'fastify';
 import jwt from 'jsonwebtoken';
 import {number, object, string} from 'zod';
 
-import config from '../../config';
 import {UnauthorizedError} from '../errors';
 import Users from '../models/Users';
 import {getAllServices, type ServiceInstances} from '../services';

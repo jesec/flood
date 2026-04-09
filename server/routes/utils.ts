@@ -1,6 +1,5 @@
 import type {FastifyRateLimitOptions} from '@fastify/rate-limit';
-
-import config from '../../config';
+import config from '@server/config';
 
 type RateLimitOptions = {
   max: number;

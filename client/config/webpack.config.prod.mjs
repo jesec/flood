@@ -23,7 +23,7 @@ export default {
           {
             loader: 'babel-loader',
             options: {
-              babelrc: true,
+              configFile: path.resolve('./client/.babelrc'),
             },
           },
         ],

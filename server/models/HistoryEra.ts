@@ -1,9 +1,8 @@
 import {setInterval} from 'node:timers';
 
 import Datastore from '@seald-io/nedb';
+import config from '@server/config';
 import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
-
-import config from '../../config';
 
 interface HistoryEraOpts {
   interval: number;

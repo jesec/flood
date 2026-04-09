@@ -3,11 +3,11 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import swagger from '@fastify/swagger';
+import config from '@server/config';
 import type {FastifyError, FastifyInstance} from 'fastify';
 import {jsonSchemaTransform, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
 
-import config from '../../config';
 import packageJson from '../../package.json';
 import Users from '../models/Users';
 import apiRoutes from './api';

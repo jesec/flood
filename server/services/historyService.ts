@@ -1,6 +1,6 @@
+import config from '@server/config';
 import type {TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
-import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
 import BaseService from './BaseService';
 

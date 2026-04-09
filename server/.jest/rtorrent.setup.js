@@ -50,7 +50,7 @@ const config = {
   disableRateLimit: false,
 };
 
-vi.mock('../../config', () => ({
+vi.mock('../config', () => ({
   __esModule: true,
   default: config,
 }));

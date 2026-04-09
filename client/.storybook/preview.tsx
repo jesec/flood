@@ -1,12 +1,12 @@
 // Import styles
-import '../client/src/sass/style.scss';
-import '../client/src/sass/panda.css';
+import '../src/sass/style.scss';
+import '../src/sass/panda.css';
 import './storybook-layout.css'; // Ensures proper layout hierarchy in Storybook
 
 // FloodActions is mocked via webpack alias but not used directly in preview
 import {i18n} from '@lingui/core';
 // Import language files with Lingui loader
-import {messages as enMessages} from '@lingui/loader!../client/src/javascript/i18n/strings/en.json?raw-lingui';
+import {messages as enMessages} from '@lingui/loader!../src/javascript/i18n/strings/en.json?raw-lingui';
 import {I18nProvider} from '@lingui/react';
 import type {Preview} from '@storybook/react';
 import React, {useEffect} from 'react';

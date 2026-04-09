@@ -3,7 +3,7 @@ import {promises as fsp} from 'node:fs';
 import {homedir} from 'node:os';
 import path from 'node:path';
 
-import config from '../../config';
+import config from '@server/config';
 
 export const accessDeniedError = () => {
   const error = new Error('Permission denied') as NodeJS.ErrnoException;

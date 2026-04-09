@@ -1,8 +1,8 @@
 import path from 'node:path';
 
+import config from '@server/config';
 import fs from 'fs-extra';
 
-import config from '../../../config';
 import Users from '../../models/Users';
 
 const migration = () => {

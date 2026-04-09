@@ -145,7 +145,6 @@ const build = async (previousFileSizes) => {
     platform: 'node',
     target: 'node12',
     bundle: true,
-    external: ['geoip-country'],
     sourcemap: 'inline',
     define: {
       __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),

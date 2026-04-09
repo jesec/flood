@@ -1,8 +1,8 @@
+import config from '@server/config';
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import {strictObject, string, z} from 'zod';
 
-import config from '../../../config';
 import {
   authAuthenticationRequestSchema,
   authAuthenticationRequiredSchema,

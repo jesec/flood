@@ -5,13 +5,13 @@ import path from 'node:path';
 import readline from 'node:readline';
 import stream from 'node:stream';
 
+import config from '@server/config';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import fastify from 'fastify';
 import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
 
-import config from '../../../config';
 import {buildPaths as paths} from '../../../shared/config/buildPaths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';

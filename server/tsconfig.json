@@ -17,5 +17,5 @@
     },
     "outDir": "../dist"
   },
-  "include": ["./**/*.ts", "../shared/**/*.ts", "../config.js", "../config.ts"]
+  "include": ["./**/*.ts", "../shared/**/*.ts"]
 }

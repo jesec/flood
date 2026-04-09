@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
+import config from '@server/config';
 import type {
   Notification,
   NotificationCount,
@@ -8,7 +9,6 @@ import type {
   NotificationState,
 } from '@shared/types/Notification';
 
-import config from '../../config';
 import BaseService from './BaseService';
 
 type NotificationServiceEvents = {

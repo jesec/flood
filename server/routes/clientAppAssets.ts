@@ -3,9 +3,8 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import fastifyStatic from '@fastify/static';
+import config from '@server/config';
 import type {FastifyInstance, FastifyReply} from 'fastify';
-
-import config from '../../config';
 
 type EmbeddedAssets = Record<string, {type: string; bodyBase64: string}>;
 

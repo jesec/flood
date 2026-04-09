@@ -4,7 +4,7 @@ import type {StorybookConfig} from '@storybook/react-webpack5';
 import webpack from 'webpack';
 
 const config: StorybookConfig = {
-  stories: ['../client/src/javascript/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../src/javascript/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@storybook/addon-onboarding', '@storybook/addon-webpack5-compiler-babel'],
   framework: {
     name: '@storybook/react-webpack5',
@@ -54,8 +54,8 @@ const config: StorybookConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       // General aliases
-      '@client': path.resolve(__dirname, '../client/src/javascript'),
-      '@shared': path.resolve(__dirname, '../shared'),
+      '@client': path.resolve(__dirname, '../src/javascript'),
+      '@shared': path.resolve(__dirname, '../../shared'),
     };
 
     // Add TypeScript support

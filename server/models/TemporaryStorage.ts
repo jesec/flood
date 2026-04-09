@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import config from '../../config';
+import config from '@server/config';
 
 fs.mkdirSync(config.tempPath, {recursive: true});
 

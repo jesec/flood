@@ -10,9 +10,9 @@ import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
-import AlertStore from '../../client/src/javascript/stores/AlertStore';
-import TorrentStore from '../../client/src/javascript/stores/TorrentStore';
-import UIStore from '../../client/src/javascript/stores/UIStore';
+import AlertStore from '../../src/javascript/stores/AlertStore';
+import TorrentStore from '../../src/javascript/stores/TorrentStore';
+import UIStore from '../../src/javascript/stores/UIStore';
 import {
   createNewTorrentTemplate,
   MOCK_MEDIAINFO_OUTPUT,

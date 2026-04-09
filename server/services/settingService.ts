@@ -1,9 +1,9 @@
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
+import config from '@server/config';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import config from '../../config';
 import BaseService from './BaseService';
 
 interface SettingRecord {
