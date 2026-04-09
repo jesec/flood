@@ -828,7 +828,8 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         const fileName = path.basename(file);
         const fileExt = path.extname(file);
 
-        const result = await send(request.raw, file, {
+        // @fastify/send expects a urlencoded path, not the actual filesystem path.
+        const result = await send(request.raw, encodeURI(file), {
           acceptRanges: true,
           lastModified: true,
         });
