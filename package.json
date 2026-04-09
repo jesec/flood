@@ -61,7 +61,7 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006 --config-dir client/.storybook",
     "build-storybook": "storybook build --config-dir client/.storybook",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook --config-dir client/.storybook"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.6",
