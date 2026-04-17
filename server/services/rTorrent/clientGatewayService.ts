@@ -60,6 +60,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls();
 
+  // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
+  // even though the equivalent XML-RPC call succeeds. rakshasa/rtorrent#1596
   private async fetchTorrentListResponses() {
     const methodCalls = ['', 'main'].concat((await this.availableMethodCalls).torrentList);
 
