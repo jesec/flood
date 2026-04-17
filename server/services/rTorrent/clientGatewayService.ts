@@ -60,6 +60,25 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls();
 
+  private async fetchTorrentListResponses() {
+    const methodCalls = ['', 'main'].concat((await this.availableMethodCalls).torrentList);
+
+    try {
+      return await this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    } catch (error) {
+      if (!this.clientRequestManager.isJSONCapable || (error as RPCError)?.code !== -32700) {
+        throw error;
+      }
+
+      this.clientRequestManager.isJSONCapable = false;
+      return this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    }
+  }
+
   async getPreferredMethod(methods: string[]): Promise<string> {
     const {methodList} = await this.availableMethodCalls;
 
@@ -673,9 +692,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
-    return this.clientRequestManager
-      .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+    return this.fetchTorrentListResponses()
       .then((responses: string[][]) => {
         this.emit('PROCESS_TORRENT_LIST_START');
         return Promise.all(
