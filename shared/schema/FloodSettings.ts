@@ -34,6 +34,9 @@ export const floodSettingKeySchema = z.enum(
     UITagSelectorMode: true,
     UITorrentsAddTab: true,
     UIPageTitleSpeedEnabled: true,
+    UISidebarFilterLocation: true,
+    UISidebarFilterTracker: true,
+    UISidebarFilterTag: true,
   }) as [keyof FloodSettings, ...Array<keyof FloodSettings>],
 );
 
@@ -164,6 +167,9 @@ export const floodSettingsSchema = z
     UITagSelectorMode: z.enum(['single', 'multi']).optional(),
     UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
     UIPageTitleSpeedEnabled: z.boolean().default(true),
+    UISidebarFilterLocation: z.boolean().default(true),
+    UISidebarFilterTracker: z.boolean().default(true),
+    UISidebarFilterTag: z.boolean().default(true),
   })
   .strict();
 
