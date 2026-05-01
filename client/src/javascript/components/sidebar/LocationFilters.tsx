@@ -4,6 +4,7 @@ import {useLingui} from '@lingui/react';
 import {LocationTreeNode} from '@shared/types/Taxonomy';
 
 import SidebarFilter from './SidebarFilter';
+import SettingStore from '../../stores/SettingStore';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 
 const buildLocationFilterTree = (location: LocationTreeNode): ReactNode => {
@@ -40,6 +41,10 @@ const buildLocationFilterTree = (location: LocationTreeNode): ReactNode => {
 
 const LocationFilters: FC = observer(() => {
   const {i18n} = useLingui();
+
+  if (!SettingStore.floodSettings.UISidebarFilterLocation) {
+    return null;
+  }
 
   if (TorrentFilterStore.taxonomy.locationTree.containedCount === 0) {
     return null;
