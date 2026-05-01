@@ -52,6 +52,7 @@
     "lint": "NODE_ENV=development eslint --max-warnings 0 .",
     "prepack": "rm -rf dist && npm run build",
     "start": "node --enable-source-maps --use_strict dist/index.js",
+    "dev": "concurrently \"panda --watch\" \"vite --config vite.config.ts\" 'tsx watch server/bin/start.ts'",
     "start:development:client": "concurrently \"panda --watch\" \"vite --config vite.config.ts\"",
     "start:development:server": "NODE_ENV=development tsx watch server/bin/start.ts",
     "start:test:rtorrent": "node scripts/testsetup.mjs",
