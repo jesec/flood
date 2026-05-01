@@ -8,8 +8,7 @@ import {within, expect, waitFor} from 'storybook/test';
 import React from 'react';
 
 import Overview from './Overview';
-// Using the mock FloodActions from Storybook mocks
-import FloodActions from '../../../../.storybook/mocks/FloodActions';
+import FloodActions from '@client/actions/FloodActions';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import AuthActions from '@client/actions/AuthActions';
 import {createMockMouseEvent, TEST_TIMEOUTS} from '../test-utils/storybook-helpers';
@@ -17,9 +16,8 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 import {TorrentPriority} from '@shared/types/Torrent';
 import {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-// Import mocks using relative paths since they're not in the webpack alias
-import MockStateStore from '../../../../.storybook/mocks/MockStateStore';
-import {MOCK_FLOOD_SETTINGS, MOCK_NOTIFICATIONS, SIZE, TIME} from '../../../../.storybook/mocks/_fixtures';
+import MockStateStore from '@client/storybook-mocks/MockStateStore';
+import {MOCK_FLOOD_SETTINGS, MOCK_NOTIFICATIONS, SIZE, TIME} from '@client/storybook-mocks/_fixtures';
 
 const meta: Meta<typeof Overview> = {
   title: 'Routes/Overview',
@@ -443,7 +441,7 @@ export const Default: Story = {
         storyIntervals.push(progressInterval);
 
         // Start FloodActions dynamic updates to send diffs to stores
-        FloodActions.startDynamicUpdates(UPDATE_INTERVAL);
+        (FloodActions as unknown as {startDynamicUpdates: (ms: number) => void}).startDynamicUpdates(UPDATE_INTERVAL);
 
         // Note: Storybook doesn't use return values from loaders
         // Cleanup is handled by cleanupStory() at the start of each story
@@ -693,7 +691,7 @@ export const Completing: Story = {
         storyIntervals.push(progressInterval);
 
         // Start FloodActions dynamic updates
-        FloodActions.startDynamicUpdates(UPDATE_INTERVAL);
+        (FloodActions as unknown as {startDynamicUpdates: (ms: number) => void}).startDynamicUpdates(UPDATE_INTERVAL);
 
         // Note: Storybook doesn't use return values from loaders
         // Cleanup is handled by cleanupStory() at the start of each story
