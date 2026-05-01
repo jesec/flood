@@ -1,4 +1,4 @@
-import {defineConfig, type ViteUserConfig} from 'vitest/config';
+import {defineConfig, defineProject, type ViteUserConfig} from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 type VitestPlugin = NonNullable<ViteUserConfig['plugins']>[number];
@@ -24,15 +24,17 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     projects: [
-      {
+      defineProject({
+        plugins: [tsconfigPathsPlugin],
         test: {
           ...baseTestConfig,
           name: 'auth',
           setupFiles: ['server/.jest/auth.setup.js'],
           include: ['server/routes/api/auth.test.ts'],
         },
-      },
-      {
+      }),
+      defineProject({
+        plugins: [tsconfigPathsPlugin],
         test: {
           ...baseTestConfig,
           name: 'qbittorrent',
@@ -40,8 +42,9 @@ export default defineConfig({
           include: ['server/**/*.test.ts'],
           exclude: ['server/routes/api/auth.test.ts'],
         },
-      },
-      {
+      }),
+      defineProject({
+        plugins: [tsconfigPathsPlugin],
         test: {
           ...baseTestConfig,
           name: 'rtorrent',
@@ -49,8 +52,9 @@ export default defineConfig({
           include: ['server/**/*.test.ts'],
           exclude: ['server/routes/api/auth.test.ts'],
         },
-      },
-      {
+      }),
+      defineProject({
+        plugins: [tsconfigPathsPlugin],
         test: {
           ...baseTestConfig,
           name: 'transmission',
@@ -58,7 +62,7 @@ export default defineConfig({
           include: ['server/**/*.test.ts'],
           exclude: ['server/routes/api/auth.test.ts'],
         },
-      },
+      }),
     ],
   },
 });
