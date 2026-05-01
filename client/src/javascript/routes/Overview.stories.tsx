@@ -10,6 +10,7 @@ import React from 'react';
 import Overview from './Overview';
 import FloodActions from '@client/actions/FloodActions';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import TorrentStore from '@client/stores/TorrentStore';
 import AuthActions from '@client/actions/AuthActions';
 import {createMockMouseEvent, TEST_TIMEOUTS} from '../test-utils/storybook-helpers';
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -141,6 +142,8 @@ const cleanupStory = () => {
   FloodActions.closeActivityStream();
   // Reset mock state
   MockStateStore.reset();
+  // Clear MobX stores to prevent stale data from previous stories
+  TorrentStore.handleTorrentListFullUpdate({});
   // Clear any filters
   TorrentFilterStore.clearAllFilters();
 };
