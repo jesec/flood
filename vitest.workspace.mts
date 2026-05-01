@@ -15,11 +15,8 @@ const baseTestConfig = {
     clean: false,
   },
   testTimeout: 60000,
-  poolOptions: {
-    threads: {
-      singleThread: true,
-    },
-  },
+  maxWorkers: 1,
+  isolate: false,
 };
 
 const createProject = (name: string, setupFile: string, include: string[], exclude: string[] = []) =>
