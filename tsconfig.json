@@ -16,6 +16,7 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": "./",
     "paths": {
+      "@client/storybook-mocks/*": [".storybook/mocks/*"],
       "@client/*": ["client/src/javascript/*"],
       "@server/*": ["server/*"],
       "@shared/*": ["shared/*"]

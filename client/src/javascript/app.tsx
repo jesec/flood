@@ -16,9 +16,9 @@ import stringUtil from '@shared/util/stringUtil';
 import '../sass/style.scss';
 import '../sass/panda.css';
 
-const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
-const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));
-const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));
+const Login = lazy(() => import('./routes/Login'));
+const Overview = lazy(() => import('./routes/Overview'));
+const Register = lazy(() => import('./routes/Register'));
 
 const FloodApp: FC = observer(() => {
   useEffect(() => {

@@ -1,11 +1,11 @@
-import type {Meta, StoryObj} from '@storybook/react-webpack5';
+import type {Meta, StoryObj} from '@storybook/react-vite';
 import {within, expect, waitFor, userEvent} from 'storybook/test';
 
 import TorrentListRow from './TorrentListRow';
-import {MOCK_TORRENT_STATES} from '../../../../../.storybook/mocks/_fixtures';
+import {MOCK_TORRENT_STATES} from '@client/storybook-mocks/_fixtures';
 import TorrentStore from '@client/stores/TorrentStore';
 import FloodActions from '@client/actions/FloodActions';
-import MockStateStore from '../../../../../.storybook/mocks/MockStateStore';
+import MockStateStore from '@client/storybook-mocks/MockStateStore';
 import type {TorrentProperties} from '@shared/types/Torrent';
 import {
   createMockMouseEvent,

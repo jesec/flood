@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 
 import fastifyStatic from '@fastify/static';
 import type {FastifyInstance, FastifyReply} from 'fastify';
@@ -95,7 +94,7 @@ const registerEmbeddedClientAppAssetsRoutes = async (
 
 // for developing
 const registerStaticClientAppAssetsRoutes = async (fastify: FastifyInstance): Promise<void> => {
-  const assetsDist = path.resolve(fileURLToPath(import.meta.url), '../../../dist/assets/');
+  const assetsDist = path.resolve('dist/assets/');
 
   await fastify.register(fastifyStatic, {root: assetsDist, prefix: '/', etag: false});
 
