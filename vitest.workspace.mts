@@ -1,4 +1,4 @@
-import {defineConfig, defineWorkspace, type ViteUserConfig} from 'vitest/config';
+import {defineProject, type ViteUserConfig} from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 type VitestPlugin = NonNullable<ViteUserConfig['plugins']>[number];
@@ -23,7 +23,7 @@ const baseTestConfig = {
 };
 
 const createProject = (name: string, setupFile: string, include: string[], exclude: string[] = []) =>
-  defineConfig({
+  defineProject({
     plugins: [tsconfigPathsPlugin],
     test: {
       ...baseTestConfig,
@@ -34,7 +34,7 @@ const createProject = (name: string, setupFile: string, include: string[], exclu
     },
   });
 
-export default defineWorkspace([
+export default [
   createProject('auth', 'server/.jest/auth.setup.js', ['server/routes/api/auth.test.ts']),
   createProject(
     'qbittorrent',
@@ -54,4 +54,4 @@ export default defineWorkspace([
     ['server/**/*.test.ts'],
     ['server/routes/api/auth.test.ts'],
   ),
-]);
+];
