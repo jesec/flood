@@ -424,6 +424,9 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
   },
   deleteTorrentData: false,
   UIPageTitleSpeedEnabled: false,
+  UISidebarFilterLocation: true,
+  UISidebarFilterTracker: true,
+  UISidebarFilterTag: true,
 };
 
 /**

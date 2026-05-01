@@ -44,6 +44,11 @@ export interface FloodSettings {
 
   // Display upload and download speed in page title
   UIPageTitleSpeedEnabled: boolean;
+
+  // Sidebar filter visibility
+  UISidebarFilterLocation: boolean;
+  UISidebarFilterTracker: boolean;
+  UISidebarFilterTag: boolean;
 }
 
 export type FloodSetting = keyof FloodSettings;
