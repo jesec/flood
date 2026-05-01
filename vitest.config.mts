@@ -15,6 +15,7 @@ const baseTestConfig = {
     clean: false,
   },
   testTimeout: 60000,
+  hookTimeout: 60000,
   fileParallelism: false,
 };
 
