@@ -1,5 +1,10 @@
 import {FC} from 'react';
 
+const flagModules = import.meta.glob('../../../images/flags/*.png', {
+  query: '?url',
+  import: 'default',
+});
+
 const flagsCache: Record<string, string | null> = {};
 
 const getFlag = (countryCode?: string): string | null => {
@@ -13,18 +18,18 @@ const getFlag = (countryCode?: string): string | null => {
 
   const loadFlag = async () => {
     let flag: string | null = null;
-    await import(/* webpackChunkName: 'flag' */ `../../../images/flags/${countryCode.toLowerCase()}.png`)
-      .then(
-        ({default: image}: {default: string}) => {
-          flag = image;
-        },
-        () => {
-          flag = null;
-        },
-      )
-      .finally(() => {
-        flagsCache[countryCode] = flag;
-      });
+    const key = `../../../images/flags/${countryCode.toLowerCase()}.png`;
+    const loader = flagModules[key];
+    if (loader) {
+      try {
+        flag = (await loader()) as string;
+      } catch {
+        flag = null;
+      }
+    } else {
+      flag = null;
+    }
+    flagsCache[countryCode] = flag;
     return flag;
   };
 

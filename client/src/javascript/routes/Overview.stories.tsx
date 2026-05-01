@@ -3,7 +3,7 @@
  * Shows the complete application overview with torrents, sidebar, and action bar
  */
 
-import type {Meta, StoryObj} from '@storybook/react-webpack5';
+import type {Meta, StoryObj} from '@storybook/react-vite';
 import {within, expect, waitFor} from 'storybook/test';
 import React from 'react';
 

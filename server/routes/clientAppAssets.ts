@@ -95,7 +95,7 @@ const registerEmbeddedClientAppAssetsRoutes = async (
 
 // for developing
 const registerStaticClientAppAssetsRoutes = async (fastify: FastifyInstance): Promise<void> => {
-  const assetsDist = path.resolve(fileURLToPath(import.meta.url), '../../../dist/assets/');
+  const assetsDist = path.resolve('dist/assets/');
 
   await fastify.register(fastifyStatic, {root: assetsDist, prefix: '/', etag: false});
 
