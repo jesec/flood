@@ -43,6 +43,10 @@ $progress-bar--height: 3px;
         @include themes.theme('color', 'progress-bar--fill--error');
       }
 
+      .torrent--has-warning & {
+        @include themes.theme('color', 'progress-bar--fill--warning');
+      }
+
       .torrent--is-checking & {
         @include themes.theme('color', 'progress-bar--fill--checking');
       }
@@ -57,6 +61,10 @@ $progress-bar--height: 3px;
 
       .torrent--has-error.torrent--is-stopped & {
         @include themes.theme('color', 'progress-bar--fill--error--stopped');
+      }
+
+      .torrent--has-warning.torrent--is-stopped & {
+        @include themes.theme('color', 'progress-bar--fill--warning--stopped');
       }
     }
   }
@@ -79,6 +87,10 @@ $progress-bar--height: 3px;
       @include themes.theme('background', 'progress-bar--fill--error');
     }
 
+    .torrent--has-warning & {
+      @include themes.theme('background', 'progress-bar--fill--warning');
+    }
+
     .torrent--is-checking & {
       @include themes.theme('background', 'progress-bar--fill--checking');
     }
@@ -95,6 +107,10 @@ $progress-bar--height: 3px;
       @include themes.theme('background', 'progress-bar--fill--error--stopped');
     }
 
+    .torrent--has-warning.torrent--is-stopped & {
+      @include themes.theme('background', 'progress-bar--fill--warning--stopped');
+    }
+
     &__wrapper {
       @include themes.theme('background', 'progress-bar--track--background');
       flex: 1 1 auto;
@@ -109,12 +125,20 @@ $progress-bar--height: 3px;
         @include themes.theme('background', 'progress-bar--track--background--error');
       }
 
+      .torrent--has-warning & {
+        @include themes.theme('background', 'progress-bar--track--background--warning');
+      }
+
       .torrent--is-selected & {
         @include themes.theme('background', 'progress-bar--track--background--selected');
       }
 
       .torrent--has-error.torrent--is-stopped & {
         @include themes.theme('background', 'progress-bar--track--background--error--stopped');
+      }
+
+      .torrent--has-warning.torrent--is-stopped & {
+        @include themes.theme('background', 'progress-bar--track--background--warning--stopped');
       }
 
       .torrent--is-selected.torrent--is-stopped & {
