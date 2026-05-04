@@ -6,6 +6,7 @@ const torrentStatusMap = [
   'stopped',
   'active',
   'inactive',
+  'warning',
   'error',
 ] as const;
 
