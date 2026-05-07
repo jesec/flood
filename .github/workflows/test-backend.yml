@@ -31,7 +31,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download --repo userdocs/qbittorrent-nox-static --tag release-5.1.4_v2.0.12 --pattern 'x86_64-qbittorrent-nox' --dir /tmp
+          gh release download --repo userdocs/qbittorrent-nox-static release-5.1.4_v2.0.12 --pattern 'x86_64-qbittorrent-nox' --dir /tmp
           mv /tmp/x86_64-qbittorrent-nox /usr/local/bin/qbittorrent-nox
           chmod +x /usr/local/bin/qbittorrent-nox
 
