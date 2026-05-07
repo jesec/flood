@@ -6,6 +6,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig({
   root: 'client/src',
+  base: './',
   publicDir: 'public',
   resolve: {
     alias: {
