@@ -123,17 +123,20 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     }
 
     const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
-    await this.clientRequestManager
-      .torrentsAddURLs(urls, {
-        savepath: destination,
-        tags: tags.join(','),
-        [method]: !start,
-        root_folder: !isBasePath,
-        contentLayout: isBasePath ? 'NoSubfolder' : undefined,
-        sequentialDownload: isSequential,
-        skip_checking: isCompleted,
-      })
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    if (urls[0]) {
+      await this.clientRequestManager
+        .torrentsAddURLs(urls, {
+          savepath: destination,
+          tags: tags.join(','),
+          [method]: !start,
+          root_folder: !isBasePath,
+          contentLayout: isBasePath ? 'NoSubfolder' : undefined,
+          sequentialDownload: isSequential,
+          skip_checking: isCompleted,
+        })
+        .then(this.processClientRequestSuccess, this.processClientRequestError);
+    }
 
     if (files[0]) {
       return this.addTorrentsByFile({
