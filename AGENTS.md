@@ -47,7 +47,7 @@ pnpm run test                        # Run tests to catch regressions
 ```bash
 # Package Manager: pnpm (v9.7.0) is the project's package manager
 pnpm install --frozen-lockfile  # Install dependencies with lockfile
-pnpm run build                   # Build production (esbuild for server, webpack for client)
+pnpm run build                   # Build production (esbuild for server, Vite for client)
 pnpm start                       # Start production server (node --enable-source-maps dist/index.js)
 pnpm start -- --port 8080       # With custom options (pass args after --)
 ```
@@ -56,7 +56,7 @@ pnpm start -- --port 8080       # With custom options (pass args after --)
 
 ```bash
 pnpm run start:development:server  # Server with tsx watch mode (hot reload via tsx watch)
-pnpm run start:development:client  # Client webpack-dev-server (port 4200, with Panda CSS watch)
+pnpm run start:development:client  # Client Vite dev server (port 4200, with Panda CSS watch)
 # Run both in separate terminals for full development environment
 ```
 
@@ -73,7 +73,7 @@ pnpm run start:development:client  # Client webpack-dev-server (port 4200, with 
 pnpm test                        # Run all Vitest integration tests (spawns real torrent clients!)
 pnpm test:watch                  # Watch mode with Vitest
 pnpm test -- --project rtorrent server/routes/api/torrents.test.ts  # Run a specific server test against rTorrent
-pnpm run test:client             # Cypress E2E tests (requires server on port 4200)
+pnpm run test-storybook          # Run Storybook interaction tests
 pnpm run test-storybook          # Run Storybook interaction tests
 
 # Test specific torrent clients (runs relevant Vitest project):
@@ -117,6 +117,15 @@ fastify.route({
 })
 ```
 
+### OpenAPI Documentation
+
+Flood provides an OpenAPI specification and interactive Swagger UI:
+
+- **OpenAPI spec**: Available at `/api/openapi.json`
+- **Swagger UI**: Interactive API documentation at `/api/docs/`
+- All endpoints are documented with Zod schemas that generate OpenAPI schemas
+- Uses `@fastify/swagger` with `fastify-type-provider-zod` for automatic schema generation
+
 ### Database: NeDB (Embedded)
 
 - Located in `~/.local/share/flood/` by default
@@ -127,7 +136,7 @@ fastify.route({
 ### Build Process
 
 - **Server**: esbuild bundles to single file (`dist/index.js`) with source maps
-- **Client**: webpack with code splitting, CSS extraction, asset optimization
+- **Client**: Vite with code splitting, CSS extraction, asset optimization
 - **Assets**: Static files copied to `dist/assets/`
 - **CSS**: Panda CSS generates styled-system via `panda codegen`
 
@@ -262,8 +271,6 @@ For reverse proxy setups:
 
 ### Development Environment Variables
 
-- `DEV_SERVER_PORT` - webpack-dev-server port (default: 4200)
-- `DEV_SERVER_HOST` - Dev server host (default: 0.0.0.0)
 - `NODE_ENV=development` - Enables dev features
 
 ## Common Development Tasks
@@ -308,7 +315,7 @@ For reverse proxy setups:
 
 - **TypeScript errors?** Run `pnpm run check-types` and fix from top to bottom
 - **Lint errors?** Run `pnpm run lint` - most are auto-fixable with `pnpm run format-source`
-- **Build fails?** Check both server (esbuild) and client (webpack) output
+- **Build fails?** Check both server (esbuild) and client (Vite) output
 - **Tests fail?** Run specific test file with `pnpm test -- path/to/test`
 - **Panda CSS issues?** Run `panda codegen` to regenerate styled-system
 
@@ -342,7 +349,7 @@ For reverse proxy setups:
 ```bash
 # Start both for full development:
 npm run start:development:server  # Backend on port 3000 (tsx watch mode)
-npm run start:development:client  # Frontend on port 4200 (webpack-dev-server)
+pnpm run start:development:client  # Frontend on port 4200 (Vite dev server)
 
 # Frontend proxies API calls to backend (configurable):
 npm run start:development:client -- --proxy http://localhost:3000
@@ -368,21 +375,33 @@ npm run test-storybook          # Run Storybook tests
 
 - Stories located in `client/src/javascript/components/**/*.stories.tsx`
 - Webpack aliases configured for `@client/` and `@shared/` paths
-- Full CSS module support matching production webpack config
+- Full CSS module support matching production Vite config
 - Babel decorators enabled for MobX compatibility
 
 ### Frontend Mocking Strategy
 
-#### 1. Action Mocking via Webpack NormalModuleReplacementPlugin
+#### 1. Action Mocking via Vite Plugin
 
-Storybook replaces real actions with mocks at build time:
+Storybook replaces real actions with mocks at build time using a custom Vite plugin in `.storybook/main.ts`:
 
 ```typescript
 // In .storybook/main.ts
-new webpack.NormalModuleReplacementPlugin(
-  /@client\/actions\/FloodActions$/,
-  path.resolve(__dirname, './mocks/FloodActions.ts'),
-);
+{
+  name: 'storybook-mock-action-modules',
+  enforce: 'pre',
+  resolveId(id: string, _importer: string | undefined) {
+    // Intercept @client/actions/* imports and redirect to mocks
+    const cleanId = id.split('?')[0];
+    for (const moduleName of MOCKED_ACTION_MODULES) {
+      const aliasPath = `@client/actions/${moduleName}`;
+      const realPath = path.resolve(realActionsDir, `${moduleName}.ts`);
+      if (cleanId === aliasPath || cleanId === realPath) {
+        return path.resolve(mockDir, `${moduleName}.ts`);
+      }
+    }
+    return undefined;
+  },
+}
 ```
 
 This ensures all imports of actions are replaced with mock implementations.
