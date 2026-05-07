@@ -49,7 +49,9 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
   private cachedProperties: Record<
     string,
-    Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'>
+    Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'> & {
+      trackerMessage: string;
+    }
   > = {};
 
   async addTorrentsByFile({
@@ -366,10 +368,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
             const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
 
             if (properties != null && trackers != null && Array.isArray(trackers)) {
+              const firstTrackerMsg = trackers.find((t) => t.msg.length > 0)?.msg ?? '';
               this.cachedProperties[hash] = {
                 comment: properties?.comment,
                 dateCreated: properties?.creation_date,
                 isPrivate: trackers[0]?.msg.includes('is private'),
+                trackerMessage: firstTrackerMsg,
                 trackerURIs: getDomainsFromURLs(
                   trackers
                     .map((tracker) => tracker.url)
@@ -388,6 +392,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 comment = '',
                 dateCreated = 0,
                 isPrivate = false,
+                trackerMessage = '',
                 trackerURIs = [],
               } = this.cachedProperties[info.hash] || {};
 
@@ -409,7 +414,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,
-                message: '', // in tracker method
+                message: trackerMessage,
                 name: info.name,
                 peersConnected: info.num_leechs,
                 peersTotal: info.num_incomplete,
@@ -419,7 +424,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 seedsConnected: info.num_seeds,
                 seedsTotal: info.num_complete,
                 sizeBytes: info.size,
-                status: getTorrentStatusFromState(info.state),
+                status: getTorrentStatusFromState(info.state, trackerMessage),
                 tags: info.tags === '' ? [] : info.tags.split(',').map((tag) => tag.trim()),
                 trackerURIs,
                 upRate: info.upspeed,

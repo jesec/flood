@@ -1,6 +1,6 @@
 import {FC, memo} from 'react';
 
-import {Error, Spinner, Start, Stop} from '@client/ui/icons';
+import {CircleExclamation, Error, Spinner, Start, Stop} from '@client/ui/icons';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -10,6 +10,8 @@ interface TorrentStatusIconProps {
 
 const TorrentStatusIcon: FC<TorrentStatusIconProps> = memo(({status}: TorrentStatusIconProps) => {
   switch (status) {
+    case 'warning':
+      return <CircleExclamation />;
     case 'error':
       return <Error />;
     case 'checking':
