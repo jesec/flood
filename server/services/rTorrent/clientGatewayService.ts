@@ -53,7 +53,6 @@ import {
   getTorrentETAFromProperties,
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
-  SEQUENTIAL_SET_METHOD,
 } from './util/torrentPropertiesUtil';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
@@ -112,7 +111,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
-    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     let processedFiles: string[] = files;
@@ -133,7 +131,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
       isBasePath,
-      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
+      isSequential,
       isInitialSeeding,
       tags,
     });
@@ -187,7 +185,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     const {files, urls} = await fetchUrls(inputUrls, cookies);
@@ -201,7 +198,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
       isBasePath,
-      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
+      isSequential,
       isInitialSeeding,
       tags,
     });
@@ -546,6 +543,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
+    const {methodList} = await this.availableMethodCalls;
+
+    if (!methodList.includes('d.down.sequential.set')) {
+      throw new Error('d.down.sequential.set is not supported by this rTorrent instance');
+    }
+
     const methodCalls: MultiMethodCalls = hashes.map((hash) => ({
       methodName: 'd.down.sequential.set',
       params: [hash, isSequential ? '1' : '0'],

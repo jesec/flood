@@ -93,7 +93,7 @@ export const encodeTags = (tags: TorrentProperties['tags']): string => {
     .join(',');
 };
 
-export const SEQUENTIAL_SET_METHOD = 'd.down.sequential.set';
+const SEQUENTIAL_SET_METHOD = 'd.down.sequential.set';
 
 export const getAddTorrentPropertiesCalls = ({
   destination,
