@@ -21,14 +21,6 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 
 For now, rakshasa/rtorrent and jesec/rtorrent are both supported.
 
-If you are using rakshasa/rtorrent>0.15.1 (upstream rtorrent with json-rpc support),
-you will need to add these options to your config:
-
-```ini
-method.insert=d.down.sequential,value|const,0
-method.insert=d.down.sequential.set,value|const,0
-```
-
 #### Integrating with Flood
 
 APIs are officially documented inline by the [comments](https://github.com/jesec/flood/blob/f7019001dd81ee8401c87d4c4cd6da6f5f520611/server/routes/api/torrents.ts#L106-L117) and [types](https://github.com/jesec/flood/blob/f7019001dd81ee8401c87d4c4cd6da6f5f520611/shared/schema/api/torrents.ts#L10-L32).
