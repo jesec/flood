@@ -1,6 +1,6 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import ClientGatewayService from './clientGatewayService';
+import {type ClientGatewayService} from './clientGatewayService';
 import DelugeClientGatewayService from './Deluge/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
@@ -25,18 +25,18 @@ export interface ServiceInstances {
 
 const serviceInstances: Record<string, ServiceInstances> = {};
 
-const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => {
+const newClientGatewayService = async (user: UserInDatabase): Promise<ClientGatewayService> => {
   switch (user.client.client) {
     case 'Deluge':
-      return new DelugeClientGatewayService(user);
+      return DelugeClientGatewayService.create(user);
     case 'Neptune':
       return new NeptuneClientGatewayService(user);
     case 'qBittorrent':
-      return new QBittorrentClientGatewayService(user);
+      return QBittorrentClientGatewayService.create(user);
     case 'rTorrent':
-      return new RTorrentClientGatewayService(user);
+      return RTorrentClientGatewayService.create(user);
     case 'Transmission':
-      return new TransmissionClientGatewayService(user);
+      return TransmissionClientGatewayService.create(user);
   }
 };
 
@@ -56,7 +56,7 @@ export const destroyUserServices = async (userId: UserInDatabase['_id'], drop = 
   );
 };
 
-export const bootstrapServicesForUser = (user: UserInDatabase) => {
+export const bootstrapServicesForUser = async (user: UserInDatabase) => {
   const {_id} = user;
 
   if (serviceInstances[_id] != null) {
@@ -64,7 +64,7 @@ export const bootstrapServicesForUser = (user: UserInDatabase) => {
   }
 
   const userServiceInstances = {
-    clientGatewayService: newClientGatewayService(user),
+    clientGatewayService: await newClientGatewayService(user),
     feedService: new FeedService(user),
     historyService: new HistoryService(user),
     notificationService: new NotificationService(user),
