@@ -164,7 +164,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
       const credentials = req.body;
 
       const user = await Users.createUser(credentials);
-      bootstrapServicesForUser(user);
+      await bootstrapServicesForUser(user);
 
       if (req.query.cookie === 'false') {
         return {username: user.username};
@@ -358,7 +358,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
           await destroyUserServices(user._id);
 
-          bootstrapServicesForUser(user);
+          await bootstrapServicesForUser(user);
 
           return {};
         },
