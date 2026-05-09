@@ -11,6 +11,8 @@ export const addTorrentByURLSchema = strictObject({
   cookies: record(array(string())).optional(),
   // Path of destination
   destination: string().optional(),
+  // Category
+  category: string().optional(),
   // Tags
   tags: tagsSchema.optional(),
   // Whether destination is the base path [default: false]
@@ -33,6 +35,8 @@ export const addTorrentByFileSchema = strictObject({
   files: array(string()).nonempty(),
   // Path of destination
   destination: string().optional(),
+  // Category
+  category: string().optional(),
   // Tags
   tags: tagsSchema.optional(),
   // Whether destination is the base path [default: false]
@@ -48,6 +52,16 @@ export const addTorrentByFileSchema = strictObject({
 });
 
 export type AddTorrentByFileOptions = zodInfer<typeof addTorrentByFileSchema>;
+
+// PATCH /api/torrents/category
+export const setTorrentsCategorySchema = strictObject({
+  // An array of string representing hashes of torrents to operate on
+  hashes: array(string()).nonempty(),
+  // An array of string representing tags
+  category: string(),
+});
+
+export type SetTorrentsCategoryOptions = zodInfer<typeof setTorrentsCategorySchema>;
 
 // PATCH /api/torrents/tags
 export const setTorrentsTagsSchema = strictObject({

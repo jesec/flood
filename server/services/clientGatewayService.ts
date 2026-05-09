@@ -2,6 +2,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {UserInDatabase} from '@shared/schema/Auth';
@@ -110,6 +111,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * @return - Rejects with error.
    */
   abstract removeTorrents(options: DeleteTorrentsOptions): Promise<void>;
+
+  /**
+   * Sets category of torrents
+   *
+   * @param options - An object of options...
+   * @return - Rejects with error.
+   */
+  abstract setTorrentsCategory(options: SetTorrentsCategoryOptions): Promise<void>;
 
   /**
    * Sets initial seeding mode of torrents

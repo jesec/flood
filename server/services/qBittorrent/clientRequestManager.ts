@@ -428,6 +428,23 @@ class ClientRequestManager {
       });
   }
 
+  async torrentsSetCategory(hashes: Array<string>, category: string): Promise<void> {
+    return axios
+      .post(
+        `${this.apiBase}/torrents/setCategory`,
+        new URLSearchParams({
+          hashes: hashes.join('|').toLowerCase(),
+          category: `${category}`,
+        }),
+        {
+          headers: await this.getRequestHeaders(),
+        },
+      )
+      .then(() => {
+        // returns nothing
+      });
+  }
+
   async torrentsAddFiles(files: Array<Buffer>, options: QBittorrentTorrentsAddOptions): Promise<void> {
     const form = new FormData();
 
