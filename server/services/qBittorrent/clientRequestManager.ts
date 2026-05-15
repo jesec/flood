@@ -73,7 +73,7 @@ class ClientRequestManager {
         const cookies = res.headers['set-cookie'];
 
         if (Array.isArray(cookies)) {
-          return cookies.filter((cookie) => cookie.includes('SID='))[0];
+          return cookies.filter((cookie) => cookie.includes('SID=') || cookie.includes('QBT_SID_'))[0];
         }
 
         return undefined;
