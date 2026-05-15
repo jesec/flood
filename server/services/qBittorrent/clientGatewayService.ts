@@ -379,17 +379,14 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
             const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
 
             if (properties != null && trackers != null && Array.isArray(trackers)) {
-              const firstTrackerMsg = trackers.find((t) => t.msg.length > 0)?.msg ?? '';
+              const realTrackers = trackers.filter((t) => t.tier >= 0);
+              const firstTrackerMsg = realTrackers.find((t) => t.msg.length > 0)?.msg ?? '';
               this.cachedProperties[hash] = {
                 comment: properties?.comment,
                 dateCreated: properties?.creation_date,
                 isPrivate: trackers[0]?.msg.includes('is private'),
                 trackerMessage: firstTrackerMsg,
-                trackerURIs: getDomainsFromURLs(
-                  trackers
-                    .map((tracker) => tracker.url)
-                    .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
-                ),
+                trackerURIs: getDomainsFromURLs(realTrackers.map((tracker) => tracker.url)),
               };
             }
           }
