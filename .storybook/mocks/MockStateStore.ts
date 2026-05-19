@@ -106,6 +106,8 @@ class MockStateStore {
         containedCount: 0,
         containedSize: 0,
       },
+      categoriesCounts: {},
+      categoriesSizes: {},
       statusCounts: {},
       statusSizes: {},
       tagCounts: {},
