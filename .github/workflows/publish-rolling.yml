@@ -113,8 +113,3 @@ jobs:
       flood-tags: |
         jesec/flood:master-distroless
         ghcr.io/jesec/flood:master-distroless
-      build-rtorrent: true
-      rtorrent-version: master
-      rtorrent-tags: |
-        jesec/rtorrent-flood:master-distroless
-        ghcr.io/jesec/rtorrent-flood:master-distroless
