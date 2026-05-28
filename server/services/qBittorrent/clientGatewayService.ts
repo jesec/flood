@@ -51,8 +51,41 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     string,
     Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'> & {
       trackerMessage: string;
+      trackerMessageFetchedAt: number;
     }
   > = {};
+
+  private async fetchProperties(hash: string, includeProperties: boolean): Promise<void> {
+    const properties = includeProperties
+      ? await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined)
+      : undefined;
+    const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
+
+    if (trackers == null || !Array.isArray(trackers)) {
+      return;
+    }
+
+    if (includeProperties && properties == null) {
+      return;
+    }
+
+    const realTrackers = trackers.filter((t) => t.tier >= 0);
+
+    if (includeProperties) {
+      this.cachedProperties[hash] = {
+        comment: properties!.comment,
+        dateCreated: properties!.creation_date,
+        isPrivate: trackers[0]?.msg.includes('is private'),
+        trackerMessage: realTrackers.find((t) => t.msg.length > 0)?.msg ?? '',
+        trackerURIs: getDomainsFromURLs(realTrackers.map((tracker) => tracker.url)),
+        trackerMessageFetchedAt: Date.now(),
+      };
+    } else {
+      this.cachedProperties[hash].trackerMessage = realTrackers.find((t) => t.msg.length > 0)?.msg ?? '';
+      this.cachedProperties[hash].trackerURIs = getDomainsFromURLs(realTrackers.map((tracker) => tracker.url));
+      this.cachedProperties[hash].trackerMessageFetchedAt = Date.now();
+    }
+  }
 
   async addTorrentsByFile({
     files,
@@ -362,25 +395,13 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         this.emit('PROCESS_TORRENT_LIST_START');
 
         // qBittorrent can not handle requests in a highly concurrent way.
+        const TRACKER_MESSAGE_TTL = 60 * 60 * 1000; // 1 hour
+
         for await (const {hash} of infos) {
           if (this.cachedProperties[hash] == null) {
-            const properties = await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined);
-            const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
-
-            if (properties != null && trackers != null && Array.isArray(trackers)) {
-              const firstTrackerMsg = trackers.find((t) => t.msg.length > 0)?.msg ?? '';
-              this.cachedProperties[hash] = {
-                comment: properties?.comment,
-                dateCreated: properties?.creation_date,
-                isPrivate: trackers[0]?.msg.includes('is private'),
-                trackerMessage: firstTrackerMsg,
-                trackerURIs: getDomainsFromURLs(
-                  trackers
-                    .map((tracker) => tracker.url)
-                    .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
-                ),
-              };
-            }
+            await this.fetchProperties(hash, true);
+          } else if (Date.now() - this.cachedProperties[hash].trackerMessageFetchedAt > TRACKER_MESSAGE_TTL) {
+            await this.fetchProperties(hash, false);
           }
         }
 
