@@ -4,7 +4,7 @@ import SettingStore from '@client/stores/SettingStore';
 import ToggleList from '@client/components/general/ToggleList';
 import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
 

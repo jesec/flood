@@ -137,11 +137,11 @@ const handleProlongedInactivity = () => {
 };
 
 const handleWindowVisibilityChange = () => {
-  if (global.document.hidden) {
+  if (document.hidden) {
     // After 30 seconds of inactivity, we stop the event stream.
-    visibilityChangeTimeout = global.setTimeout(handleProlongedInactivity, 1000 * 30);
+    visibilityChangeTimeout = setTimeout(handleProlongedInactivity, 1000 * 30);
   } else {
-    global.clearTimeout(visibilityChangeTimeout);
+    clearTimeout(visibilityChangeTimeout);
 
     if (activityStreamEventSource == null) {
       FloodActions.startActivityStream();
@@ -149,6 +149,6 @@ const handleWindowVisibilityChange = () => {
   }
 };
 
-global.document.addEventListener('visibilitychange', handleWindowVisibilityChange);
+document.addEventListener('visibilitychange', handleWindowVisibilityChange);
 
 export default FloodActions;

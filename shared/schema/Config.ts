@@ -66,7 +66,7 @@ export const configSchema = strictObject({
 
   // CLI argument: --host / -h
   // The host that Flood should listen for web connections on.
-  // To listen on all interfaces, change to `floodServerHost: '0.0.0.0'`. [default: '127.0.0.1']
+  // To listen on all interfaces (both IPv4 and IPv6), change to `floodServerHost: '::'`. [default: '127.0.0.1']
   floodServerHost: string().optional(),
 
   // CLI argument: --port / -p

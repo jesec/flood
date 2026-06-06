@@ -4,7 +4,7 @@ import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useSta
 import {observer} from 'mobx-react-lite';
 import {useLongPress} from 'react-use';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import ConfigStore from '@client/stores/ConfigStore';
 import SettingStore from '@client/stores/SettingStore';

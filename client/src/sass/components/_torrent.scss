@@ -142,6 +142,31 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
     }
   }
 
+  &--has-warning {
+    &.torrent {
+      &--is-stopped {
+        .torrent {
+          &__detail {
+            &--name {
+              @include themes.theme('color', 'torrent--primary--foreground--warning--stopped');
+            }
+          }
+        }
+      }
+    }
+
+    .torrent {
+      &__detail {
+        &--name {
+          @include themes.theme('color', 'torrent--primary--foreground--warning');
+        }
+      }
+    }
+
+    &:after {
+      @include themes.theme('background', 'torrent--background--warning');
+    }
+  }
   &--is-downloading {
     &--actively {
       .torrent {
@@ -227,6 +252,35 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
         }
       }
 
+      &--has-warning {
+        .torrent {
+          &__detail {
+            &--name {
+              @include themes.theme('color', 'torrent--primary--foreground--selected--warning');
+            }
+
+            &--tags {
+              .tag {
+                @include themes.theme('background', 'torrent--tags--background--selected--has-warning');
+                @include themes.theme('color', 'torrent--tags--foreground--has-warning');
+              }
+            }
+
+            &--downRate,
+            &--upRate {
+              @include themes.theme('color', 'torrent--speed--foreground--selected--has-warning');
+            }
+          }
+        }
+
+        &,
+        &:hover {
+          &:after {
+            @include themes.theme('background', 'torrent--background--warning');
+          }
+        }
+      }
+
       &--is-stopped {
         &.torrent {
           &--has-error {
@@ -234,6 +288,16 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
               &__detail {
                 &--name {
                   @include themes.theme('color', 'torrent--primary--foreground--error--stopped--selected');
+                }
+              }
+            }
+          }
+
+          &--has-warning {
+            .torrent {
+              &__detail {
+                &--name {
+                  @include themes.theme('color', 'torrent--primary--foreground--warning--stopped--selected');
                 }
               }
             }
@@ -510,6 +574,13 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
             }
           }
 
+          &--has-warning {
+            &,
+            & + .torrent {
+              @include themes.theme('border-color', 'torrent--border--selected--warning');
+            }
+          }
+
           &--is-stopped {
             .torrent {
               &__detail {
@@ -553,6 +624,18 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
         .icon {
           margin-right: 0;
         }
+      }
+    }
+
+    .progress-bar--with-percent {
+      .progress-bar__fill__wrapper {
+        border-radius: 7px;
+        height: 14px;
+      }
+
+      .progress-bar__fill {
+        border-radius: 7px;
+        height: 100%;
       }
     }
   }

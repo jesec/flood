@@ -357,6 +357,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     property: 'dateAdded',
   },
   torrentListViewSize: 'expanded',
+  torrentListShowProgressPercent: true,
   torrentListColumns: [
     {id: 'name', visible: true},
     {id: 'percentComplete', visible: true},
@@ -423,6 +424,9 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
   },
   deleteTorrentData: false,
   UIPageTitleSpeedEnabled: false,
+  UISidebarFilterLocation: true,
+  UISidebarFilterTracker: true,
+  UISidebarFilterTag: true,
 };
 
 /**

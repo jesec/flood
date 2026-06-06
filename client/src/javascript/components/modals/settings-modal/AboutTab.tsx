@@ -4,7 +4,7 @@ import Markdown from 'react-markdown';
 
 import packageJSON from '../../../../../../package.json';
 
-import AboutMarkdown from '../../../../ABOUT.md';
+import AboutMarkdown from '../../../../ABOUT.md?raw';
 
 const FLOOD_PROJECT_URL = 'https://github.com/jesec/flood';
 

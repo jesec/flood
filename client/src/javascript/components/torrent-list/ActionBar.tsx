@@ -28,12 +28,7 @@ const ActionBar: FC = observer(() => {
           label="actionbar.button.sidebar.expand.collapse"
           slug="sidebar-expand-collapse"
           icon={<Menu />}
-          clickHandler={() => {
-            const view = document.getElementsByClassName('application__view')[0];
-            if (view != null) {
-              view.classList.toggle('application__view--sidebar-alternative-state');
-            }
-          }}
+          clickHandler={() => UIStore.toggleSidebarAlternativeState()}
           noTip
         />
       </div>

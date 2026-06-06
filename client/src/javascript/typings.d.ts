@@ -3,6 +3,6 @@ declare module '*.md' {
   export default value;
 }
 
-declare module '@lingui/loader!*.json?raw-lingui' {
+declare module '*?lingui' {
   export const messages: Record<string, string[]>;
 }

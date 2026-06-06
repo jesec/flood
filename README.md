@@ -21,21 +21,15 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 
 For now, rakshasa/rtorrent and jesec/rtorrent are both supported.
 
-If you are using rakshasa/rtorrent>0.15.1 (upstream rtorrent with json-rpc support),
-you will need to add these options to your config:
-
-```ini
-method.insert=d.down.sequential,value|const,0
-method.insert=d.down.sequential.set,value|const,0
-```
-
 #### Integrating with Flood
 
-APIs are officially documented inline by the [comments](https://github.com/jesec/flood/blob/f7019001dd81ee8401c87d4c4cd6da6f5f520611/server/routes/api/torrents.ts#L106-L117) and [types](https://github.com/jesec/flood/blob/f7019001dd81ee8401c87d4c4cd6da6f5f520611/shared/schema/api/torrents.ts#L10-L32).
+Flood provides an OpenAPI specification and interactive Swagger UI for API documentation:
+
+- **OpenAPI spec**: Available at `/api/openapi.json`
+- **Swagger UI**: Interactive API documentation at `/api/docs/`
 
 You can also check out:
 
-- [community documentation site](https://flood-api.netlify.app)
 - [list of unofficial client API libraries](https://github.com/jesec/flood/wiki/List-of-unofficial-client-API-libraries)
 - [list of unofficial API integrations](https://github.com/jesec/flood/wiki/List-of-unofficial-API-integrations)
 
@@ -139,40 +133,34 @@ Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshoo
 
 From the root of the Flood directory...
 
-1. Run `npm install`.
-1. Run `npm run build`.
-1. Run `npm start`.
+1. Run `pnpm install`.
+1. Run `pnpm run build`.
+1. Run `pnpm start`.
 
 Access the UI in your browser. With default settings, go to `http://localhost:3000`. You can configure the port via `--port` argument.
 
 **Notes**
 
-- When you use `npm run start` to execute Flood, you have to pass command line arguments after `--`. For example, `npm run start -- --host 0.0.0.0 --port 8080`. This applies to any `npm run` (e.g. `start:development:client`).
+- When you use `pnpm run start` to execute Flood, you have to pass command line arguments after `--`. For example, `pnpm run start -- --host 0.0.0.0 --port 8080`. This applies to any `pnpm run` (e.g. `start:development:client`).
 
 ### Updating
 
 1. To update, run `git pull` in this repository's directory.
 1. Kill the currently running Flood server.
-1. Run `npm install` to update dependencies.
-1. Run `npm run build` to transpile and bundle static assets.
-1. Start the Flood server with `npm start`.
+1. Run `pnpm install` to update dependencies.
+1. Run `pnpm run build` to transpile and bundle static assets.
+1. Start the Flood server with `pnpm start`.
 
 ### Local Development
 
-1. Run `npm install`.
-1. Run `npm run start:development:server` and `npm run start:development:client` in separate terminal instances.
-   - `npm run start:development:server` uses [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) to watch for changes to the server-side source. Or open the folder with VS code and then `Run -> Start Debugging`. You may use a [Javascript IDE](https://code.visualstudio.com/) to debug server codes.
-   - `npm run start:development:client` watches for changes in the client-side source. Access the UI in your browser. Defaults to `localhost:4200`. You may use browser's [DevTools](https://developers.google.com/web/tools/chrome-devtools) to debug client codes.
+1. Run `pnpm install`.
+1. Run `pnpm run start:development:server` and `pnpm run start:development:client` in separate terminal instances.
+   - `pnpm run start:development:server` uses [tsx](https://www.npmjs.com/package/tsx) to watch for changes to the server-side source. Or open the folder with VS code and then `Run -> Start Debugging`. You may use a [Javascript IDE](https://code.visualstudio.com/) to debug server codes.
+   - `pnpm run start:development:client` watches for changes in the client-side source. Access the UI in your browser. Defaults to `localhost:4200`. You may use browser's [DevTools](https://developers.google.com/web/tools/chrome-devtools) to debug client codes.
 
 `--help --show-hidden` shows advanced arguments.
 
 `--proxy` proxies requests from a development client to a URL of your choice (usually URL to a Flood server). It is useful when you wish to do development on the frontend but not the backend. Or when the frontend and backend are being developed on different hosts.
-
-### Environment Variables
-
-1. `DEV_SERVER_PORT`: webpackDevServer's port, used when developing Flood. Defaults to `4200`.
-1. `DEV_SERVER_HOST`: webpackDevServer's host, used when developing Flood. Defaults to `0.0.0.0`.
-1. `DEV_SERVER_HTTPS`: webpackDevServer's protocol, used when developing Flood. Defaults to `http`.
 
 ### Building Docker
 

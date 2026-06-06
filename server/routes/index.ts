@@ -1,26 +1,27 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
 import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
-import fastifyStatic from '@fastify/static';
-import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
-import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import swagger from '@fastify/swagger';
+import type {FastifyError, FastifyInstance} from 'fastify';
+import {jsonSchemaTransform, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
-import {createServerPaths} from 'server/config/paths';
 
 import config from '../../config';
+import packageJson from '../../package.json';
 import Users from '../models/Users';
 import apiRoutes from './api';
+import {registerClientAppAssetsRoutes} from './clientAppAssets';
+import swaggerRoutes from './swagger';
 
 const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => {
-  const {appDist} = createServerPaths();
   await Users.bootstrapServicesForAllUsers();
 
   fastify.setValidatorCompiler(validatorCompiler);
-  fastify.setSerializerCompiler(serializerCompiler);
+  // fastify.setSerializerCompiler(serializerCompiler);
+  fastify.setSerializerCompiler(() => {
+    return (data) => JSON.stringify(data);
+  });
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
@@ -46,6 +47,24 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifyCompress);
   await fastify.register(fastifySSE);
+  await fastify.register(swagger, {
+    openapi: {
+      info: {
+        title: 'Flood API',
+        version: packageJson.version,
+      },
+      components: {
+        securitySchemes: {
+          User: {
+            type: 'apiKey',
+            in: 'cookie',
+            name: 'jwt',
+          },
+        },
+      },
+    },
+    transform: jsonSchemaTransform,
+  });
 
   if (!config.disableRateLimit) {
     await fastify.register(fastifyRateLimit, {
@@ -62,31 +81,17 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
     }
   });
 
-  if (config.serveAssets !== false) {
-    await fastify.register(fastifyStatic, {root: appDist, prefix: servedPath, etag: false});
+  // enforce `/` at end
+  const routePrefix = servedPath.endsWith('/') ? servedPath : servedPath + '/';
+  await fastify.register(registerScopedRoutes, {
+    prefix: routePrefix,
+  });
+};
 
-    const html = fs.readFileSync(path.join(appDist, 'index.html'), {
-      encoding: 'utf8',
-    });
-
-    const headers = {
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      Expires: '0',
-      Pragma: 'no-cache',
-      'content-type': 'text/html; charset=UTF-8',
-    };
-
-    const sendIndex = (_req: unknown, res: FastifyReply) => {
-      res.headers(headers);
-      res.send(html);
-    };
-
-    fastify.get(`${servedPath}login`, sendIndex);
-    fastify.get(`${servedPath}register`, sendIndex);
-    fastify.get(`${servedPath}overview`, sendIndex);
-  }
-
-  await fastify.register(apiRoutes, {prefix: `${servedPath}api`});
+const registerScopedRoutes = async (scoped: FastifyInstance) => {
+  await registerClientAppAssetsRoutes(scoped);
+  await scoped.register(swaggerRoutes);
+  await scoped.register(apiRoutes, {prefix: '/api/'});
 };
 
 export default constructRoutes;

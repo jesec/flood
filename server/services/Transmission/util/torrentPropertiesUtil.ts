@@ -42,7 +42,11 @@ const getTorrentStatus = (
   }
 
   if (error !== TransmissionTorrentError.TR_STAT_OK) {
-    statuses.push('error');
+    if (error === TransmissionTorrentError.TR_STAT_TRACKER_WARNING) {
+      statuses.push('warning');
+    } else {
+      statuses.push('error');
+    }
   }
 
   if (haveValid === totalSize) {

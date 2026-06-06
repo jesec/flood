@@ -1,4 +1,4 @@
-import type {Meta, StoryObj} from '@storybook/react-webpack5';
+import type {Meta, StoryObj} from '@storybook/react-vite';
 import {fn, within, userEvent, expect, waitFor} from 'storybook/test';
 import {useRef} from 'react';
 

@@ -1,5 +1,6 @@
 # Use node alpine docker image
 FROM docker.io/node:22-alpine
+LABEL org.opencontainers.image.source="https://github.com/jesec/flood"
 
 ARG PACKAGE_TARBALL=artifacts/flood.tgz
 
@@ -26,5 +27,5 @@ USER download
 EXPOSE 3000
 
 # Flood
-ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENV FLOOD_OPTION_HOST="::"
 ENTRYPOINT ["/sbin/tini", "--", "flood"]

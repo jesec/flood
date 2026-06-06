@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  check-real:
+  check-matrix:
     runs-on: ubuntu-24.04
 
     strategy:
@@ -28,12 +28,16 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: npm run ${{ matrix.check }}
+      - run: pnpm run ${{ matrix.check }}
 
   check:
     # so we do not need to update GitHub repo config
     runs-on: ubuntu-latest
     needs:
-      - check-real
+      - check-matrix
+    if: always()
     steps:
-      - run: echo ok
+      - run: |
+          if [[ "${{ needs.check-matrix.result }}" != "success" ]]; then
+            exit 1
+          fi

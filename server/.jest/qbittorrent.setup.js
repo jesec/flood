@@ -12,6 +12,15 @@ fs.mkdirSync(temporaryRuntimeDirectory, {recursive: true});
 fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'db'), {recursive: true});
 fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'temp'), {recursive: true});
 
+// Pre-create qBittorrent config for 5.x static binary
+// LocalHostAuth=false allows unauthenticated access from localhost
+const qbtConfigDir = path.join(temporaryRuntimeDirectory, 'qBittorrent', 'config');
+fs.mkdirSync(qbtConfigDir, {recursive: true});
+fs.writeFileSync(
+  path.join(qbtConfigDir, 'qBittorrent.conf'),
+  ['[LegalNotice]', 'Accepted=true', '', '[Preferences]', 'WebUI\\LocalHostAuth=false', ''].join('\n'),
+);
+
 const qbtPort = Math.floor(Math.random() * (65534 - 20000) + 20000);
 
 const config = {
@@ -49,7 +58,7 @@ vi.mock('../../config', () => ({
 
 const qBittorrentDaemon = spawn(
   'qbittorrent-nox',
-  [`--webui-port=${qbtPort}`, `--profile=${temporaryRuntimeDirectory}`],
+  ['--confirm-legal-notice', `--webui-port=${qbtPort}`, `--profile=${temporaryRuntimeDirectory}`],
   {
     stdio: 'ignore',
     killSignal: 'SIGKILL',

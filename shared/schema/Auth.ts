@@ -13,7 +13,7 @@ export const credentialsSchema = strictObject({
   password: string(),
   client: clientConnectionSettingsSchema,
   level: nativeEnum(AccessLevel),
-});
+}).strip();
 
 export type Credentials = zodInfer<typeof credentialsSchema>;
 

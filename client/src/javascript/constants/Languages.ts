@@ -11,7 +11,7 @@ const Languages = {
   hu: 'Magyar',
   nl: 'Nederlands',
   no: 'norsk',
-  pl: 'Polskie',
+  pl: 'Polski',
   pt: 'português',
   ru: 'русский язык',
   ro: 'Romanian',

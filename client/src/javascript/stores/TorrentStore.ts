@@ -37,7 +37,17 @@ class TorrentStore {
     }
 
     if (searchFilter !== '') {
-      filteredTorrents = termMatch(filteredTorrents, (properties) => properties.name, searchFilter);
+      const nameMatchedHashes = new Set(
+        termMatch(filteredTorrents, (properties) => properties.name, searchFilter).map((p) => p.hash),
+      );
+      // Fuzzy match torrent names, exact match infohash (after trim/lowercase).
+      const normalizedSearchFilter = searchFilter.trim().toLowerCase();
+
+      filteredTorrents = filteredTorrents.filter(
+        (properties) =>
+          nameMatchedHashes.has(properties.hash) ||
+          (normalizedSearchFilter !== '' && properties.hash.toLowerCase() === normalizedSearchFilter),
+      );
     }
 
     if (statusFilter.length) {

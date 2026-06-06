@@ -31,7 +31,7 @@ import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {cleanupEmptyDirectories, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import ClientGatewayService from '../clientGatewayService';
 import * as geoip from '../geoip';
@@ -53,12 +53,32 @@ import {
   getTorrentETAFromProperties,
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
-  SEQUENTIAL_SET_METHOD,
 } from './util/torrentPropertiesUtil';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls();
+
+  // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
+  // even though the equivalent XML-RPC call succeeds. rakshasa/rtorrent#1596
+  private async fetchTorrentListResponses() {
+    const methodCalls = ['', 'main'].concat((await this.availableMethodCalls).torrentList);
+
+    try {
+      return await this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    } catch (error) {
+      if (!this.clientRequestManager.isJSONCapable || (error as RPCError)?.code !== -32700) {
+        throw error;
+      }
+
+      this.clientRequestManager.isJSONCapable = false;
+      return this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    }
+  }
 
   async getPreferredMethod(methods: string[]): Promise<string> {
     const {methodList} = await this.availableMethodCalls;
@@ -91,7 +111,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
-    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     let processedFiles: string[] = files;
@@ -112,7 +131,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
       isBasePath,
-      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
+      isSequential,
       isInitialSeeding,
       tags,
     });
@@ -166,7 +185,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     const {files, urls} = await fetchUrls(inputUrls, cookies);
@@ -180,7 +198,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
       isBasePath,
-      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
+      isSequential,
       isInitialSeeding,
       tags,
     });
@@ -344,13 +362,33 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             ? path.resolve(isBasePath ? destination : path.join(destination, name))
             : path.resolve(destination);
 
-          if (sourceDirectory !== destDirectory) {
-            if (isMultiFile[index]) {
-              await move(sourceDirectory, destDirectory, {overwrite: true});
-            } else {
-              await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
+          if (sourceDirectory === destDirectory) {
+            return;
+          }
+
+          const contents = await this.getTorrentContents(hash);
+
+          for (const content of contents) {
+            const sourcePath = sanitizePath(path.resolve(sourceDirectory, content.path));
+
+            if (!fs.existsSync(sourcePath) || !isAllowedPath(sourcePath)) {
+              continue;
+            }
+
+            const destPath = sanitizePath(path.resolve(destDirectory, content.path));
+
+            if (!isAllowedPath(destPath)) {
+              continue;
+            }
+
+            await fs.promises.mkdir(path.dirname(destPath), {recursive: true});
+
+            if (sourcePath !== destPath) {
+              await move(sourcePath, destPath, {overwrite: true});
             }
           }
+
+          await cleanupEmptyDirectories(sourceDirectory);
         }),
       );
     }
@@ -505,6 +543,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
+    const {methodList} = await this.availableMethodCalls;
+
+    if (!methodList.includes('d.down.sequential.set')) {
+      throw new Error('d.down.sequential.set is not supported by this rTorrent instance');
+    }
+
     const methodCalls: MultiMethodCalls = hashes.map((hash) => ({
       methodName: 'd.down.sequential.set',
       params: [hash, isSequential ? '1' : '0'],
@@ -653,9 +697,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
-    return this.clientRequestManager
-      .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+    return this.fetchTorrentListResponses()
       .then((responses: string[][]) => {
         this.emit('PROCESS_TORRENT_LIST_START');
         return Promise.all(

@@ -51,7 +51,7 @@ EXPOSE 3000
 EXPOSE 4200
 
 # Flood server in development mode
-ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start", "--", "--host=0.0.0.0"]
+ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start", "--", "--host=::"]
 
 # Then, to start a debugging session of frontend:
 # docker exec -it ${container_id} npm --prefix=/usr/src/app/ run start:development:client
@@ -63,4 +63,4 @@ FROM flood AS rtorrent-flood
 # Copy rTorrent
 COPY --from=rtorrent / /
 
-ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start", "--", "--host=0.0.0.0", "--rtorrent"]
+ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start", "--", "--host=::", "--rtorrent"]
