@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import SettingActions from '@client/actions/SettingActions';
 import SettingStore from '@client/stores/SettingStore';

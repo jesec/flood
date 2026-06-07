@@ -1,12 +1,12 @@
-import {FC, Suspense, useEffect, useState} from 'react';
+import {FC, Suspense, useCallback, useEffect, useState} from 'react';
 import {Trans} from '@lingui/react';
 import {useInterval} from 'react-use';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import {css} from '@client/styled-system/css';
 import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
-import UIStore from '@client/stores/UIStore';
 
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
@@ -17,10 +17,9 @@ const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
   const [pollingDelay, setPollingDelay] = useState<number | null>(null);
 
-  const torrentHash =
-    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrentHash = getTorrentDetailsHash();
 
-  const fetchPeers = () => {
+  const fetchPeers = useCallback(() => {
     setPollingDelay(null);
     if (torrentHash) {
       TorrentActions.fetchTorrentPeers(torrentHash).then((data) => {
@@ -30,9 +29,9 @@ const TorrentPeers: FC = () => {
       });
     }
     setPollingDelay(ConfigStore.pollInterval);
-  };
+  }, [torrentHash]);
 
-  useEffect(() => fetchPeers(), [torrentHash]);
+  useEffect(() => fetchPeers(), [fetchPeers]);
   useInterval(() => fetchPeers(), pollingDelay);
 
   return (

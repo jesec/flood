@@ -1,13 +1,13 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import LinkedText from '../../general/LinkedText';
 import Size from '../../general/Size';
 import TorrentStore from '../../../stores/TorrentStore';
-import UIStore from '../../../stores/UIStore';
 
 const getTags = (tags: TorrentProperties['tags']) =>
   tags.map((tag) => (
@@ -19,8 +19,7 @@ const getTags = (tags: TorrentProperties['tags']) =>
 const TorrentGeneralInfo: FC = observer(() => {
   const {i18n} = useLingui();
 
-  const torrentHash =
-    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrentHash = getTorrentDetailsHash();
   const torrent = torrentHash ? TorrentStore.torrents[torrentHash] : undefined;
 
   if (torrent == null) {

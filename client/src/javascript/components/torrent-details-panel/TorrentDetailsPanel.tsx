@@ -1,8 +1,7 @@
 import {FC, useEffect, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
-import ConfigStore from '@client/stores/ConfigStore';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
 import SettingStore from '@client/stores/SettingStore';

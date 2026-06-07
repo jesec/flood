@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '@client/ui';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -9,7 +10,6 @@ import {Disk} from '@client/ui/icons';
 import selectionTree from '@client/util/selectionTree';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
-import UIStore from '@client/stores/UIStore';
 
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 
@@ -21,8 +21,7 @@ const TorrentContents: FC = observer(() => {
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const {i18n} = useLingui();
 
-  const torrentHash =
-    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrentHash = getTorrentDetailsHash();
 
   useEffect(() => {
     if (torrentHash) {
@@ -39,7 +38,7 @@ const TorrentContents: FC = observer(() => {
     return null;
   }
 
-  const {hash} = UIStore.activeModal;
+  const hash = torrentHash;
 
   let directoryHeadingIconContent = null;
   let fileDetailContent = null;

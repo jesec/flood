@@ -1,17 +1,16 @@
 import {FC, useEffect, useState} from 'react';
 import {Trans} from '@lingui/react';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
 import Badge from '../../general/Badge';
 import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 const TorrentTrackers: FC = () => {
   const [trackers, setTrackers] = useState<Array<TorrentTracker>>([]);
 
-  const torrentHash =
-    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+  const torrentHash = getTorrentDetailsHash();
 
   const trackerCount = trackers.length;
   const trackerTypes = ['http', 'udp', 'dht'];

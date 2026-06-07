@@ -22,6 +22,9 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
   const [filterTagEnabled, setFilterTagEnabled] = useState<FloodSettings['UISidebarFilterTag']>(
     SettingStore.floodSettings.UISidebarFilterTag,
   );
+  const [torrentDetailsPanelEnabled, setTorrentDetailsPanelEnabled] = useState<FloodSettings['UITorrentDetailsPanel']>(
+    SettingStore.floodSettings.UITorrentDetailsPanel ?? true,
+  );
 
   const handlePageTitleSpeedToggle = () => {
     const nextValue = !pageTitleSpeedEnabled;
@@ -42,6 +45,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
     const nextValue = !filterTagEnabled;
     setFilterTagEnabled(nextValue);
     onSettingsChange({UISidebarFilterTag: nextValue});
+  };
+  const handleTorrentDetailsPanelToggle = () => {
+    const nextValue = !torrentDetailsPanelEnabled;
+    setTorrentDetailsPanelEnabled(nextValue);
+    onSettingsChange({UITorrentDetailsPanel: nextValue});
   };
   return (
     <ToggleList
@@ -65,6 +73,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
           label: 'settings.ui.sidebar.filter.tag',
           checked: filterTagEnabled,
           onClick: handleFilterTagToggle,
+        },
+        {
+          label: 'settings.ui.torrent.details.panel',
+          checked: torrentDetailsPanelEnabled,
+          onClick: handleTorrentDetailsPanelToggle,
         },
       ]}
     />
