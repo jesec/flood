@@ -36,7 +36,7 @@ The dev container image is automatically built and published to GitHub Container
 
 - **OS:** Ubuntu 22.04 LTS (jammy)
 - **Node.js:** v22.x (matches CI and production targets)
-- **Package Manager:** pnpm 9.7.0
+- **Package Manager:** pnpm 11.5.2
 - **Shell:** zsh with Oh My Zsh
 
 ### Development Tools

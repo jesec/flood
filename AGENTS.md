@@ -45,7 +45,7 @@ pnpm run test                        # Run tests to catch regressions
 ### Build & Run
 
 ```bash
-# Package Manager: pnpm (v9.7.0) is the project's package manager
+# Package Manager: pnpm (v11.5.2) is the project's package manager
 pnpm install --frozen-lockfile  # Install dependencies with lockfile
 pnpm run build                   # Build production (esbuild for server, Vite for client)
 pnpm start                       # Start production server (node --enable-source-maps dist/index.js)
