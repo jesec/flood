@@ -1,30 +1,32 @@
 import type {infer as zodInfer} from 'zod';
-import {array, boolean, number, strictObject, string} from 'zod';
+import {array, boolean, strictObject, string, z} from 'zod';
+
+const coerceNumber = z.coerce.number();
 
 export const clientSettingsSchema = strictObject({
   dht: boolean(),
-  dhtPort: number(),
+  dhtPort: coerceNumber,
   directoryDefault: string(),
-  networkHttpMaxOpen: number(),
+  networkHttpMaxOpen: coerceNumber,
   networkLocalAddress: array(string()),
-  networkMaxOpenFiles: number(),
+  networkMaxOpenFiles: coerceNumber,
   networkPortOpen: boolean(),
   networkPortRandom: boolean(),
   networkPortRange: string(),
   piecesHashOnCompletion: boolean(),
-  piecesMemoryMax: number(),
+  piecesMemoryMax: coerceNumber,
   protocolPex: boolean(),
-  throttleGlobalDownSpeed: number(),
-  throttleGlobalUpSpeed: number(),
-  throttleMaxPeersNormal: number(),
-  throttleMaxPeersSeed: number(),
-  throttleMaxDownloads: number(),
-  throttleMaxDownloadsGlobal: number(),
-  throttleMaxUploads: number(),
-  throttleMaxUploadsGlobal: number(),
-  throttleMinPeersNormal: number(),
-  throttleMinPeersSeed: number(),
-  trackersNumWant: number(),
+  throttleGlobalDownSpeed: coerceNumber,
+  throttleGlobalUpSpeed: coerceNumber,
+  throttleMaxPeersNormal: coerceNumber,
+  throttleMaxPeersSeed: coerceNumber,
+  throttleMaxDownloads: coerceNumber,
+  throttleMaxDownloadsGlobal: coerceNumber,
+  throttleMaxUploads: coerceNumber,
+  throttleMaxUploadsGlobal: coerceNumber,
+  throttleMinPeersNormal: coerceNumber,
+  throttleMinPeersSeed: coerceNumber,
+  trackersNumWant: coerceNumber,
 }).strip();
 
 // PATCH /api/client/settings
