@@ -26,6 +26,7 @@ RUN chown 1001:1001 /root/sysroot/home/download
 
 # flood image
 FROM scratch AS flood
+LABEL org.opencontainers.image.source="https://github.com/jesec/flood"
 
 COPY --from=build /root/sysroot /
 
