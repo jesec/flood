@@ -204,6 +204,7 @@ Each client in `/server/services/[client]/` follows this pattern:
 - JSON message catalogs in `/client/src/javascript/i18n/strings/`
 - Lazy-loaded based on user preference
 - Build extracts messages via Babel plugin
+- **Only modify `en.json`** — all other locale files are generated from a translation platform and should never be edited directly
 
 ### Testing Infrastructure
 
