@@ -16,6 +16,8 @@ const TorrentStatusIcon: FC<TorrentStatusIconProps> = memo(({status}: TorrentSta
       return <Error />;
     case 'checking':
       return <Spinner />;
+    case 'moving':
+      return <Spinner />;
     case 'downloading':
       return <Start />;
     case 'seeding':

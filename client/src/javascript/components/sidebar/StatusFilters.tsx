@@ -50,6 +50,11 @@ const StatusFilters: FC = observer(() => {
       icon: <Spinner />,
     },
     {
+      label: i18n._('filter.status.moving'),
+      slug: 'moving',
+      icon: <Spinner />,
+    },
+    {
       label: i18n._('filter.status.completed'),
       slug: 'complete',
       icon: <Completed />,
