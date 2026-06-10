@@ -74,7 +74,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
     name = i18n._('filter.untagged');
   }
 
-  if (slug === 'checking' || slug === 'error') {
+  if (slug === 'checking' || slug === 'moving' || slug === 'error') {
     if (count === 0) {
       return null;
     }

@@ -8,6 +8,7 @@ const torrentStatusMap = [
   'inactive',
   'warning',
   'error',
+  'moving',
 ] as const;
 
 export type TorrentStatus = (typeof torrentStatusMap)[number];
