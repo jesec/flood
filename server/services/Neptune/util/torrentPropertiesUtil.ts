@@ -15,11 +15,7 @@ export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'
   return TorrentTrackerType.DHT;
 };
 
-export const getTorrentStatusFromState = (
-  state: NeptuneTorrentState,
-  message = '',
-  trackerErrors?: Record<string, string>,
-): TorrentProperties['status'] => {
+export const getTorrentStatusFromState = (state: NeptuneTorrentState, message = ''): TorrentProperties['status'] => {
   const statuses: TorrentProperties['status'] = [];
 
   switch (state) {
@@ -41,7 +37,7 @@ export const getTorrentStatusFromState = (
       statuses.push('checking');
       break;
     case 'Moving':
-      statuses.push('checking');
+      statuses.push('moving');
       break;
     case 'Error':
       statuses.push('error');
@@ -52,7 +48,7 @@ export const getTorrentStatusFromState = (
       break;
   }
 
-  if (message.length > 0 || (trackerErrors != null && Object.keys(trackerErrors).length > 0)) {
+  if (message.length > 0) {
     statuses.push('warning');
   }
 
