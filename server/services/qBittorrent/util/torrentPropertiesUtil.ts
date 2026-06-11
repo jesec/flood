@@ -86,6 +86,8 @@ export const getTorrentStatusFromState = (
       statuses.push('checking');
       break;
     case 'moving':
+      statuses.push('moving');
+      break;
     case 'checkingResumeData':
     case 'unknown':
       statuses.push('checking');
