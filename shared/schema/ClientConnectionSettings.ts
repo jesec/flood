@@ -61,8 +61,19 @@ const transmissionConnectionSettingsSchema = strictObject({
 
 export type TransmissionConnectionSettings = zodInfer<typeof transmissionConnectionSettingsSchema>;
 
+const neptuneConnectionSettingsSchema = strictObject({
+  client: literal('Neptune'),
+  type: literal('rpc'),
+  version: literal(1),
+  url: string().url(),
+  token: string(),
+});
+
+export type NeptuneConnectionSettings = zodInfer<typeof neptuneConnectionSettingsSchema>;
+
 export const clientConnectionSettingsSchema = union([
   delugeConnectionSettingsSchema,
+  neptuneConnectionSettingsSchema,
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
   transmissionConnectionSettingsSchema,

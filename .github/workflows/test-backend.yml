@@ -35,7 +35,9 @@ jobs:
           mv /tmp/x86_64-qbittorrent-nox /usr/local/bin/qbittorrent-nox
           chmod +x /usr/local/bin/qbittorrent-nox
 
-      - run: sudo apt-get install -y transmission-daemon
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y transmission-daemon
 
       - run: |
           wget https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb

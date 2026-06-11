@@ -50,5 +50,21 @@ jobs:
       - docker
       - docker-distroless
       - debian
+    if: always()
     steps:
-      - run: echo 1
+      - run: |
+          if [[ "${{ needs.pkg.result }}" != "success" ]]; then
+            exit 1
+          fi
+      - run: |
+          if [[ "${{ needs.docker.result }}" != "success" ]]; then
+            exit 1
+          fi
+      - run: |
+          if [[ "${{ needs.docker-distroless.result }}" != "success" ]]; then
+            exit 1
+          fi
+      - run: |
+          if [[ "${{ needs.debian.result }}" != "success" ]]; then
+            exit 1
+          fi
