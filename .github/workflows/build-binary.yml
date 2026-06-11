@@ -60,6 +60,8 @@ jobs:
           cp pnpm-lock.yaml package/
 
       - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: 'package/package.json'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
