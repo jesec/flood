@@ -42,36 +42,6 @@ on:
         required: false
         default: jesec/flood
         type: string
-      build-rtorrent:
-        description: Whether to build rtorrent-flood image
-        required: false
-        default: true
-        type: boolean
-      rtorrent-tags:
-        description: Docker tags for the rtorrent-flood image (newline separated)
-        required: false
-        default: jesec/rtorrent-flood:dev
-        type: string
-      rtorrent-version:
-        description: rtorrent version to embed
-        required: false
-        default: master
-        type: string
-      rtorrent-registry:
-        description: Registry host for rtorrent base image
-        required: false
-        default: docker.io
-        type: string
-      rtorrent-repository:
-        description: Repository path for rtorrent base image
-        required: false
-        default: jesec/rtorrent
-        type: string
-      rtorrent-image:
-        description: Full image reference for rtorrent base
-        required: false
-        default: docker.io/jesec/rtorrent:master
-        type: string
 
 jobs:
   docker:
@@ -103,7 +73,6 @@ jobs:
         id: local
         run: |
           printf 'flood=%s\n' "${LOCAL_REGISTRY}/${{ inputs['flood-repository'] }}:${{ inputs['flood-version'] }}" >> "$GITHUB_OUTPUT"
-          printf 'rtorrent=%s\n' "${LOCAL_REGISTRY}/rtorrent-flood:${{ inputs['rtorrent-version'] }}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -162,29 +131,3 @@ jobs:
             [ -z "$tag" ] && continue
             regctl image copy "$LOCAL_TAG" "$tag"
           done <<< "${{ inputs['flood-tags'] }}"
-
-      - name: Build rtorrent-flood image
-        if: inputs.build-rtorrent
-        id: build_rtorrent
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./distribution/containers/Dockerfile.rtorrent
-          platforms: ${{ inputs.platforms }}
-          push: true
-          pull: false
-          network: host
-          tags: ${{ steps.local.outputs.rtorrent }}
-          build-args: |
-            FLOOD_IMAGE=${{ steps.local.outputs.flood }}
-            RTORRENT_IMAGE=${{ inputs['rtorrent-image'] }}
-
-      - name: Mirror rtorrent-flood image to targets
-        if: inputs.push && inputs.build-rtorrent
-        env:
-          LOCAL_TAG: ${{ steps.local.outputs.rtorrent }}
-        run: |
-          while IFS= read -r tag; do
-            [ -z "$tag" ] && continue
-            regctl image copy "$LOCAL_TAG" "$tag"
-          done <<< "${{ inputs['rtorrent-tags'] }}"

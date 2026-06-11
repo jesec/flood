@@ -89,11 +89,6 @@ jobs:
       flood-tags: |
         jesec/flood:master
         ghcr.io/jesec/flood:master
-      build-rtorrent: true
-      rtorrent-version: master
-      rtorrent-tags: |
-        jesec/rtorrent-flood:master
-        ghcr.io/jesec/rtorrent-flood:master
 
   pkg:
     needs: package
@@ -113,8 +108,3 @@ jobs:
       flood-tags: |
         jesec/flood:master-distroless
         ghcr.io/jesec/flood:master-distroless
-      build-rtorrent: true
-      rtorrent-version: master
-      rtorrent-tags: |
-        jesec/rtorrent-flood:master-distroless
-        ghcr.io/jesec/rtorrent-flood:master-distroless

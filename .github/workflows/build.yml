@@ -20,8 +20,6 @@ jobs:
       flood-version: pr-${{ github.event.pull_request.number || 'check' }}
       flood-tags: |
         jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}
-      rtorrent-tags: |
-        jesec/rtorrent-flood:pr-validate
       platforms: linux/amd64,linux/arm64
 
   pkg:
@@ -39,8 +37,6 @@ jobs:
       flood-version: pr-${{ github.event.pull_request.number || 'check' }}
       flood-tags: |
         jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
-      rtorrent-tags: |
-        jesec/rtorrent-flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
       platforms: linux/amd64,linux/arm64
 
   debian:
