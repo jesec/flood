@@ -34,7 +34,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: latest
 
       - name: Exchange OIDC token for npm publish token
         id: npm_token
@@ -86,13 +86,6 @@ jobs:
         jesec/flood:${{ needs.package.outputs.version }}
         ghcr.io/jesec/flood:latest
         ghcr.io/jesec/flood:${{ needs.package.outputs.version }}
-      build-rtorrent: true
-      rtorrent-version: master
-      rtorrent-tags: |
-        jesec/rtorrent-flood:${{ needs.package.outputs.version }}
-        jesec/rtorrent-flood:latest
-        ghcr.io/jesec/rtorrent-flood:${{ needs.package.outputs.version }}
-        ghcr.io/jesec/rtorrent-flood:latest
 
   github-release:
     needs:

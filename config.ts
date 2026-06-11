@@ -112,6 +112,14 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
     describe: 'Password of Transmission RPC interface',
     type: 'string',
   })
+  .option('neptune-url', {
+    describe: 'URL to Neptune JSON-RPC interface',
+    type: 'string',
+  })
+  .option('neptune-token', {
+    describe: 'Authentication token for Neptune JSON-RPC interface',
+    type: 'string',
+  })
   .group(
     [
       'dehost',
@@ -127,6 +135,8 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
       'trurl',
       'truser',
       'trpass',
+      'neptune-url',
+      'neptune-token',
     ],
     'When auth=none:',
   )
@@ -216,7 +226,7 @@ try {
   fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
   fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
 } catch {
-  console.error('Failed to access runtime directory');
+  console.error(`Failed to access runtime directory ${argv.rundir}`);
   process.exit(1);
 }
 
@@ -314,6 +324,14 @@ if (argv.rtsocket != null || argv.rthost != null) {
     port: argv.deport,
     username: argv.deuser,
     password: argv.depass,
+  };
+} else if (argv.neptuneUrl != null) {
+  connectionSettings = {
+    client: 'Neptune',
+    type: 'rpc',
+    version: 1,
+    url: argv.neptuneUrl,
+    token: argv.neptuneToken ?? '',
   };
 }
 

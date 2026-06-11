@@ -29,8 +29,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-# Install pnpm 9.7.0
-RUN npm install -g pnpm@9.7.0
+# Install pnpm 11.5.2
+RUN npm install -g pnpm@11.5.2
 
 # Install rTorrent from jesec's releases (same as CI)
 RUN wget -q https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb && \

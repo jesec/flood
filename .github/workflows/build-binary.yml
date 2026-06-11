@@ -59,7 +59,7 @@ jobs:
           tar -xzf "${{ steps.package.outputs.tarball }}" -C package --strip-components=1
           cp pnpm-lock.yaml package/
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -83,7 +83,7 @@ jobs:
           sudo chmod +x /usr/local/bin/ldid
 
       - name: Install pkg
-        run: pnpm add -g @yao-pkg/pkg
+        run: pnpm add -g --config.global-bin-dir="$PNPM_HOME" @yao-pkg/pkg
 
       - name: Build executables
         working-directory: package

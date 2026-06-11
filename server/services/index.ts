@@ -4,6 +4,7 @@ import ClientGatewayService from './clientGatewayService';
 import DelugeClientGatewayService from './Deluge/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
+import NeptuneClientGatewayService from './Neptune/clientGatewayService';
 import NotificationService from './notificationService';
 import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
@@ -28,6 +29,8 @@ const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => 
   switch (user.client.client) {
     case 'Deluge':
       return new DelugeClientGatewayService(user);
+    case 'Neptune':
+      return new NeptuneClientGatewayService(user);
     case 'qBittorrent':
       return new QBittorrentClientGatewayService(user);
     case 'rTorrent':
