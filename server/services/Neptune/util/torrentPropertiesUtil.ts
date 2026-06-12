@@ -15,25 +15,26 @@ export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'
   return TorrentTrackerType.DHT;
 };
 
-export const getTorrentStatusFromState = (state: NeptuneTorrentState, message = ''): TorrentProperties['status'] => {
+export const getTorrentStatusFromState = (
+  state: NeptuneTorrentState,
+  message = '',
+  downRate = 0,
+  upRate = 0,
+): TorrentProperties['status'] => {
   const statuses: TorrentProperties['status'] = [];
 
   switch (state) {
     case 'Stopped':
-      statuses.push('inactive');
       statuses.push('stopped');
       break;
     case 'Downloading':
-      statuses.push('active');
       statuses.push('downloading');
       break;
     case 'Seeding':
       statuses.push('complete');
-      statuses.push('active');
       statuses.push('seeding');
       break;
     case 'Checking':
-      statuses.push('active');
       statuses.push('checking');
       break;
     case 'Moving':
@@ -41,11 +42,16 @@ export const getTorrentStatusFromState = (state: NeptuneTorrentState, message = 
       break;
     case 'Error':
       statuses.push('error');
-      statuses.push('inactive');
       statuses.push('stopped');
       break;
     default:
       break;
+  }
+
+  if (downRate !== 0 || upRate !== 0) {
+    statuses.push('active');
+  } else {
+    statuses.push('inactive');
   }
 
   if (message.length > 0) {
