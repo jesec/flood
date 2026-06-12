@@ -267,7 +267,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
           );
 
           const isComplete = torrent.state === 'Seeding';
-          const isActive = torrent.state === 'Downloading' || torrent.state === 'Seeding';
+          const isActive = torrent.upload_rate > 0 && torrent.download_rate > 0;
 
           const trackerErrorMessages = Object.values(torrent.tracker_errors ?? {}).filter(Boolean);
           const trackerMessage = trackerErrorMessages.find((m) => m.length > 0) ?? '';
