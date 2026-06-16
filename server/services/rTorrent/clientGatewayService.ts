@@ -801,6 +801,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
     const configs = clientSettingMethodCallConfigs;
+    const {methodList} = await this.availableMethodCalls;
     const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
       const property = key as keyof SetClientSettingsOptions;
       let methodName = '';
@@ -815,13 +816,29 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           methodName = 'dht.mode.set';
           param = (param as ClientSettings[typeof property]) ? 'auto' : 'disable';
           break;
-        case 'piecesMemoryMax':
-          methodName = `${configs[property].methodCall}.set`;
+        case 'piecesMemoryMax': {
+          const pieceMethods = Array.isArray(configs[property].methodCall)
+            ? configs[property].methodCall
+            : [configs[property].methodCall];
+          methodName = `${pieceMethods[0]}.set`;
           param = (param as ClientSettings[typeof property]) * 1024 * 1024;
           break;
-        default:
-          methodName = `${configs[property].methodCall}.set`;
+        }
+        default: {
+          const methods = Array.isArray(configs[property].methodCall)
+            ? configs[property].methodCall
+            : [configs[property].methodCall];
+          methodName = `${methods[0]}.set`;
+          if (methodList?.length > 0) {
+            for (const method of methods) {
+              if (methodList.includes(`${method}.set`)) {
+                methodName = `${method}.set`;
+                break;
+              }
+            }
+          }
           break;
+        }
       }
 
       if (typeof param === 'boolean') {
@@ -882,21 +899,16 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       });
     }
 
-    const getAvailableMethodCalls =
-      methodList?.length > 0
-        ? (methodCalls: Array<string>) => {
-            return methodCalls.map((method) => (methodList.includes(method.split('=')[0]) ? method : 'false='));
-          }
-        : (methodCalls: Array<string>) => methodCalls;
+    const clientSettingCalls = getMethodCalls(clientSettingMethodCallConfigs, methodList);
 
     return {
       methodList,
-      clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
-      torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
-      torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
-      torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
-      torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
-      transferSummary: getAvailableMethodCalls(getMethodCalls(transferSummaryMethodCallConfigs)),
+      clientSetting: clientSettingCalls,
+      torrentContent: getMethodCalls(torrentContentMethodCallConfigs, methodList),
+      torrentList: getMethodCalls(torrentListMethodCallConfigs, methodList),
+      torrentPeer: getMethodCalls(torrentPeerMethodCallConfigs, methodList),
+      torrentTracker: getMethodCalls(torrentTrackerMethodCallConfigs, methodList),
+      transferSummary: getMethodCalls(transferSummaryMethodCallConfigs, methodList),
     };
   }
 
