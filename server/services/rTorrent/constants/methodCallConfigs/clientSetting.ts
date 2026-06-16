@@ -23,7 +23,7 @@ const clientSettingMethodCallConfigs = {
     },
   },
   networkHttpMaxOpen: {
-    methodCall: 'network.http.max_open',
+    methodCall: ['network.http.max_open', 'network.http.max_total_connections'],
     transformValue: numberTransformer,
   },
   networkLocalAddress: {
