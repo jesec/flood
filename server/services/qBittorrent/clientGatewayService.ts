@@ -8,6 +8,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -35,7 +36,7 @@ import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
 import {isApiVersionAtLeast} from './util/apiVersionCheck';
@@ -45,8 +46,8 @@ import {
   getTorrentTrackerTypeFromURL,
 } from './util/torrentPropertiesUtil';
 
-class QBittorrentClientGatewayService extends ClientGatewayService {
-  private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
+class QBittorrentClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  private clientRequestManager: ClientRequestManager;
   private cachedProperties: Record<
     string,
     Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'> & {
@@ -54,6 +55,16 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       trackerMessageFetchedAt: number;
     }
   > = {};
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static async create(user: UserInDatabase): Promise<QBittorrentClientGatewayService> {
+    const clientRequestManager = new ClientRequestManager(user.client as QBittorrentConnectionSettings);
+    return new QBittorrentClientGatewayService(user, clientRequestManager);
+  }
 
   private async fetchProperties(hash: string, includeProperties: boolean): Promise<void> {
     const properties = includeProperties
