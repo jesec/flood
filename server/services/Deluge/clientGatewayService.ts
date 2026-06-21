@@ -7,6 +7,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -31,13 +32,23 @@ import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
 import {getTorrentStatusFromStatuses} from './util/torrentPropertiesUtil';
 
-class DelugeClientGatewayService extends ClientGatewayService {
-  private clientRequestManager = new ClientRequestManager(this.user.client as DelugeConnectionSettings);
+class DelugeClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  private clientRequestManager: ClientRequestManager;
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static async create(user: UserInDatabase): Promise<DelugeClientGatewayService> {
+    const clientRequestManager = new ClientRequestManager(user.client as DelugeConnectionSettings);
+    return new DelugeClientGatewayService(user, clientRequestManager);
+  }
 
   async addTorrentsByFile({
     files,

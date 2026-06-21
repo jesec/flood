@@ -6,6 +6,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -30,14 +31,24 @@ import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import * as geoip from '../geoip';
 import ClientRequestManager from './clientRequestManager';
 import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/TransmissionTorrentsMethods';
 import torrentPropertiesUtil from './util/torrentPropertiesUtil';
 
-class TransmissionClientGatewayService extends ClientGatewayService {
-  clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);
+class TransmissionClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  clientRequestManager: ClientRequestManager;
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static async create(user: UserInDatabase): Promise<TransmissionClientGatewayService> {
+    const clientRequestManager = new ClientRequestManager(user.client as TransmissionConnectionSettings);
+    return new TransmissionClientGatewayService(user, clientRequestManager);
+  }
 
   async addTorrentsByFile({
     files,
