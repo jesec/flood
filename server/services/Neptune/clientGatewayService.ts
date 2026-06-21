@@ -267,12 +267,15 @@ class NeptuneClientGatewayService extends ClientGatewayService {
           );
 
           const isComplete = torrent.state === 'Seeding';
-          const isActive = torrent.state === 'Downloading' || torrent.state === 'Seeding';
+
+          const trackerErrorMessages = Object.values(torrent.tracker_errors ?? {}).filter(Boolean);
+          const trackerMessage = trackerErrorMessages.find((m) => m.length > 0) ?? '';
+          const combinedMessage = torrent.message || trackerMessage;
 
           const torrentProperties: TorrentProperties = {
             bytesDone: torrent.completed,
             comment: torrent.comment,
-            dateActive: isActive ? -1 : 0,
+            dateActive: 0,
             dateAdded: torrent.add_at,
             dateCreated: 0,
             dateFinished: isComplete ? torrent.add_at : 0,
@@ -284,7 +287,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             isPrivate: torrent.private,
             isInitialSeeding: false,
             isSequential: false,
-            message: torrent.message,
+            message: combinedMessage,
             name: torrent.name,
             peersConnected: torrent.connection_count,
             peersTotal: 0,
@@ -299,8 +302,9 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             sizeBytes: torrent.total_length,
             status: getTorrentStatusFromState(
               torrent.state as NeptuneTorrentState,
-              torrent.message,
-              torrent.tracker_errors,
+              combinedMessage,
+              torrent.download_rate,
+              torrent.upload_rate,
             ),
             tags: torrent.tags,
             trackerURIs,
