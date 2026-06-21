@@ -45,7 +45,7 @@ import {
   transferSummaryMethodCallConfigs,
 } from './constants/methodCallConfigs';
 import type {RPCError} from './types/RPCError';
-import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import type {MethodCallConfig, MethodCallConfigs, MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {
   encodeTags,
@@ -57,22 +57,41 @@ import {
 
 type AvailableMethodCalls = {
   methodList: string[];
-  clientSetting: string[];
+  clientSetting: MethodCallConfigs;
   torrentContent: string[];
   torrentList: string[];
   torrentPeer: string[];
   torrentTracker: string[];
-  transferSummary: string[];
+  transferSummary: MethodCallConfigs;
 };
 
 const EMPTY_METHOD_CALLS: AvailableMethodCalls = {
   methodList: [],
-  clientSetting: [],
+  clientSetting: {},
   torrentContent: [],
   torrentList: [],
   torrentPeer: [],
   torrentTracker: [],
-  transferSummary: [],
+  transferSummary: {},
+};
+
+/**
+ * Filter configs by available methods, resolving alternative method names
+ * to the single method that is actually available on this rTorrent instance.
+ */
+const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string[]): MethodCallConfigs => {
+  const resolved: Record<string, MethodCallConfig> = {};
+  // Sort keys so that Object.values(configs) (methodCalls) and
+  // Object.keys(configs) (processMethodCallResponse) stay in sync.
+  for (const key of Object.keys(configs).sort()) {
+    const config = configs[key]!;
+    const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
+    const availableMethod = methodList.length > 0 ? methods.find((m) => methodList.includes(m)) : methods[0];
+    if (availableMethod) {
+      resolved[key] = {methodCall: availableMethod, transformValue: config.transformValue};
+    }
+  }
+  return resolved;
 };
 
 async function fetchAvailableMethodCalls(
@@ -105,14 +124,18 @@ async function fetchAvailableMethodCalls(
         }
       : (methodCalls: Array<string>) => methodCalls;
 
+  // Resolve clientSetting and transferSummary configs at startup: pick the
+  // available method from alternatives and drop unavailable entries entirely.
+  // This way getClientSettings/fetchTransferSummary can use the configs directly
+  // with system.multicall, without worrying about 'false=' sentinels.
   return {
     methodList,
-    clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
+    clientSetting: resolveMethodCallConfigs(clientSettingMethodCallConfigs, methodList),
     torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
     torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
     torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
     torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
-    transferSummary: getAvailableMethodCalls(getMethodCalls(transferSummaryMethodCallConfigs)),
+    transferSummary: resolveMethodCallConfigs(transferSummaryMethodCallConfigs, methodList),
   };
 }
 
@@ -1072,18 +1095,23 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
-    const methodCalls: MultiMethodCalls = this.availableMethodCalls.transferSummary.map((methodCall) => {
-      return {
-        methodName: methodCall,
+    const configs = this.availableMethodCalls.transferSummary;
+    const methodCalls: MultiMethodCalls = Object.keys(configs)
+      .sort()
+      .map((key) => ({
+        methodName: configs[key]!.methodCall as string,
         params: [''],
-      };
-    });
+      }));
+
+    if (methodCalls.length === 0) {
+      return {} as TransferSummary;
+    }
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
-        return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
+        return processMethodCallResponse(response, configs as typeof transferSummaryMethodCallConfigs);
       });
   }
 
@@ -1095,18 +1123,23 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
   }
 
   async getClientSettings(): Promise<ClientSettings> {
-    const methodCalls: MultiMethodCalls = this.availableMethodCalls.clientSetting.map((methodCall) => {
-      return {
-        methodName: methodCall,
+    const configs = this.availableMethodCalls.clientSetting;
+    const methodCalls: MultiMethodCalls = Object.keys(configs)
+      .sort()
+      .map((key) => ({
+        methodName: configs[key]!.methodCall as string,
         params: [''],
-      };
-    });
+      }));
+
+    if (methodCalls.length === 0) {
+      return {} as ClientSettings;
+    }
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
-        return processMethodCallResponse(response, clientSettingMethodCallConfigs);
+        return processMethodCallResponse(response, configs as typeof clientSettingMethodCallConfigs);
       });
   }
 
