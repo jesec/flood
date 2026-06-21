@@ -101,6 +101,23 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.custom=addtime',
     transformValue: numberTransformer,
   },
+  selectedSizeData: {
+    methodCall: 'd.custom=flood.selected_size',
+    transformValue: (value: unknown): {selectedSize: number; lastUpdateAt: number} => {
+      if (typeof value !== 'string' || value === '') {
+        return {selectedSize: 0, lastUpdateAt: 0};
+      }
+      try {
+        const parsed = JSON.parse(value);
+        return {
+          selectedSize: typeof parsed.selected_size === 'number' ? parsed.selected_size : 0,
+          lastUpdateAt: typeof parsed.last_update_at === 'number' ? parsed.last_update_at : 0,
+        };
+      } catch {
+        return {selectedSize: 0, lastUpdateAt: 0};
+      }
+    },
+  },
   dateCreated: {
     methodCall: 'd.creation_date=',
     transformValue: numberTransformer,

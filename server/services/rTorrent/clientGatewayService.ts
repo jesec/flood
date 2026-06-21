@@ -282,6 +282,36 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
+  /**
+   * Get the total size of files selected for download.
+   * Uses rTorrent's custom attribute cache, refreshing hourly if stale.
+   */
+  async getSelectedSize(hash: string, cached: {selectedSize: number; lastUpdateAt: number}): Promise<number> {
+    const nowSec = Math.floor(Date.now() / 1000);
+    const CACHE_TTL = 3600; // 1 hour
+
+    // Return cached value if fresh
+    if (cached.lastUpdateAt > 0 && nowSec - cached.lastUpdateAt <= CACHE_TTL) {
+      return cached.selectedSize;
+    }
+
+    // Cache is stale or missing — fetch file list and recalculate
+    try {
+      const contents = await this.getTorrentContents(hash);
+      const selectedSize = contents.reduce((sum, file) => (file.priority > 0 ? sum + file.sizeBytes : sum), 0);
+      const data = JSON.stringify({last_update_at: nowSec, selected_size: selectedSize});
+
+      await this.clientRequestManager
+        .methodCall('d.custom.set', [hash, 'flood.selected_size', data])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+
+      return selectedSize;
+    } catch {
+      // On failure, fall back to whatever cached value we have
+      return cached.selectedSize;
+    }
+  }
+
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
     return this.clientRequestManager
       .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
@@ -645,8 +675,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-      .then(() => {
-        // returns nothing.
+      .then(async () => {
+        // Force refresh the cached selected size after priority changes
+        await this.getSelectedSize(hash, {selectedSize: 0, lastUpdateAt: 0});
       });
   }
 
@@ -709,6 +740,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             processedResponses.map(async (response) => {
+              const selectedSizeBytes = await this.getSelectedSize(response.hash, response.selectedSizeData);
+
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
                 comment: response.comment,
@@ -719,7 +752,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 directory: response.directory,
                 downRate: response.downRate,
                 downTotal: response.downTotal,
-                eta: getTorrentETAFromProperties(response),
+                eta: getTorrentETAFromProperties(selectedSizeBytes, response.downRate, response.bytesDone),
                 hash: response.hash,
                 isPrivate: response.isPrivate,
                 isInitialSeeding: response.isInitialSeeding,
@@ -728,7 +761,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 name: response.name,
                 peersConnected: response.peersConnected,
                 peersTotal: response.peersTotal,
-                percentComplete: getTorrentPercentCompleteFromProperties(response),
+                percentComplete: getTorrentPercentCompleteFromProperties(selectedSizeBytes, response.bytesDone),
                 priority: response.priority,
                 ratio: response.ratio,
                 seedsConnected: response.seedsConnected,
