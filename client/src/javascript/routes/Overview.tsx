@@ -1,4 +1,4 @@
-import {FC, lazy, useEffect} from 'react';
+import {FC, lazy, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import classnames from 'classnames';
 
@@ -27,7 +27,12 @@ const Overview: FC = observer(() => {
 
   const usePanelView = SettingStore.floodSettings.UITorrentDetailsPanel ?? true;
   const showPanel = UIStore.detailsPanelVisible && !ConfigStore.isSmallScreen && usePanelView;
-  const panelHeight = SettingStore.floodSettings.detailsPanelHeight || 400;
+  const savedPanelHeight = SettingStore.floodSettings.detailsPanelHeight || 400;
+  const [panelHeight, setPanelHeight] = useState(savedPanelHeight);
+
+  useEffect(() => {
+    setPanelHeight(savedPanelHeight);
+  }, [savedPanelHeight]);
 
   return (
     <ApplicationView>
@@ -50,7 +55,7 @@ const Overview: FC = observer(() => {
 
           {showPanel && (
             <>
-              <TorrentDetailsPanelResizeHandle />
+              <TorrentDetailsPanelResizeHandle height={panelHeight} onHeightChange={setPanelHeight} />
               <TorrentDetailsPanel />
             </>
           )}

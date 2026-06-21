@@ -1,8 +1,7 @@
-import {FC, useRef, useState} from 'react';
+import {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import SettingActions from '@client/actions/SettingActions';
-import SettingStore from '@client/stores/SettingStore';
 import UIStore from '@client/stores/UIStore';
 
 const pointerDownStyles = `
@@ -10,84 +9,112 @@ const pointerDownStyles = `
   * { cursor: row-resize !important; }
 `;
 
-const TorrentDetailsPanelResizeHandle: FC = observer(() => {
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const startY = useRef<number>();
-  const initialHeight = useRef<number>();
-  const resizeLine = useRef<HTMLDivElement>(null);
+const MIN_PANEL_HEIGHT = 200;
+const WINDOW_PADDING = 200;
 
-  const handlePointerMove = (event: PointerEvent) => {
-    if (startY.current == null || initialHeight.current == null) {
-      return;
-    }
+interface TorrentDetailsPanelResizeHandleProps {
+  height: number;
+  onHeightChange: (height: number) => void;
+}
 
-    const deltaY = startY.current - event.clientY;
-    let newHeight = initialHeight.current + deltaY;
+const getConstrainedHeight = (initialHeight: number, startY: number, currentY: number) => {
+  const deltaY = startY - currentY;
+  const maxHeight = window.innerHeight - WINDOW_PADDING;
 
-    // Constraints: Min 200px, max window.innerHeight - 200px
-    const minHeight = 200;
-    const maxHeight = window.innerHeight - 200;
-    newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+  return Math.max(MIN_PANEL_HEIGHT, Math.min(maxHeight, initialHeight + deltaY));
+};
 
-    if (resizeLine.current != null) {
-      resizeLine.current.style.transform = `translateY(${event.clientY}px)`;
-    }
+const TorrentDetailsPanelResizeHandle: FC<TorrentDetailsPanelResizeHandleProps> = observer(
+  ({height, onHeightChange}) => {
+    const [dragLineY, setDragLineY] = useState<number>();
+    const startY = useRef<number>();
+    const initialHeight = useRef<number>();
 
-    // Update the height in real-time (just for visual feedback)
-    document.documentElement.style.setProperty('--details-panel-height', `${newHeight}px`);
-  };
+    const isDragging = dragLineY != null;
 
-  const handlePointerUp = () => {
-    UIStore.removeGlobalStyle(pointerDownStyles);
-    window.removeEventListener('pointerup', handlePointerUp);
-    window.removeEventListener('pointermove', handlePointerMove);
+    const resetDragState = useCallback(() => {
+      setDragLineY(undefined);
+      startY.current = undefined;
+      initialHeight.current = undefined;
+    }, []);
 
-    setIsDragging(false);
+    const updatePanelHeight = useCallback(
+      (currentY: number) => {
+        if (startY.current == null || initialHeight.current == null) {
+          return undefined;
+        }
 
-    if (resizeLine.current != null) {
-      resizeLine.current.style.opacity = '0';
-      resizeLine.current.style.transform = '';
-    }
+        const newHeight = getConstrainedHeight(initialHeight.current, startY.current, currentY);
 
-    if (startY.current != null && initialHeight.current != null) {
-      const deltaY = startY.current - (window.event as PointerEvent).clientY;
-      let newHeight = initialHeight.current + deltaY;
+        setDragLineY(currentY);
+        onHeightChange(newHeight);
 
-      const minHeight = 200;
-      const maxHeight = window.innerHeight - 200;
-      newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+        return newHeight;
+      },
+      [onHeightChange],
+    );
 
-      SettingActions.saveSetting('detailsPanelHeight', newHeight);
-    }
+    const handlePointerMove = useCallback(
+      (event: PointerEvent) => {
+        updatePanelHeight(event.clientY);
+      },
+      [updatePanelHeight],
+    );
 
-    startY.current = undefined;
-    initialHeight.current = undefined;
-  };
+    const handlePointerUp = useCallback(
+      (event: PointerEvent) => {
+        const newHeight = updatePanelHeight(event.clientY);
 
-  const handlePointerDown = (event: React.PointerEvent) => {
-    if (!isDragging) {
-      setIsDragging(true);
+        if (newHeight != null) {
+          SettingActions.saveSetting('detailsPanelHeight', newHeight);
+        }
 
-      startY.current = event.clientY;
-      initialHeight.current = SettingStore.floodSettings.detailsPanelHeight || 400;
+        resetDragState();
+      },
+      [resetDragState, updatePanelHeight],
+    );
 
+    useEffect(() => {
+      if (!isDragging) {
+        return undefined;
+      }
+
+      UIStore.addGlobalStyle(pointerDownStyles);
       window.addEventListener('pointerup', handlePointerUp);
       window.addEventListener('pointermove', handlePointerMove);
-      UIStore.addGlobalStyle(pointerDownStyles);
 
-      if (resizeLine.current != null) {
-        resizeLine.current.style.transform = `translateY(${event.clientY}px)`;
-        resizeLine.current.style.opacity = '1';
+      return () => {
+        UIStore.removeGlobalStyle(pointerDownStyles);
+        window.removeEventListener('pointerup', handlePointerUp);
+        window.removeEventListener('pointermove', handlePointerMove);
+      };
+    }, [handlePointerMove, handlePointerUp, isDragging]);
+
+    const handlePointerDown = (event: React.PointerEvent) => {
+      event.preventDefault();
+
+      if (isDragging) {
+        return;
       }
-    }
-  };
 
-  return (
-    <>
-      <div className="torrent-details-panel-resize-handle" onPointerDown={handlePointerDown} />
-      <div className="torrent-details-panel-resize-line" ref={resizeLine} />
-    </>
-  );
-});
+      startY.current = event.clientY;
+      initialHeight.current = height;
+      setDragLineY(event.clientY);
+    };
+
+    return (
+      <>
+        <div className="torrent-details-panel-resize-handle" onPointerDown={handlePointerDown} />
+        <div
+          className="torrent-details-panel-resize-line"
+          style={{
+            opacity: isDragging ? 1 : 0,
+            transform: dragLineY == null ? undefined : `translateY(${dragLineY}px)`,
+          }}
+        />
+      </>
+    );
+  },
+);
 
 export default TorrentDetailsPanelResizeHandle;
