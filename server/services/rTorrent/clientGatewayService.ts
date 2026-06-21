@@ -746,6 +746,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           ...(await Promise.all(
             processedResponses.map(async (response) => {
               const selectedSizeBytes = await this.getSelectedSize(response.hash, response.selectedSizeData);
+              // Fall back to full torrent size when selected size is unavailable (cold cache + fetch error)
+              const effectiveSizeBytes = selectedSizeBytes || response.sizeBytes;
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
@@ -757,7 +759,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 directory: response.directory,
                 downRate: response.downRate,
                 downTotal: response.downTotal,
-                eta: getTorrentETAFromProperties(selectedSizeBytes, response.downRate, response.bytesDone),
+                eta: getTorrentETAFromProperties(effectiveSizeBytes, response.downRate, response.bytesDone),
                 hash: response.hash,
                 isPrivate: response.isPrivate,
                 isInitialSeeding: response.isInitialSeeding,
@@ -766,12 +768,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 name: response.name,
                 peersConnected: response.peersConnected,
                 peersTotal: response.peersTotal,
-                percentComplete: getTorrentPercentCompleteFromProperties(selectedSizeBytes, response.bytesDone),
+                percentComplete: getTorrentPercentCompleteFromProperties(effectiveSizeBytes, response.bytesDone),
                 priority: response.priority,
                 ratio: response.ratio,
                 seedsConnected: response.seedsConnected,
                 seedsTotal: response.seedsTotal,
-                sizeBytes: response.sizeBytes,
+                sizeBytes: effectiveSizeBytes,
                 status: getTorrentStatusFromProperties(response),
                 tags: response.tags,
                 trackerURIs: response.trackerURIs,
