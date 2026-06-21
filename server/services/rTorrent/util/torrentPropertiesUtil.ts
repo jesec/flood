@@ -9,7 +9,7 @@ export const getTorrentETAFromProperties = (
   downRate: number,
   bytesDone: number,
 ): TorrentProperties['eta'] => {
-  if (downRate > 0) {
+  if (downRate > 0 && selectedSizeBytes > 0) {
     return (selectedSizeBytes - bytesDone) / downRate;
   }
 
@@ -20,6 +20,10 @@ export const getTorrentPercentCompleteFromProperties = (
   selectedSizeBytes: number,
   bytesDone: number,
 ): TorrentProperties['percentComplete'] => {
+  if (!selectedSizeBytes) {
+    return 0;
+  }
+
   const percentComplete = (bytesDone / selectedSizeBytes) * 100;
 
   if (percentComplete > 0 && percentComplete < 10) {

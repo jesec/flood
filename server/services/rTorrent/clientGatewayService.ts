@@ -296,20 +296,25 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }
 
     // Cache is stale or missing — fetch file list and recalculate
+    let selectedSize = cached.selectedSize;
     try {
       const contents = await this.getTorrentContents(hash);
-      const selectedSize = contents.reduce((sum, file) => (file.priority > 0 ? sum + file.sizeBytes : sum), 0);
-      const data = JSON.stringify({last_update_at: nowSec, selected_size: selectedSize});
+      selectedSize = contents.reduce((sum, file) => (file.priority > 0 ? sum + file.sizeBytes : sum), 0);
+    } catch {
+      return cached.selectedSize;
+    }
 
+    // Write cache (best-effort, failure does not affect the returned value)
+    try {
+      const data = JSON.stringify({last_update_at: nowSec, selected_size: selectedSize});
       await this.clientRequestManager
         .methodCall('d.custom.set', [hash, 'flood.selected_size', data])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
-
-      return selectedSize;
     } catch {
-      // On failure, fall back to whatever cached value we have
-      return cached.selectedSize;
+      // Silently ignore cache write failures
     }
+
+    return selectedSize;
   }
 
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
