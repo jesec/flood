@@ -136,6 +136,8 @@
   "filter.status.downloading": "Pobieranie",
   "filter.status.error": "Błąd",
   "filter.status.inactive": "Nieaktywny",
+  "filter.status.moving": "Przenoszenie",
+  "filter.status.warning": "Uwaga",
   "filter.status.seeding": "Wysyłanie",
   "filter.status.stopped": "Zatrzymano",
   "filter.status.title": "Filtruj według statusu",
