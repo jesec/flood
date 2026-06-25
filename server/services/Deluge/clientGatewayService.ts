@@ -5,6 +5,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {UserInDatabase} from '@shared/schema/Auth';
@@ -85,6 +86,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -122,6 +124,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
         ...(await this.addTorrentsByFile({
           files: files.map((file) => file.toString('base64')) as [string, ...string[]],
           destination,
+          category,
           tags,
           isBasePath,
           isCompleted,
@@ -235,6 +238,10 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentsCategory(_options: SetTorrentsCategoryOptions): Promise<void> {
+    return;
+  }
+
   async setTorrentsTags(_options: SetTorrentsTagsOptions): Promise<void> {
     return;
   }
@@ -332,6 +339,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: status.total_done,
+                category: '',
                 comment: status.comment,
                 dateActive:
                   status.download_payload_rate > 0 || status.upload_payload_rate > 0 ? -1 : status.active_time,

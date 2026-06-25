@@ -10,6 +10,7 @@ import UIStore from '@client/stores/UIStore';
 import AddTorrentsActions from './AddTorrentsActions';
 import FileDropzone from '../../general/form-elements/FileDropzone';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
+import CategorySelect from '../../general/form-elements/CategorySelect';
 import TagSelect from '../../general/form-elements/TagSelect';
 
 import type {ProcessedFiles} from '../../general/form-elements/FileDropzone';
@@ -17,6 +18,7 @@ import type {ProcessedFiles} from '../../general/form-elements/FileDropzone';
 interface AddTorrentsByFileFormData {
   destination: string;
   start: boolean;
+  category: string;
   tags: string;
   isBasePath: boolean;
   isCompleted: boolean;
@@ -43,6 +45,21 @@ const AddTorrentsByFile: FC = () => {
           }
           onFilesChanged={(files) => {
             filesRef.current = files;
+          }}
+        />
+      </FormRow>
+      <FormRow>
+        <CategorySelect
+          label={i18n._('torrents.add.category')}
+          id="category"
+          onCategorySelected={(category) => {
+            if (textboxRef.current != null) {
+              const suggestedPath = SettingStore.floodSettings.torrentCategoryDestinations?.[category];
+              if (typeof suggestedPath === 'string' && textboxRef.current != null) {
+                textboxRef.current.value = suggestedPath;
+                textboxRef.current.dispatchEvent(new Event('input', {bubbles: true}));
+              }
+            }
           }}
         />
       </FormRow>
@@ -79,7 +96,7 @@ const AddTorrentsByFile: FC = () => {
           const formData = formRef.current?.getFormData();
           setIsAddingTorrents(true);
 
-          const {destination, start, tags, isBasePath, isCompleted, isSequential} =
+          const {destination, start, category, tags, isBasePath, isCompleted, isSequential} =
             formData as Partial<AddTorrentsByFileFormData>;
 
           const filesData: Array<string> = [];
@@ -97,6 +114,7 @@ const AddTorrentsByFile: FC = () => {
           TorrentActions.addTorrentsByFiles({
             files: filesData as [string, ...string[]],
             destination,
+            category,
             tags: tagsArray,
             isBasePath,
             isCompleted,
@@ -109,6 +127,7 @@ const AddTorrentsByFile: FC = () => {
           saveAddTorrentsUserPreferences({
             start,
             destination,
+            categories: category,
             tags: tagsArray,
             tab: 'by-file',
           });

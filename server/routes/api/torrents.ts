@@ -23,6 +23,7 @@ import {
   moveTorrentsSchema,
   reannounceTorrentsSchema,
   setTorrentContentsPropertiesSchema,
+  setTorrentsCategorySchema,
   setTorrentsInitialSeedingSchema,
   setTorrentsPrioritySchema,
   setTorrentsSequentialSchema,
@@ -166,8 +167,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     },
     async (request, reply) => {
       const authedContext = getRequiredAuthContext(request);
-      const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
-        request.body;
+      const {
+        urls,
+        cookies,
+        destination,
+        category,
+        tags,
+        isBasePath,
+        isCompleted,
+        isSequential,
+        isInitialSeeding,
+        start,
+      } = request.body;
 
       const normalizedUrls = urls.map((url) => normalizeTorrentUrl(url)) as [string, ...string[]];
 
@@ -185,6 +196,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         urls: normalizedUrls,
         cookies: cookies != null ? cookies : {},
         destination: finalDestination,
+        category: category ?? '',
         tags: tags ?? [],
         isBasePath: isBasePath ?? false,
         isCompleted: isCompleted ?? false,
@@ -224,7 +236,8 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     },
     async (request, reply) => {
       const authedContext = getRequiredAuthContext(request);
-      const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} = request.body;
+      const {files, destination, category, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+        request.body;
 
       const finalDestination = await getDestination(authedContext.services, {
         destination,
@@ -239,6 +252,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       const response = await authedContext.services.clientGatewayService.addTorrentsByFile({
         files,
         destination: finalDestination,
+        category: category ?? '',
         tags: tags ?? [],
         isBasePath: isBasePath ?? false,
         isCompleted: isCompleted ?? false,
@@ -276,7 +290,8 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     },
     async (request, reply) => {
       const authedContext = getRequiredAuthContext(request);
-      const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = request.body;
+      const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, category, tags, start} =
+        request.body;
 
       const sanitizedPath = sanitizePath(sourcePath);
       if (!isAllowedPath(sanitizedPath)) {
@@ -308,6 +323,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
             ? sanitizedPath
             : path.dirname(sanitizedPath),
+          category: category ?? '',
           tags: tags ?? [],
           isBasePath: true,
           isCompleted: true,
@@ -538,6 +554,28 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     async (request) => {
       const authedContext = getRequiredAuthContext(request);
       await authedContext.services.clientGatewayService.setTorrentsSequential(request.body);
+      authedContext.services.torrentService.fetchTorrentList();
+    },
+  );
+
+  typedFastify.patch(
+    '/category',
+    {
+      schema: {
+        summary: 'Set torrent category',
+        description: 'Set category for torrents.',
+        tags: ['Torrents'],
+        security: [{User: []}],
+        body: setTorrentsCategorySchema,
+        response: {
+          200: emptyResponseSchema,
+          500: errorResponseSchema,
+        },
+      },
+    },
+    async (request) => {
+      const authedContext = getRequiredAuthContext(request);
+      await authedContext.services.clientGatewayService.setTorrentsCategory(request.body);
       authedContext.services.torrentService.fetchTorrentList();
     },
   );
