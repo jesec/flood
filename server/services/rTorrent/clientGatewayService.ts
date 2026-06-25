@@ -28,7 +28,6 @@ import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
@@ -140,9 +139,44 @@ async function fetchAvailableMethodCalls(
   };
 }
 
+async function linkFile(sourcePath: string, destPath: string): Promise<boolean> {
+  try {
+    await fs.promises.unlink(destPath).catch(() => undefined);
+    await fs.promises.link(sourcePath, destPath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function* copyFile(sourcePath: string, destPath: string): AsyncGenerator<number> {
+  const CHUNK_SIZE = 64 * 1024;
+  const buf = Buffer.allocUnsafe(CHUNK_SIZE);
+
+  const src = await fs.promises.open(sourcePath, 'r');
+  const dst = await fs.promises.open(destPath, 'w');
+
+  try {
+    let bytesCopied = 0;
+    let bytesRead: number;
+
+    while ((bytesRead = (await src.read(buf, 0, CHUNK_SIZE, bytesCopied)).bytesRead) > 0) {
+      await dst.write(buf.subarray(0, bytesRead));
+      bytesCopied += bytesRead;
+      yield bytesCopied;
+    }
+  } finally {
+    await Promise.all([src.close(), dst.close()]);
+  }
+}
+
 class RTorrentClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
   clientRequestManager: ClientRequestManager;
   availableMethodCalls: AvailableMethodCalls;
+
+  private moveProgress: Map<string, {bytesDone: number; totalBytes: number}> = new Map();
+  private moveQueue: MoveTorrentsOptions[] = [];
+  private moveQueueNotify: (() => void) | null = null;
 
   constructor(user: UserInDatabase, availableMethodCalls: AvailableMethodCalls) {
     super(user);
@@ -459,20 +493,75 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
       );
   }
 
-  async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
-    await this.stopTorrents({hashes});
+  onServicesUpdated = () => {
+    // Start background move queue consumer when services are wired up
+    this.runMoveQueue().catch(() => undefined);
+  };
 
+  async moveTorrents(options: MoveTorrentsOptions): Promise<void> {
+    // Dedup: remove any existing queue entries that overlap with incoming hashes
+    const incomingHashes = new Set(options.hashes);
+    this.moveQueue = this.moveQueue.filter((queued) => !queued.hashes.some((h) => incomingHashes.has(h)));
+    this.moveQueue.push(options);
+
+    // Signal the background consumer
+    if (this.moveQueueNotify) {
+      this.moveQueueNotify();
+      this.moveQueueNotify = null;
+    }
+  }
+
+  private async runMoveQueue(): Promise<void> {
+    while (true) {
+      while (this.moveQueue.length > 0) {
+        const options = this.moveQueue.shift()!;
+
+        // Skip hashes that are already being moved
+        const activeHashes = options.hashes.filter((h) => !this.moveProgress.has(h));
+        if (activeHashes.length === 0) {
+          continue;
+        }
+
+        try {
+          await this.doMoveTorrents({...options, hashes: activeHashes});
+        } catch {
+          // Continue processing next items even if one fails
+        }
+      }
+
+      // Wait for new items
+      await new Promise<void>((resolve) => {
+        this.moveQueueNotify = resolve;
+      });
+    }
+  }
+
+  private async doMoveTorrents({
+    hashes,
+    destination,
+    moveFiles,
+    isBasePath,
+    isCheckHash,
+  }: MoveTorrentsOptions): Promise<void> {
     await fs.promises.mkdir(destination, {recursive: true});
+
+    // Collect files to copy and source paths to delete afterwards
+    type TorrentFilePlan = {
+      hash: string;
+      isCompleted: boolean;
+      sourceDirectory: string;
+      files: {sourcePath: string; destPath: string; sizeBytes: number; dev: number}[];
+      totalBytes: number;
+    };
+    const plans: TorrentFilePlan[] = [];
 
     if (moveFiles) {
       const isMultiFile = await this.clientRequestManager
         .methodCall('system.multicall', [
-          hashes.map((hash) => {
-            return {
-              methodName: 'd.is_multi_file',
-              params: [hash],
-            };
-          }),
+          hashes.map((hash) => ({
+            methodName: 'd.is_multi_file',
+            params: [hash],
+          })),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
         .then((responses: string[][]): boolean[] =>
@@ -484,50 +573,137 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
         throw new Error();
       }
 
-      await Promise.all(
-        hashes.map(async (hash, index) => {
-          const {directory, name} = this.services?.torrentService.getTorrent(hash) || {};
+      // Gather file plans for each torrent
+      for (const [index, hash] of hashes.entries()) {
+        const torrent = this.services?.torrentService.getTorrent(hash);
+        if (torrent == null) {
+          continue;
+        }
 
-          if (directory == null || name == null) {
-            return;
+        const {directory, name} = torrent;
+        if (directory == null || name == null) {
+          continue;
+        }
+
+        const sourceDirectory = path.resolve(directory);
+        const destDirectory = isMultiFile[index]
+          ? path.resolve(isBasePath ? destination : path.join(destination, name))
+          : path.resolve(destination);
+
+        if (sourceDirectory === destDirectory) {
+          continue;
+        }
+
+        const contents = await this.getTorrentContents(hash);
+
+        const files: TorrentFilePlan['files'] = [];
+        let totalBytes = 0;
+
+        for (const content of contents) {
+          const sourcePath = sanitizePath(path.resolve(sourceDirectory, content.path));
+          if (!isAllowedPath(sourcePath)) {
+            continue;
           }
 
-          const sourceDirectory = path.resolve(directory);
-          const destDirectory = isMultiFile[index]
-            ? path.resolve(isBasePath ? destination : path.join(destination, name))
-            : path.resolve(destination);
-
-          if (sourceDirectory === destDirectory) {
-            return;
+          const destPath = sanitizePath(path.resolve(destDirectory, content.path));
+          if (!isAllowedPath(destPath)) {
+            continue;
           }
 
-          const contents = await this.getTorrentContents(hash);
+          let sourceStat: fs.Stats;
+          try {
+            sourceStat = await fs.promises.stat(sourcePath);
+          } catch {
+            continue;
+          }
 
-          for (const content of contents) {
-            const sourcePath = sanitizePath(path.resolve(sourceDirectory, content.path));
+          if (!sourceStat.isFile()) {
+            continue;
+          }
 
-            if (!fs.existsSync(sourcePath) || !isAllowedPath(sourcePath)) {
+          files.push({sourcePath, destPath, sizeBytes: sourceStat.size, dev: sourceStat.dev});
+          totalBytes += sourceStat.size;
+        }
+
+        if (files.length > 0) {
+          plans.push({
+            hash,
+            isCompleted: torrent.percentComplete === 100,
+            sourceDirectory,
+            files,
+            totalBytes,
+          });
+        }
+      }
+
+      // Phase 1: Copy files (no deletion yet)
+      for (const plan of plans) {
+        const {hash, isCompleted, files, totalBytes} = plan;
+
+        // Stop downloading torrents before copy; completed ones keep running
+        if (!isCompleted) {
+          await this.stopTorrents({hashes: [hash]});
+        }
+
+        // Register progress and trigger first poll to show 0%
+        this.moveProgress.set(hash, {bytesDone: 0, totalBytes});
+        this.services?.torrentService.fetchTorrentList();
+
+        let bytesDone = 0;
+        let lastProgressEmit = 0;
+
+        for (const file of files) {
+          const {sourcePath, destPath, sizeBytes, dev: sourceDev} = file;
+
+          // Check if this torrent's move was superseded by a newer queue entry
+          if (!this.moveProgress.has(hash)) {
+            break;
+          }
+
+          await fs.promises.mkdir(path.dirname(destPath), {recursive: true});
+
+          if (sourcePath === destPath) {
+            bytesDone += sizeBytes;
+            continue;
+          }
+
+          // Determine same-fs vs cross-fs by comparing device ID
+          let destDirDev: number;
+          try {
+            destDirDev = (await fs.promises.stat(path.dirname(destPath))).dev;
+          } catch {
+            continue;
+          }
+
+          if (sourceDev === destDirDev) {
+            // Same filesystem: hardlink (instant)
+            if (!(await linkFile(sourcePath, destPath))) {
               continue;
             }
-
-            const destPath = sanitizePath(path.resolve(destDirectory, content.path));
-
-            if (!isAllowedPath(destPath)) {
-              continue;
+            bytesDone += sizeBytes;
+          } else {
+            // Different filesystem: stream copy with progress tracking
+            const fileStartBytes = bytesDone;
+            for await (const copied of copyFile(sourcePath, destPath)) {
+              bytesDone = fileStartBytes + copied;
+              const now = Date.now();
+              if (now - lastProgressEmit >= 200) {
+                this.moveProgress.set(hash, {bytesDone, totalBytes});
+                this.services?.torrentService.fetchTorrentList();
+                lastProgressEmit = now;
+              }
             }
-
-            await fs.promises.mkdir(path.dirname(destPath), {recursive: true});
-
-            if (sourcePath !== destPath) {
-              await move(sourcePath, destPath, {overwrite: true});
-            }
+            bytesDone = fileStartBytes + sizeBytes;
           }
 
-          await cleanupEmptyDirectories(sourceDirectory);
-        }),
-      );
+          // Emit progress after each file
+          this.moveProgress.set(hash, {bytesDone, totalBytes});
+          this.services?.torrentService.fetchTorrentList();
+        }
+      }
     }
 
+    // Phase 2: Set directories in rTorrent
     const hashesToRestart: Array<string> = [];
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
@@ -545,6 +721,21 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+
+    // Phase 3: Delete source files now that rTorrent knows the new location
+    for (const plan of plans) {
+      const {hash, isCompleted, sourceDirectory, files} = plan;
+
+      await Promise.all(files.map((file) => fs.promises.unlink(file.sourcePath).catch(() => undefined)));
+
+      // Stop completed torrents now that files are moved
+      if (isCompleted) {
+        await this.stopTorrents({hashes: [hash]});
+      }
+
+      this.moveProgress.delete(hash);
+      await cleanupEmptyDirectories(sourceDirectory);
+    }
 
     if (isCheckHash) {
       await this.checkTorrents({hashes});
@@ -848,6 +1039,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
               const selectedSizeBytes = await this.getSelectedSize(response.hash, response.selectedSizeData);
               // Fall back to full torrent size when selected size is unavailable (cold cache + fetch error)
               const effectiveSizeBytes = selectedSizeBytes || response.sizeBytes;
+              const moveProg = this.moveProgress.get(response.hash);
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
@@ -868,7 +1060,9 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
                 name: response.name,
                 peersConnected: response.peersConnected,
                 peersTotal: response.peersTotal,
-                percentComplete: getTorrentPercentCompleteFromProperties(effectiveSizeBytes, response.bytesDone),
+                percentComplete: moveProg
+                  ? (moveProg.bytesDone / moveProg.totalBytes) * 100
+                  : getTorrentPercentCompleteFromProperties(effectiveSizeBytes, response.bytesDone),
                 priority: response.priority,
                 ratio: response.ratio,
                 seedsConnected: response.seedsConnected,
