@@ -832,6 +832,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         const result = await send(request.raw, encodeURI(file), {
           acceptRanges: true,
           lastModified: true,
+          dotFiles: 'allow',
         });
 
         const statusCode = result.statusCode;
