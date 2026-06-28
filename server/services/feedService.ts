@@ -283,6 +283,7 @@ class FeedService extends BaseService<Record<string, never>> {
                 urls,
                 cookies: {},
                 destination,
+                category: '',
                 tags,
                 start,
                 isBasePath: false,

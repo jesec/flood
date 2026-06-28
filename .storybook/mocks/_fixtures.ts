@@ -126,6 +126,7 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
   const baseData: TorrentProperties = {
     hash,
     name: overrides.name || nameList[nameIndex],
+    category: '',
     status: ['downloading', 'active'],
     bytesDone: Math.floor(bytesDone),
     comment: '',
@@ -699,6 +700,7 @@ export function createNewTorrentTemplate(
   return {
     hash,
     name: options?.name ?? `New Torrent ${new Date().toLocaleTimeString()}`,
+    category: '',
     status: start ? ['downloading', 'active'] : ['stopped', 'inactive'],
     bytesDone: 0,
     comment: options?.comment ?? '',
