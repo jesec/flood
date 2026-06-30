@@ -43,5 +43,19 @@
   "start_url": "./index.html",
   "description": "Web UI for torrent clients",
   "background_color": "#ffffff",
-  "theme_color": "#349cf4"
+  "theme_color": "#349cf4",
+  "protocol_handlers": [
+    {
+      "protocol": "magnet",
+      "url": "./index.html?action=add-urls&url=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./index.html",
+      "accept": {
+        "application/x-bittorrent": [".torrent"]
+      }
+    }
+  ]
 }
