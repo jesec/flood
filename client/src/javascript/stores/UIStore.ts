@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 import React, {FC, MouseEvent} from 'react';
 
-import type {ProcessedFiles} from '@client/components/general/form-elements/FileDropzone';
+import type {ProcessedFiles} from '@client/util/processFiles';
 import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
 
 export type ContextMenuItem =
