@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 
+import SettingStore from '@client/stores/SettingStore';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 export const torrentStatusClasses = (
@@ -8,7 +9,7 @@ export const torrentStatusClasses = (
 ): string =>
   classnames(classes, {
     'torrent--has-error': status.includes('error'),
-    'torrent--has-warning': status.includes('warning'),
+    'torrent--has-warning': SettingStore.floodSettings.UITrackerWarningEnabled && status.includes('warning'),
     'torrent--is-stopped': status.includes('stopped'),
     'torrent--is-downloading': status.includes('downloading'),
     'torrent--is-downloading--actively': downRate > 0,
@@ -24,6 +25,9 @@ export const torrentStatusEffective = (status: TorrentProperties['status']): Tor
   let result: TorrentProperties['status'][number] = 'stopped';
 
   ['warning', 'error', 'moving', 'checking', 'stopped', 'downloading', 'seeding'].some((state) => {
+    if (state === 'warning' && !SettingStore.floodSettings.UITrackerWarningEnabled) {
+      return false;
+    }
     if (status.includes(state as TorrentProperties['status'][number])) {
       result = state as TorrentProperties['status'][number];
       return true;

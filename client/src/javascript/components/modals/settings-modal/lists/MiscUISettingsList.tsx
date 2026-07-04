@@ -22,6 +22,9 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
   const [filterTagEnabled, setFilterTagEnabled] = useState<FloodSettings['UISidebarFilterTag']>(
     SettingStore.floodSettings.UISidebarFilterTag,
   );
+  const [trackerWarningEnabled, setTrackerWarningEnabled] = useState<FloodSettings['UITrackerWarningEnabled']>(
+    SettingStore.floodSettings.UITrackerWarningEnabled,
+  );
 
   const handlePageTitleSpeedToggle = () => {
     const nextValue = !pageTitleSpeedEnabled;
@@ -42,6 +45,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
     const nextValue = !filterTagEnabled;
     setFilterTagEnabled(nextValue);
     onSettingsChange({UISidebarFilterTag: nextValue});
+  };
+  const handleTrackerWarningToggle = () => {
+    const nextValue = !trackerWarningEnabled;
+    setTrackerWarningEnabled(nextValue);
+    onSettingsChange({UITrackerWarningEnabled: nextValue});
   };
   return (
     <ToggleList
@@ -65,6 +73,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
           label: 'settings.ui.sidebar.filter.tag',
           checked: filterTagEnabled,
           onClick: handleFilterTagToggle,
+        },
+        {
+          label: 'settings.ui.tracker.warning.enabled',
+          checked: trackerWarningEnabled,
+          onClick: handleTrackerWarningToggle,
         },
       ]}
     />
