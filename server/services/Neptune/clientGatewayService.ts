@@ -260,11 +260,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
         const torrentList: TorrentList = {};
 
         for (const torrent of response.torrents) {
-          const trackerURIs = getDomainsFromURLs(
-            (
-              await this.clientRequestManager.getTorrentTrackers(torrent.hash).catch(() => ({trackers: []}))
-            ).trackers.map((t) => t.url),
-          );
+          const trackerURIs = getDomainsFromURLs(Object.keys(torrent.tracker_errors ?? {}));
 
           const isComplete = torrent.state === 'Seeding';
 
