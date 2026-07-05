@@ -286,7 +286,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             isSequential: false,
             message: combinedMessage,
             name: torrent.name,
-            peersConnected: torrent.connection_count,
+            peersConnected: torrent.connected_downloading,
             peersTotal: torrent.total_downloading,
             percentComplete: torrent.total_length > 0 ? (torrent.completed / torrent.selected_size) * 100 : 0,
             priority: 1,
