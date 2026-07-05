@@ -93,6 +93,10 @@ export interface NeptuneTorrent {
   selected_size: number;
   add_at: number;
   private: boolean;
+  total_seeding: number;
+  total_downloading: number;
+  connected_seeding: number;
+  connected_downloading: number;
 }
 
 export interface NeptuneTorrentList {
