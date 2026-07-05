@@ -119,6 +119,7 @@ const createTorrent = (hash: string, overrides: Partial<TorrentProperties>): Tor
     seedsConnected: 0,
     seedsTotal: 0,
     sizeBytes: SIZE.GB,
+    selectedSizeBytes: SIZE.GB,
     tags: [],
     trackerURIs: [],
     upRate: 0,

@@ -139,6 +139,8 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return <Size value={torrent[column]} />;
       case 'sizeBytes':
         return <Size value={torrent[column]} />;
+      case 'selectedSizeBytes':
+        return <Size value={torrent[column]} />;
       case 'ratio':
         return <RatioCell ratio={torrent[column]} />;
       case 'isPrivate':
