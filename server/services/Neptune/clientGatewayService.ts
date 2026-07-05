@@ -260,11 +260,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
         const torrentList: TorrentList = {};
 
         for (const torrent of response.torrents) {
-          const trackerURIs = getDomainsFromURLs(
-            (
-              await this.clientRequestManager.getTorrentTrackers(torrent.hash).catch(() => ({trackers: []}))
-            ).trackers.map((t) => t.url),
-          );
+          const trackerURIs = getDomainsFromURLs(Object.keys(torrent.tracker_errors ?? {}));
 
           const isComplete = torrent.state === 'Seeding';
 
@@ -290,15 +286,15 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             message: combinedMessage,
             name: torrent.name,
             peersConnected: torrent.connection_count,
-            peersTotal: 0,
+            peersTotal: torrent.total_downloading,
             percentComplete: torrent.total_length > 0 ? (torrent.completed / torrent.selected_size) * 100 : 0,
             priority: 1,
             ratio:
               torrent.upload_total > 0 && torrent.download_total > 0
                 ? torrent.upload_total / torrent.download_total
                 : 0,
-            seedsConnected: 0,
-            seedsTotal: 0,
+            seedsConnected: torrent.connected_seeding,
+            seedsTotal: torrent.total_seeding,
             sizeBytes: torrent.total_length,
             status: getTorrentStatusFromState(
               torrent.state as NeptuneTorrentState,
