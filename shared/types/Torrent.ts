@@ -46,6 +46,7 @@ export interface TorrentProperties {
   seedsConnected: number;
   seedsTotal: number;
   sizeBytes: number;
+  selectedSizeBytes: number;
   status: Array<TorrentStatus>;
   tags: Array<string>;
   trackerURIs: Array<string>;

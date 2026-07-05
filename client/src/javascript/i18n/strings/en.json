@@ -368,6 +368,7 @@
   "torrents.properties.percentage": "Progress",
   "torrents.properties.ratio": "Ratio",
   "torrents.properties.seeds": "Seeds",
+  "torrents.properties.selected.size": "Selected Size",
   "torrents.properties.size": "File Size",
   "torrents.properties.tags": "Tags",
   "torrents.properties.tracker.message": "Tracker Message",

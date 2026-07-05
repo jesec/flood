@@ -296,6 +296,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             seedsConnected: torrent.connected_seeding,
             seedsTotal: torrent.total_seeding,
             sizeBytes: torrent.total_length,
+            selectedSizeBytes: torrent.selected_size,
             status: getTorrentStatusFromState(
               torrent.state as TorrentState,
               combinedMessage,
