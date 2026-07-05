@@ -430,6 +430,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
   UISidebarFilterLocation: true,
   UISidebarFilterTracker: true,
   UISidebarFilterTag: true,
+  UITrackerWarningEnabled: true,
 };
 
 /**

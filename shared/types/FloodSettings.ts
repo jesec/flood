@@ -49,6 +49,9 @@ export interface FloodSettings {
   UISidebarFilterLocation: boolean;
   UISidebarFilterTracker: boolean;
   UISidebarFilterTag: boolean;
+
+  // Show/hide the tracker warning status level
+  UITrackerWarningEnabled: boolean;
 }
 
 export type FloodSetting = keyof FloodSettings;

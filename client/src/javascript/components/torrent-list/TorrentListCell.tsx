@@ -159,7 +159,11 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return (
           <ProgressBar
             percent={computed(() => torrent.percentComplete).get()}
-            status={computed(() => torrentStatusEffective(torrent.status)).get()}
+            status={computed(() =>
+              torrentStatusEffective(torrent.status, {
+                trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled,
+              }),
+            ).get()}
             showPercentLabel={computed(
               () =>
                 SettingStore.floodSettings.torrentListViewSize === 'condensed' &&

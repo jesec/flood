@@ -84,6 +84,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
   const {status, upRate, downRate} = TorrentStore.torrents?.[hash] || {};
   const torrentClasses = torrentStatusClasses(
     {status, upRate, downRate},
+    {trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled},
     classnames({
       'torrent--is-selected': isSelected,
       'torrent--is-condensed': isCondensed,

@@ -15,6 +15,7 @@ import {
   UploadSmall,
 } from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import SettingStore from '@client/stores/SettingStore';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -86,21 +87,23 @@ const StatusFilters: FC = observer(() => {
     },
   ];
 
-  const filterElements = filters.map((filter) => (
-    <SidebarFilter
-      handleClick={(selection, event) => TorrentFilterStore.setStatusFilters(selection as TorrentStatus, event)}
-      count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
-      key={filter.slug}
-      icon={filter.icon}
-      isActive={
-        (filter.slug === '' && !TorrentFilterStore.statusFilter.length) ||
-        TorrentFilterStore.statusFilter.includes(filter.slug as TorrentStatus)
-      }
-      name={filter.label}
-      slug={filter.slug}
-      size={TorrentFilterStore.taxonomy.statusSizes[filter.slug] ?? 0}
-    />
-  ));
+  const filterElements = filters
+    .filter((f) => f.slug !== 'warning' || SettingStore.floodSettings.UITrackerWarningEnabled)
+    .map((filter) => (
+      <SidebarFilter
+        handleClick={(selection, event) => TorrentFilterStore.setStatusFilters(selection as TorrentStatus, event)}
+        count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
+        key={filter.slug}
+        icon={filter.icon}
+        isActive={
+          (filter.slug === '' && !TorrentFilterStore.statusFilter.length) ||
+          TorrentFilterStore.statusFilter.includes(filter.slug as TorrentStatus)
+        }
+        name={filter.label}
+        slug={filter.slug}
+        size={TorrentFilterStore.taxonomy.statusSizes[filter.slug] ?? 0}
+      />
+    ));
 
   const title = i18n._('filter.status.title');
 

@@ -37,6 +37,7 @@ export const floodSettingKeySchema = z.enum(
     UISidebarFilterLocation: true,
     UISidebarFilterTracker: true,
     UISidebarFilterTag: true,
+    UITrackerWarningEnabled: true,
   }) as [keyof FloodSettings, ...Array<keyof FloodSettings>],
 );
 
@@ -172,6 +173,7 @@ export const floodSettingsSchema = z
     UISidebarFilterLocation: z.boolean().default(true),
     UISidebarFilterTracker: z.boolean().default(true),
     UISidebarFilterTag: z.boolean().default(true),
+    UITrackerWarningEnabled: z.boolean().default(true),
   })
   .strict();
 

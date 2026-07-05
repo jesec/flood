@@ -218,6 +218,7 @@
   "settings.ui.sidebar.filter.location": "Show location filters",
   "settings.ui.sidebar.filter.tag": "Show tag filters",
   "settings.ui.sidebar.filter.tracker": "Show tracker filters",
+  "settings.ui.tracker.warning.enabled": "Enable tracker warning status",
   "settings.ui.torrent.list.progress.percent": "Show percentages",
   "settings.ui.locale": "Locale",
   "settings.ui.tag.selector.mode": "Tag Selector Preference",
