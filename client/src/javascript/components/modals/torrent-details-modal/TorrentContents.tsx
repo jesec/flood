@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '@client/ui';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -9,7 +10,6 @@ import {Disk} from '@client/ui/icons';
 import selectionTree from '@client/util/selectionTree';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
-import UIStore from '@client/stores/UIStore';
 
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 
@@ -21,22 +21,24 @@ const TorrentContents: FC = observer(() => {
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const {i18n} = useLingui();
 
+  const torrentHash = getTorrentDetailsHash();
+
   useEffect(() => {
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchTorrentContents(UIStore.activeModal?.hash).then((fetchedContents) => {
+    if (torrentHash) {
+      TorrentActions.fetchTorrentContents(torrentHash).then((fetchedContents) => {
         if (fetchedContents != null) {
           setContents(fetchedContents);
           setItemsTree(selectionTree.getSelectionTree(fetchedContents));
         }
       });
     }
-  }, []);
+  }, [torrentHash]);
 
-  if (UIStore.activeModal?.id !== 'torrent-details') {
+  if (!torrentHash) {
     return null;
   }
 
-  const {hash} = UIStore.activeModal;
+  const hash = torrentHash;
 
   let directoryHeadingIconContent = null;
   let fileDetailContent = null;

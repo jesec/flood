@@ -1,11 +1,11 @@
 import axios, {CancelTokenSource} from 'axios';
 import {FC, useEffect, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
+import getTorrentDetailsHash from './getTorrentDetailsHash';
 
 import {Button} from '@client/ui';
 import {Checkmark, Clipboard} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
-import UIStore from '@client/stores/UIStore';
 
 import Tooltip from '../../general/Tooltip';
 
@@ -18,11 +18,13 @@ const TorrentMediainfo: FC = () => {
   const [isFetchingMediainfo, setIsFetchingMediainfo] = useState<boolean>(true);
   const [isCopiedToClipboard, setIsCopiedToClipboard] = useState<boolean>(false);
 
+  const torrentHash = getTorrentDetailsHash();
+
   useEffect(() => {
     const {current: currentCancelToken} = cancelToken;
 
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchMediainfo(UIStore.activeModal?.hash, cancelToken.current.token).then(
+    if (torrentHash) {
+      TorrentActions.fetchMediainfo(torrentHash, cancelToken.current.token).then(
         (fetchedMediainfo) => {
           setMediainfo(fetchedMediainfo.output);
           setIsFetchingMediainfo(false);
@@ -39,7 +41,7 @@ const TorrentMediainfo: FC = () => {
     return () => {
       currentCancelToken.cancel();
     };
-  }, []);
+  }, [torrentHash]);
 
   let headingMessageId = 'mediainfo.heading';
   if (isFetchingMediainfo) {
