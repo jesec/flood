@@ -1,7 +1,7 @@
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
 import type {TorrentTracker} from '../../../../shared/types/TorrentTracker';
 import {TorrentTrackerType} from '../../../../shared/types/TorrentTracker';
-import type {NeptuneTorrentState} from '../neptune-client';
+import type {TorrentState} from '../sdk/types.ts';
 
 export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'] => {
   if (url.startsWith('http')) {
@@ -16,7 +16,7 @@ export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'
 };
 
 export const getTorrentStatusFromState = (
-  state: NeptuneTorrentState,
+  state: TorrentState,
   message = '',
   downRate = 0,
   upRate = 0,
