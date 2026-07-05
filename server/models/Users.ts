@@ -127,7 +127,7 @@ class Users {
       await destroyUserServices(_id, true);
 
       await this.db.remove({username}, {});
-      await fs.promises.rmdir(path.join(config.dbPath, _id), {recursive: true}).catch(() => undefined);
+      await fs.promises.rm(path.join(config.dbPath, _id), {recursive: true}).catch(() => undefined);
 
       return _id;
     });
