@@ -262,8 +262,6 @@ class NeptuneClientGatewayService extends ClientGatewayService {
         for (const torrent of response.torrents) {
           const trackerURIs = getDomainsFromURLs(Object.keys(torrent.tracker_errors ?? {}));
 
-          const isComplete = torrent.state === 'Seeding';
-
           const trackerErrorMessages = Object.values(torrent.tracker_errors ?? {}).filter(Boolean);
           const trackerMessage = trackerErrorMessages.find((m) => m.length > 0) ?? '';
           const combinedMessage = torrent.message || trackerMessage;
@@ -274,11 +272,14 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             dateActive: 0,
             dateAdded: torrent.add_at,
             dateCreated: 0,
-            dateFinished: isComplete ? torrent.add_at : 0,
+            dateFinished: torrent.completed_at,
             directory: torrent.directory_base,
             downRate: torrent.download_rate,
             downTotal: torrent.download_total,
-            eta: -1,
+            eta:
+              torrent.download_rate > 0 && torrent.selected_size > 0
+                ? (torrent.selected_size - torrent.completed) / torrent.download_rate
+                : -1,
             hash: torrent.hash.toUpperCase(),
             isPrivate: torrent.private,
             isInitialSeeding: false,

@@ -34,6 +34,7 @@ export interface Torrent {
   total_length: number;
   selected_size: number;
   add_at: number;
+  completed_at: number;
   private: boolean;
   total_seeding: number;
   total_downloading: number;
