@@ -30,7 +30,7 @@ jobs:
       id-token: write
     steps:
       - name: Download package artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: npm-package
           path: artifacts
@@ -40,18 +40,18 @@ jobs:
         run: echo "path=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: latest
 
       - name: Exchange OIDC token for npm publish token
         id: npm_token
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const idToken = await core.getIDToken('npm:registry.npmjs.org');

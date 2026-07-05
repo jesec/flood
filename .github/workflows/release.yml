@@ -17,7 +17,7 @@ jobs:
       id-token: write
     steps:
       - name: Download package artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: npm-package
           path: artifacts
@@ -27,18 +27,18 @@ jobs:
         run: echo "path=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: latest
 
       - name: Exchange OIDC token for npm publish token
         id: npm_token
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const idToken = await core.getIDToken('npm:registry.npmjs.org');
@@ -96,16 +96,16 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Download pkg artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: pkg-binaries
           path: release-assets
 
       - name: Download debian artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: flood-debian
           path: release-assets
@@ -117,7 +117,7 @@ jobs:
           git for-each-ref ${{ github.ref }} --format="%(contents)" > body
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
