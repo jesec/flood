@@ -357,6 +357,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
                 seedsConnected: status.num_seeds,
                 seedsTotal: status.total_seeds < 0 ? 0 : status.total_seeds,
                 sizeBytes: status.total_size,
+                selectedSizeBytes: status.total_size,
                 status: getTorrentStatusFromStatuses(status),
                 tags: [],
                 trackerURIs: [status.tracker_host],
