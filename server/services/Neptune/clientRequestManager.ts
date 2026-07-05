@@ -1,12 +1,12 @@
 import type {NeptuneConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
-import {NeptuneClient} from './neptune-client';
+import {NeptuneClient} from './sdk/client.ts';
 
 class ClientRequestManager {
   private client: NeptuneClient;
 
   constructor(connectionSettings: NeptuneConnectionSettings) {
-    this.client = new NeptuneClient(connectionSettings.url, connectionSettings.token);
+    this.client = new NeptuneClient({baseUrl: connectionSettings.url, token: connectionSettings.token});
   }
 
   async testConnection(): Promise<void> {
@@ -95,6 +95,10 @@ class ClientRequestManager {
 
   async setUploadLimit(limit: number) {
     await this.client.call('client.set_upload_limit', {limit});
+  }
+
+  async getTransferConfig() {
+    return this.client.call('client.get_transfer_config');
   }
 }
 

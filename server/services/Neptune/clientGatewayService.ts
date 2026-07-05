@@ -33,7 +33,7 @@ import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import type {NeptuneTorrentState} from './neptune-client';
+import type {TorrentState} from './sdk/types.ts';
 import {getTorrentStatusFromState, getTorrentTrackerTypeFromURL} from './util/torrentPropertiesUtil';
 
 class NeptuneClientGatewayService extends ClientGatewayService {
@@ -297,7 +297,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             seedsTotal: 0,
             sizeBytes: torrent.total_length,
             status: getTorrentStatusFromState(
-              torrent.state as NeptuneTorrentState,
+              torrent.state as TorrentState,
               combinedMessage,
               torrent.download_rate,
               torrent.upload_rate,
@@ -340,6 +340,10 @@ class NeptuneClientGatewayService extends ClientGatewayService {
   }
 
   async getClientSettings(): Promise<ClientSettings> {
+    const config = await this.clientRequestManager
+      .getTransferConfig()
+      .then(this.processClientRequestSuccess, () => ({download_limit: 0, upload_limit: 0}));
+
     return {
       dht: false,
       dhtPort: 0,
@@ -353,8 +357,8 @@ class NeptuneClientGatewayService extends ClientGatewayService {
       piecesHashOnCompletion: false,
       piecesMemoryMax: 0,
       protocolPex: false,
-      throttleGlobalDownSpeed: 0,
-      throttleGlobalUpSpeed: 0,
+      throttleGlobalDownSpeed: config.download_limit,
+      throttleGlobalUpSpeed: config.upload_limit,
       throttleMaxPeersNormal: 0,
       throttleMaxPeersSeed: 0,
       throttleMaxDownloads: 0,
