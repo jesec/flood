@@ -158,8 +158,14 @@ class NeptuneClientGatewayService extends ClientGatewayService {
     );
   }
 
-  async reannounceTorrents(_options: ReannounceTorrentsOptions): Promise<void> {
-    throw new Error('Neptune does not support reannouncing torrents');
+  async reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void> {
+    await Promise.all(
+      hashes.map((hash) =>
+        this.clientRequestManager
+          .reannounceTorrent(hash.toLowerCase())
+          .then(this.processClientRequestSuccess, this.processClientRequestError),
+      ),
+    );
   }
 
   async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {

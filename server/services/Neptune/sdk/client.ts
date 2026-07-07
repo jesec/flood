@@ -66,6 +66,7 @@ export interface NeptuneMethodMap {
   'torrent.add_tracker': {params: AddTrackerParams; result: void};
   'torrent.remove_tracker': {params: RemoveTrackerParams; result: void};
   'torrent.replace_trackers': {params: ReplaceTrackersParams; result: void};
+  'torrent.reannounce': {params: InfoHashParams; result: void};
   'torrent.set_file_priority': {params: SetFilePriorityParams; result: void};
   'torrent.set_download_limit': {params: SpeedLimitParams; result: void};
   'torrent.set_upload_limit': {params: SpeedLimitParams; result: void};
