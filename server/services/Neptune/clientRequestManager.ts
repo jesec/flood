@@ -81,6 +81,10 @@ class ClientRequestManager {
     await this.client.call('torrent.remove_tags', {info_hash: infoHash, tags});
   }
 
+  async reannounceTorrent(infoHash: string) {
+    await this.client.call('torrent.reannounce', {info_hash: infoHash});
+  }
+
   async setTorrentFilePriority(infoHash: string, fileIds: number[], priority: number) {
     await this.client.call('torrent.set_file_priority', {info_hash: infoHash, file_ids: fileIds, priority});
   }
