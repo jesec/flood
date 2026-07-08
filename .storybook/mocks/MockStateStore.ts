@@ -447,7 +447,7 @@ class MockStateStore {
     this.setTorrent(hash, {
       ...torrent,
       bytesDone: newBytesDone,
-      percentComplete: Math.floor(progress),
+      percentComplete: Math.round(progress),
       eta: eta,
       downTotal: newDownTotal,
       upTotal: newUpTotal,
