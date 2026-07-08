@@ -1,9 +1,10 @@
-import {NeptuneHTTPError, NeptuneRPCError} from './errors.ts';
+import {NeptuneConnectionError, NeptuneHTTPError, NeptuneRPCError} from './errors.ts';
 import type {
   AddTorrentParams,
   AddTorrentResult,
   AddTrackerParams,
   DelCustomParams,
+  GetRecheckOnCompleteResult,
   GlobalSpeedLimitParams,
   InfoHashParams,
   ListTorrentParams,
@@ -13,6 +14,7 @@ import type {
   ReplaceTrackersParams,
   SetCustomParams,
   SetFilePriorityParams,
+  SetRecheckOnCompleteParams,
   SpeedLimitParams,
   TagsParams,
   TorrentFiles,
@@ -76,6 +78,8 @@ export interface NeptuneMethodMap {
   'client.set_download_limit': {params: GlobalSpeedLimitParams; result: void};
   'client.set_upload_limit': {params: GlobalSpeedLimitParams; result: void};
   'client.get_transfer_config': {params: Record<string, never>; result: TransferConfig};
+  'client.set_recheck_on_complete': {params: SetRecheckOnCompleteParams; result: void};
+  'client.get_recheck_on_complete': {params: Record<string, never>; result: GetRecheckOnCompleteResult};
 }
 
 /** Union of all method name strings. */
@@ -144,12 +148,12 @@ export class NeptuneClient {
    * @param method  – the method name (e.g. `'torrent.list'`).
    * @param params  – method parameters (optional when the method takes none).
    * @returns The parsed result.
+   * @throws {NeptuneConnectionError} when a low-level connection failure occurs.
+   * @throws {NeptuneHTTPError} when the server returns a non-2xx HTTP status.
    * @throws {NeptuneRPCError} when the server returns a JSON-RPC error.
-   * @throws {NeptuneHTTPError} when the HTTP request fails.
    */
   async call<M extends NeptuneMethod>(
     method: M,
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     ...args: {} extends NeptuneMethodMap[M]['params']
       ? [params?: NeptuneMethodMap[M]['params']]
       : [params: NeptuneMethodMap[M]['params']]
@@ -174,7 +178,7 @@ export class NeptuneClient {
         body: JSON.stringify(request),
       });
     } catch (err) {
-      throw new NeptuneHTTPError(`Failed to reach Neptune at ${this.#baseUrl}: ${String(err)}`);
+      throw new NeptuneConnectionError(`Failed to reach Neptune at ${this.#baseUrl}: ${String(err)}`, err);
     }
 
     if (!response.ok) {

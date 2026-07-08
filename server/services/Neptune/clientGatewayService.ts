@@ -33,11 +33,28 @@ import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
+import {NeptuneConnectionError, NeptuneHTTPError} from './sdk/errors.ts';
 import type {TorrentState} from './sdk/types.ts';
 import {getTorrentStatusFromState, getTorrentTrackerTypeFromURL} from './util/torrentPropertiesUtil';
 
 class NeptuneClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as NeptuneConnectionSettings);
+
+  processClientRequestError = (error: Error): never => {
+    // Only connection-level errors (network failure or HTTP error) should
+    // trigger connection state changes. RPC errors mean the server responded
+    // correctly but rejected the operation (e.g. "reannounce not allowed yet").
+    if (error instanceof NeptuneConnectionError || error instanceof NeptuneHTTPError) {
+      if (this.errorCount === 0) {
+        this.errorCount += 1;
+        this.emit('CLIENT_CONNECTION_STATE_CHANGE', false);
+      }
+
+      this.startTimer();
+    }
+
+    throw error;
+  };
 
   async addTorrentsByFile({
     files,

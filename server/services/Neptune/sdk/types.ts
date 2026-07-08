@@ -35,6 +35,7 @@ export interface Torrent {
   selected_size: number;
   add_at: number;
   completed_at: number;
+  corrupted: number;
   private: boolean;
   total_seeding: number;
   total_downloading: number;
@@ -66,6 +67,7 @@ export interface Peer {
   download_rate: number;
   upload_rate: number;
   is_incoming: boolean;
+  encrypted: boolean;
 }
 
 /** A tracker entry. */
@@ -195,4 +197,15 @@ export interface UpdateCustomParams extends InfoHashParams {
 
 export interface DelCustomParams extends InfoHashParams {
   key: string;
+}
+
+/** Parameters for client.set_recheck_on_complete. */
+export interface SetRecheckOnCompleteParams {
+  /** Whether to recheck all pieces on download completion. */
+  enabled: boolean;
+}
+
+/** Response for client.get_recheck_on_complete. */
+export interface GetRecheckOnCompleteResult {
+  enabled: boolean;
 }
