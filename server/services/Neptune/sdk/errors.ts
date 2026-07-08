@@ -25,14 +25,28 @@ export class NeptuneRPCError extends Error {
 }
 
 /**
- * Error thrown when the HTTP request itself fails (network error,
- * non-2xx status, etc.).
+ * Error thrown when a low-level connection failure occurs (DNS resolution,
+ * connection refused, timeout, etc.).
+ */
+export class NeptuneConnectionError extends Error {
+  /** The original error that caused the connection failure, if available. */
+  cause?: unknown;
+
+  constructor(message: string, cause?: unknown) {
+    super(message);
+    this.name = 'NeptuneConnectionError';
+    this.cause = cause;
+  }
+}
+
+/**
+ * Error thrown when the server returns a non-2xx HTTP status.
  */
 export class NeptuneHTTPError extends Error {
-  /** HTTP status code, if available. */
-  status?: number;
+  /** HTTP status code returned by the server. */
+  status: number;
 
-  constructor(message: string, status?: number) {
+  constructor(message: string, status: number) {
     super(message);
     this.name = 'NeptuneHTTPError';
     this.status = status;
