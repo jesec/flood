@@ -14,3 +14,6 @@ css-snapshots/
 *storybook.log
 storybook-static
 .codex
+
+# Neptune SDK (synced from external repo)
+server/services/Neptune/sdk/

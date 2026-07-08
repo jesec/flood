@@ -33,7 +33,7 @@ import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import {NeptuneConnectionError, NeptuneHTTPError, NeptuneRPCError} from './sdk/errors.ts';
+import {NeptuneConnectionError, NeptuneHTTPError} from './sdk/errors.ts';
 import type {TorrentState} from './sdk/types.ts';
 import {getTorrentStatusFromState, getTorrentTrackerTypeFromURL} from './util/torrentPropertiesUtil';
 
