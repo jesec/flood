@@ -127,7 +127,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
           index: file.index,
           path: file.path.join('/'),
           filename: file.path[file.path.length - 1] || '',
-          percentComplete: file.progress * 100,
+          percentComplete: Math.round(file.progress * 10000) / 100,
           priority: TorrentContentPriority.NORMAL,
           sizeBytes: file.size,
         }));
@@ -311,7 +311,8 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             name: torrent.name,
             peersConnected: torrent.connected_downloading,
             peersTotal: torrent.total_downloading,
-            percentComplete: torrent.total_length > 0 ? (torrent.completed / torrent.selected_size) * 100 : 0,
+            percentComplete:
+              torrent.total_length > 0 ? Math.round((torrent.completed / torrent.selected_size) * 10000) / 100 : 0,
             priority: 1,
             ratio:
               torrent.upload_total > 0 && torrent.download_total > 0
