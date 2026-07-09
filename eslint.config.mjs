@@ -22,7 +22,6 @@ export default [
       '**/*.d.ts',
       '**/styled-system/**',
       '**/storybook-static/**',
-      'server/services/Neptune/sdk/**',
     ],
   },
 

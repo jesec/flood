@@ -1,12 +1,11 @@
 import type {NeptuneConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-
-import {NeptuneClient} from './sdk/client.ts';
+import {NeptuneClient} from '@trim21/neptune';
 
 class ClientRequestManager {
   private client: NeptuneClient;
 
   constructor(connectionSettings: NeptuneConnectionSettings) {
-    this.client = new NeptuneClient({baseUrl: connectionSettings.url, token: connectionSettings.token});
+    this.client = new NeptuneClient({url: connectionSettings.url, token: connectionSettings.token});
   }
 
   async testConnection(): Promise<void> {

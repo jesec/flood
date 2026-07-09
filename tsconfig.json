@@ -3,7 +3,7 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "target": "es2022",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "module": "es2022",
     "noEmit": true,
