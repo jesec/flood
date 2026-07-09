@@ -143,7 +143,7 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
     message: '',
     peersConnected: 12,
     peersTotal: 50,
-    percentComplete: Math.round(percentComplete * 100) / 100,
+    percentComplete: Math.floor(percentComplete * 100) / 100,
     priority: TorrentPriority.NORMAL,
     ratio: Math.round(ratio * 1000) / 1000,
     seedsConnected: 5,
