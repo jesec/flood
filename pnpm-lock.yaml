@@ -92,6 +92,9 @@ importers:
       '@storybook/test-runner':
         specifier: ^0.23.0
         version: 0.23.0(@types/node@22.19.17)(babel-plugin-macros@3.1.0)(storybook@9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.99.0)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3)))(ts-node@10.9.2(@swc/core@1.15.32)(@types/node@22.19.17)(typescript@5.0.4))
+      '@trim21/neptune':
+        specifier: 0.1.0-dev.779
+        version: 0.1.0-dev.779
       '@types/bencode':
         specifier: ^2.0.4
         version: 2.0.4
@@ -2511,6 +2514,10 @@ packages:
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
+
+  '@trim21/neptune@0.1.0-dev.779':
+    resolution: {integrity: sha512-4RgBpCk9u+sfOxeTJ7E+SC2uwcJFfh9/4pXwfVMDFK8zlLgIVTA2xVxgq/gz2VhHGBBjtrrJRXlh+cjHKYCVaA==}
+    engines: {node: '>=22.0.0'}
 
   '@ts-morph/common@0.29.0':
     resolution: {integrity: sha512-35oUmphHbJvQ/+UTwFNme/t2p3FoKiGJ5auTjjpNTop2dyREspirjMy82PLSC1pnDJ8ah1GU98hwpVt64YXQsg==}
@@ -9880,6 +9887,8 @@ snapshots:
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
     dependencies:
       '@testing-library/dom': 10.4.1
+
+  '@trim21/neptune@0.1.0-dev.779': {}
 
   '@ts-morph/common@0.29.0':
     dependencies:

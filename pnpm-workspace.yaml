@@ -1,7 +1,10 @@
 nodeLinker: hoisted
+trustLockfile: true
 hoistPattern:
   - '!@lingui/*'
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@trim21/neptune@0.1.0-dev.779'

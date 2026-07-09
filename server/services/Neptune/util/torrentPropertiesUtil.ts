@@ -1,7 +1,8 @@
+import type {TorrentState} from '@trim21/neptune';
+
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
 import type {TorrentTracker} from '../../../../shared/types/TorrentTracker';
 import {TorrentTrackerType} from '../../../../shared/types/TorrentTracker';
-import type {TorrentState} from '../sdk/types.ts';
 
 export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'] => {
   if (url.startsWith('http')) {

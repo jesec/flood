@@ -27,14 +27,13 @@ import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
+import {NeptuneConnectionError, NeptuneHTTPError, TorrentState} from '@trim21/neptune';
 
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import {NeptuneConnectionError, NeptuneHTTPError} from './sdk/errors.ts';
-import type {TorrentState} from './sdk/types.ts';
 import {getTorrentStatusFromState, getTorrentTrackerTypeFromURL} from './util/torrentPropertiesUtil';
 
 class NeptuneClientGatewayService extends ClientGatewayService {
