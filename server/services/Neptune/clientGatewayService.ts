@@ -322,7 +322,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             sizeBytes: torrent.total_length,
             selectedSizeBytes: torrent.selected_size,
             status: getTorrentStatusFromState(
-              torrent.state as TorrentState,
+              torrent.state as (typeof TorrentState)[keyof typeof TorrentState],
               combinedMessage,
               torrent.download_rate,
               torrent.upload_rate,

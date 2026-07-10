@@ -7,4 +7,5 @@ allowBuilds:
   '@swc/core': true
   esbuild: true
 minimumReleaseAgeExclude:
-  - '@trim21/neptune@0.1.0-dev.779'
+  - '@trim21/neptune@0.1.0-dev.798'
+  - '@trim21/neptune@0.1.0-dev.799'
