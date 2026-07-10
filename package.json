@@ -93,7 +93,7 @@
     "@storybook/addon-onboarding": "^9.1.20",
     "@storybook/react-vite": "^9.1.20",
     "@storybook/test-runner": "^0.23.0",
-    "@trim21/neptune": "0.1.0-dev.779",
+    "@trim21/neptune": "0.1.0-dev.799",
     "@types/bencode": "^2.0.4",
     "@types/content-disposition": "^0.5.9",
     "@types/create-torrent": "^6.1.1",

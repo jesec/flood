@@ -1,4 +1,4 @@
-import type {TorrentState} from '@trim21/neptune';
+import {TorrentState} from '@trim21/neptune';
 
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
 import type {TorrentTracker} from '../../../../shared/types/TorrentTracker';
@@ -17,7 +17,7 @@ export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'
 };
 
 export const getTorrentStatusFromState = (
-  state: TorrentState,
+  state: (typeof TorrentState)[keyof typeof TorrentState],
   message = '',
   downRate = 0,
   upRate = 0,
@@ -25,23 +25,24 @@ export const getTorrentStatusFromState = (
   const statuses: TorrentProperties['status'] = [];
 
   switch (state) {
-    case 'Stopped':
-      statuses.push('stopped');
-      break;
-    case 'Downloading':
+    case TorrentState.Downloading:
+    case TorrentState.PendingDownloading:
       statuses.push('downloading');
       break;
-    case 'Seeding':
+    case TorrentState.Seeding:
       statuses.push('complete');
       statuses.push('seeding');
       break;
-    case 'Checking':
+    case TorrentState.Checking:
       statuses.push('checking');
       break;
-    case 'Moving':
+    case TorrentState.Stopped:
+      statuses.push('stopped');
+      break;
+    case TorrentState.Moving:
       statuses.push('moving');
       break;
-    case 'Error':
+    case TorrentState.Error:
       statuses.push('error');
       statuses.push('stopped');
       break;
