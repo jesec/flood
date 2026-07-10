@@ -3,6 +3,9 @@ name: Renovate
 on:
   schedule:
     - cron: '48 7 * * *' # daily at 06:00 UTC
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
