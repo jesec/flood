@@ -218,5 +218,5 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown -w"
   },
-  "packageManager": "pnpm@11.5.2"
+  "packageManager": "pnpm@11.8.0"
 }
