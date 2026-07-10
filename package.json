@@ -169,7 +169,7 @@
     "overlayscrollbars-react": "^0.5.6",
     "p-queue": "^7.4.1",
     "parse-torrent": "^9.1.5",
-    "passport": "^0.6.0",
+    "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pino": "^10.3.1",
     "pino-pretty": "^13.1.3",

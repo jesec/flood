@@ -321,8 +321,8 @@ importers:
         specifier: ^9.1.5
         version: 9.1.5
       passport:
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: ^0.7.0
+        version: 0.7.0
       passport-jwt:
         specifier: ^4.0.1
         version: 4.0.1
@@ -6005,8 +6005,8 @@ packages:
     resolution: {integrity: sha512-CB97UUvDKJde2V0KDWWB3lyf6PC3FaZP7YxZ2G8OAtn9p4HI9j9JLP9qjOGZFvyl8uwNT8qM+hGnz/n16NI7oA==}
     engines: {node: '>= 0.4.0'}
 
-  passport@0.6.0:
-    resolution: {integrity: sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==}
+  passport@0.7.0:
+    resolution: {integrity: sha512-cPLl+qZpSc+ireUvt+IzqbED1cHHkDoVYMo30jbJIdOOjQ1MQYZBPiNvmi8UM6lJuOpTPXJGZQk0DtC4y61MYQ==}
     engines: {node: '>= 0.4.0'}
 
   path-browserify@1.0.1:
@@ -14023,7 +14023,7 @@ snapshots:
 
   passport-strategy@1.0.0: {}
 
-  passport@0.6.0:
+  passport@0.7.0:
     dependencies:
       passport-strategy: 1.0.0
       pause: 0.0.1
