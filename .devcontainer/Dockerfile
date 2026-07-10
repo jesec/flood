@@ -8,7 +8,7 @@
 #
 # Sources should be mounted to /workspaces/flood.
 
-FROM docker.io/ubuntu:jammy
+FROM docker.io/ubuntu:resolute
 
 # Ensure apt is in non-interactive mode
 ENV DEBIAN_FRONTEND=noninteractive
