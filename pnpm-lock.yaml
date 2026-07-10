@@ -211,7 +211,7 @@ importers:
         version: 0.5.4
       create-torrent:
         specifier: ^6.1.0
-        version: 6.1.0
+        version: 6.1.2
       d3-array:
         specifier: ^3.2.4
         version: 3.2.4
@@ -3301,8 +3301,8 @@ packages:
   bencode@2.0.3:
     resolution: {integrity: sha512-D/vrAD4dLVX23NalHwb8dSvsUsxeRPO8Y7ToKA015JQYq69MLDOMkC0uGZYA/MPpltLO8rt8eqFC2j8DxjTZ/w==}
 
-  bencode@4.0.0:
-    resolution: {integrity: sha512-AERXw18df0pF3ziGOCyUjqKZBVNH8HV3lBxnx5w0qtgMIk4a1wb9BkcCQbkp9Zstfrn/dzRwl7MmUHHocX3sRQ==}
+  bencode@4.0.1:
+    resolution: {integrity: sha512-/bCR3FvgfB8AZk4LlowShU+nfaTNRM2vruJ9aejDa5LpgkCoRjFyEauFiZFxbpxVxQbBFapYCN42Er2dkE/Qgw==}
     engines: {node: '>=12.20.0'}
 
   bep53-range@1.1.1:
@@ -3660,8 +3660,8 @@ packages:
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
-  create-torrent@6.1.0:
-    resolution: {integrity: sha512-War593HCsg4TotHgMGWTJqnDHN0pmEU2RM13xUzzSZ78TpRNOC2bbcsC5yMO3pqIkedHEWFzYNqH1yhwuuBYTg==}
+  create-torrent@6.1.2:
+    resolution: {integrity: sha512-PrqAy9matS8HquhCQp45SyTEgshxK21SiZt9RxFNHybTWp3lYICebjj4zENl6jpjQGzuJ8DdI92TJuV73CO4YA==}
     engines: {node: '>=12'}
     hasBin: true
 
@@ -10841,7 +10841,7 @@ snapshots:
 
   bencode@2.0.3: {}
 
-  bencode@4.0.0:
+  bencode@4.0.1:
     dependencies:
       uint8-util: 2.2.6
 
@@ -11198,9 +11198,9 @@ snapshots:
   create-require@1.1.1:
     optional: true
 
-  create-torrent@6.1.0:
+  create-torrent@6.1.2:
     dependencies:
-      bencode: 4.0.0
+      bencode: 4.0.1
       block-iterator: 1.1.2
       fast-readable-async-iterator: 2.0.0
       is-file: 1.0.0
