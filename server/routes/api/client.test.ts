@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
@@ -6,7 +6,7 @@ import type {ClientSettings} from '../../../shared/types/ClientSettings';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
-const app = fastify({disableRequestLogging: true, logger: true});
+const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {

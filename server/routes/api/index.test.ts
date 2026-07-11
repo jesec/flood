@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
@@ -8,7 +8,7 @@ import constructRoutes from '..';
 
 vi.useRealTimers();
 
-const app = fastify({disableRequestLogging: true, logger: false});
+const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: false});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
