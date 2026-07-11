@@ -6,5 +6,7 @@
     "enabled": false
   },
   "rebaseWhen": "conflicted",
+  "separateMultipleMajor": true,
+  "separateMultipleMinor": false,
   "osvVulnerabilityAlerts": true
 }
