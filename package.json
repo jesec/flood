@@ -77,7 +77,7 @@
     "@eslint/js": "^9.39.4",
     "@fastify/compress": "^8.3.1",
     "@fastify/cookie": "^11.0.0",
-    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/rate-limit": "^11.0.0",
     "@fastify/send": "^4.1.0",
     "@fastify/sse": "^0.5.0",
     "@fastify/static": "^9.1.3",
