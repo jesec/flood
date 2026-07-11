@@ -2,7 +2,6 @@
  * Shared test utilities for Storybook stories
  */
 
-import {vi} from 'vitest';
 import React from 'react';
 
 /**
@@ -115,12 +114,6 @@ export class StoryErrorBoundary extends React.Component<
  * Cleanup function for story teardown
  */
 export function cleanupStory() {
-  // Clear any timers
-  vi.clearAllTimers();
-
-  // Clear all mocks
-  vi.clearAllMocks();
-
   // Reset document body
   document.body.innerHTML = '';
 
