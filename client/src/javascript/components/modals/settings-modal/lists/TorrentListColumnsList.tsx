@@ -36,10 +36,13 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
     SettingStore.floodSettings.torrentListShowProgressPercent,
   );
 
-  const torrentListColumnVisiblity = torrentListColumns.reduce((memo, {id, visible}) => {
-    memo[id] = visible;
-    return memo;
-  }, {} as Record<string, boolean>);
+  const torrentListColumnVisiblity = torrentListColumns.reduce(
+    (memo, {id, visible}) => {
+      memo[id] = visible;
+      return memo;
+    },
+    {} as Record<string, boolean>,
+  );
 
   const lockedIDs =
     torrentListViewSize === 'expanded' ? ['name', 'eta', 'downRate', 'percentComplete', 'downTotal', 'upRate'] : [];

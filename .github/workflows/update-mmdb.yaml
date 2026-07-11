@@ -5,6 +5,11 @@ on:
     # 3 times per year
     - cron: '17 * 15 1,5,9 *'
   workflow_dispatch: {}
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/update-mmdb.yaml
 
 permissions:
   contents: write
@@ -45,6 +50,8 @@ jobs:
 
       - name: Update encoded source
         run: node scripts/update-mmdb.mjs
+
+      - run: pnpm exec prettier --ignore-unknown -w
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
