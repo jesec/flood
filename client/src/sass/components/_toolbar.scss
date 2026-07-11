@@ -56,7 +56,10 @@
       opacity: 1;
       position: relative;
       text-align: center;
-      transition: color 0.25s, opacity 0.25s, visibility 0.25s;
+      transition:
+        color 0.25s,
+        opacity 0.25s,
+        visibility 0.25s;
       visibility: visible;
       z-index: 1;
 
