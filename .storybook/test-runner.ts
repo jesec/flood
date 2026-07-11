@@ -5,8 +5,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 import type {TestRunnerConfig} from '@storybook/test-runner';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // CSS properties to capture for migration validation
 const CSS_PROPERTIES_TO_CAPTURE = [
