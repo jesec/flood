@@ -192,7 +192,7 @@
     "storybook": "^10.0.0",
     "supertest": "^7.2.2",
     "tar-fs": "^3.1.2",
-    "tldts": "^5.7.112",
+    "tldts": "^7.0.0",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typed-emitter": "^2.1.0",
