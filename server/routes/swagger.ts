@@ -91,9 +91,7 @@ const swaggerRoutes = async (fastify: FastifyInstance) => {
   fastify.get(
     '/api/docs/',
     {
-      config: {
-        compress: false,
-      },
+      compress: false,
     },
     sendSwaggerUi,
   );

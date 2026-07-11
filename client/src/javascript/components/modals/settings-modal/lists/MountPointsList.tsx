@@ -40,10 +40,13 @@ const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPoin
     })(),
   );
 
-  const diskItemVisiblity = diskItems.reduce((memo, {id, visible}) => {
-    memo[id] = visible;
-    return memo;
-  }, {} as Record<string, boolean>);
+  const diskItemVisiblity = diskItems.reduce(
+    (memo, {id, visible}) => {
+      memo[id] = visible;
+      return memo;
+    },
+    {} as Record<string, boolean>,
+  );
 
   return (
     <SortableList
