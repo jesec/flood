@@ -102,7 +102,7 @@
     "@types/d3-scale": "^4.0.9",
     "@types/d3-shape": "^3.1.8",
     "@types/fs-extra": "^11.0.0",
-    "@types/http-errors": "^1.8.2",
+    "@types/http-errors": "^2.0.0",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash": "^4.17.24",
