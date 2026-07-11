@@ -42,8 +42,8 @@ importers:
         specifier: ^8.3.1
         version: 8.3.1
       '@fastify/cookie':
-        specifier: ^10.0.1
-        version: 10.0.1
+        specifier: ^11.0.0
+        version: 11.1.1
       '@fastify/rate-limit':
         specifier: ^10.3.0
         version: 10.3.0
@@ -1523,8 +1523,8 @@ packages:
   '@fastify/compress@8.3.1':
     resolution: {integrity: sha512-BUpItLr6MUX9e9ukg5Y6xekyA/7pBFG8QWtFCrUDm9ctoBc3R2/nA16yOaOWtVoccpXGjdDEYA/MxAb5+8cxag==}
 
-  '@fastify/cookie@10.0.1':
-    resolution: {integrity: sha512-NV/wbCUv4ETJ5KM1KMu0fLx0nSCm9idIxwg66NZnNbfPQH3rdbx6k0qRs5uy0y+MhBgvDudYRA30KlK659chyw==}
+  '@fastify/cookie@11.1.1':
+    resolution: {integrity: sha512-sJ0NXzGVYjUB4OynPZRsIcQ1mKSP4rW45xLCN0aelRq5Vl37xVVbz5kJ6Y0a9m2T0mCUjYCuvlUA9QlTafrZWw==}
 
   '@fastify/error@4.2.0':
     resolution: {integrity: sha512-RSo3sVDXfHskiBZKBPRgnQTtIqpi/7zhJOEmAxCiBcM7d0uwdGdxLlsCaLzGs8v8NnxIRlfG0N51p5yFaOentQ==}
@@ -3913,6 +3913,10 @@ packages:
   cookie@1.1.1:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
+
+  cookie@2.0.1:
+    resolution: {integrity: sha512-yuToqVvRrj6pfDXREyQAAv8SkAEk/8GS3jQRTiUMm66TVtBYmqQeoEjL2Lmq8Rpo6271vH76InTChTitEAm65w==}
+    engines: {node: '>=22'}
 
   cookiejar@2.1.4:
     resolution: {integrity: sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==}
@@ -8982,10 +8986,10 @@ snapshots:
       pumpify: 2.0.1
       readable-stream: 4.7.0
 
-  '@fastify/cookie@10.0.1':
+  '@fastify/cookie@11.1.1':
     dependencies:
-      cookie-signature: 1.2.2
-      fastify-plugin: 5.1.0
+      cookie: 2.0.1
+      fastify-plugin: 6.0.0
 
   '@fastify/error@4.2.0': {}
 
@@ -11631,6 +11635,8 @@ snapshots:
   cookie@0.7.2: {}
 
   cookie@1.1.1: {}
+
+  cookie@2.0.1: {}
 
   cookiejar@2.1.4: {}
 
