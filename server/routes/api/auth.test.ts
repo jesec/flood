@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import fastify from 'fastify';
+import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
@@ -40,7 +40,7 @@ const testNonAdminUser = {
 } as const;
 let testNonAdminUserToken = '';
 
-const app = fastify({disableRequestLogging: true, logger: true});
+const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {

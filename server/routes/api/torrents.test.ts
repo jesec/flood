@@ -7,7 +7,7 @@ import stream from 'node:stream';
 
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import fastify from 'fastify';
+import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
 
@@ -23,7 +23,11 @@ import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
-const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
+const app = fastify({
+  bodyLimit: 100 * 1024 * 1024 * 1024,
+  logController: new LogController({disableRequestLogging: true}),
+  forceCloseConnections: true,
+});
 let request: supertest.SuperTest<supertest.Test>;
 
 const activityStream = new stream.PassThrough();
