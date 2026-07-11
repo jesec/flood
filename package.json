@@ -188,7 +188,7 @@
     "ress": "^4.0.0",
     "sanitize-filename": "^1.6.4",
     "sass": "^1.99.0",
-    "saxen": "^8.1.2",
+    "saxen": "^11.0.0",
     "storybook": "^10.0.0",
     "supertest": "^7.2.2",
     "tar-fs": "^3.1.2",

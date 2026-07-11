@@ -378,8 +378,8 @@ importers:
         specifier: ^1.99.0
         version: 1.101.0
       saxen:
-        specifier: ^8.1.2
-        version: 8.1.2
+        specifier: ^11.0.0
+        version: 11.0.2
       storybook:
         specifier: ^10.0.0
         version: 10.5.0(@types/react@18.3.31)(prettier@2.8.8)(react@18.3.1)
@@ -6840,8 +6840,9 @@ packages:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
 
-  saxen@8.1.2:
-    resolution: {integrity: sha512-xUOiiFbc3Ow7p8KMxwsGICPx46ZQvy3+qfNVhrkwfz3Vvq45eGt98Ft5IQaA1R/7Tb5B5MKh9fUR9x3c3nDTxw==}
+  saxen@11.0.2:
+    resolution: {integrity: sha512-WDb4gqac8uiJzOdOdVpr9NWh9NrJMm7Brn5GX2Poj+mjE/QTXqYQENr8T/mom54dDDgbd3QjwTg23TRHYiWXRA==}
+    engines: {node: '>= 20.12'}
 
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
@@ -15249,7 +15250,7 @@ snapshots:
 
   sax@1.6.0: {}
 
-  saxen@8.1.2: {}
+  saxen@11.0.2: {}
 
   scheduler@0.23.2:
     dependencies:
