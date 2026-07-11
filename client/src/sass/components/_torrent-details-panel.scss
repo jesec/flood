@@ -201,7 +201,10 @@ $torrent-details--tags--foreground: #1a2028;
         &__node {
           color: $directory-tree--foreground;
           position: relative;
-          transition: background 0.25s, border 0.25s, color 0.25s;
+          transition:
+            background 0.25s,
+            border 0.25s,
+            color 0.25s;
 
           &--group {
             &:after {
