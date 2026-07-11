@@ -75,7 +75,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@eslint/js": "^9.39.4",
-    "@fastify/compress": "^8.3.1",
+    "@fastify/compress": "^9.0.0",
     "@fastify/cookie": "^11.0.0",
     "@fastify/rate-limit": "^11.0.0",
     "@fastify/send": "^4.1.0",
