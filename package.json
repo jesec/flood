@@ -185,7 +185,7 @@
     "react-transition-group": "^4.4.5",
     "react-use": "^17.6.0",
     "react-window": "^1.8.11",
-    "ress": "^4.0.0",
+    "ress": "^5.0.0",
     "sanitize-filename": "^1.6.4",
     "sass": "^1.99.0",
     "saxen": "^11.0.0",
