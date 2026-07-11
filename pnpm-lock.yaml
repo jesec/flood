@@ -259,7 +259,7 @@ importers:
         version: 5.10.0
       fastify-type-provider-zod:
         specifier: ^3.0.0
-        version: 3.0.0(fastify@5.10.0)(zod@3.25.76)
+        version: 3.0.0(fastify@5.10.0)(zod@4.4.1)
       feedsub:
         specifier: ^0.7.8
         version: 0.7.8
@@ -420,8 +420,8 @@ importers:
         specifier: ^17.7.2
         version: 17.7.3
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.4.1
 
 packages:
 
@@ -7542,9 +7542,6 @@ packages:
     peerDependencies:
       zod: ^3.25.28 || ^4
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
   zod@4.4.1:
     resolution: {integrity: sha512-a6ENMBBGZBsnlSebQ/eKCguSBeGKSf4O7BPnqVPmYGtpBYI7VSqoVqw+QcB7kPRjbqPwhYTpFbVj/RqNz/CT0Q==}
 
@@ -11934,11 +11931,11 @@ snapshots:
 
   fastify-plugin@6.0.0: {}
 
-  fastify-type-provider-zod@3.0.0(fastify@5.10.0)(zod@3.25.76):
+  fastify-type-provider-zod@3.0.0(fastify@5.10.0)(zod@4.4.1):
     dependencies:
       fastify: 5.10.0
-      zod: 3.25.76
-      zod-to-json-schema: 3.25.2(zod@3.25.76)
+      zod: 4.4.1
+      zod-to-json-schema: 3.25.2(zod@4.4.1)
 
   fastify@5.10.0:
     dependencies:
@@ -15754,15 +15751,9 @@ snapshots:
 
   yoctocolors@2.1.2: {}
 
-  zod-to-json-schema@3.25.2(zod@3.25.76):
-    dependencies:
-      zod: 3.25.76
-
   zod-to-json-schema@3.25.2(zod@4.4.1):
     dependencies:
       zod: 4.4.1
-
-  zod@3.25.76: {}
 
   zod@4.4.1: {}
 
