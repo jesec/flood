@@ -8,7 +8,7 @@ export const addTorrentByURLSchema = strictObject({
   // URLs to download torrents from
   urls: array(string()).nonempty(),
   // Cookies to attach to requests, arrays of strings in the format "name=value" with domain as key
-  cookies: record(array(string())).optional(),
+  cookies: record(string(), array(string())).optional(),
   // Path of destination
   destination: string().optional(),
   // Tags
