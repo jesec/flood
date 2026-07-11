@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 
 import type {TestRunnerConfig} from '@storybook/test-runner';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const storybookDir = path.dirname(fileURLToPath(import.meta.url));
 
 // CSS properties to capture for migration validation
 const CSS_PROPERTIES_TO_CAPTURE = [
@@ -229,7 +229,7 @@ const config: TestRunnerConfig = {
     );
 
     // Save computed styles to file for comparison
-    const outputDir = path.join(__dirname, '../css-snapshots/baseline');
+    const outputDir = path.join(storybookDir, '../css-snapshots/baseline');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, {recursive: true});
     }
