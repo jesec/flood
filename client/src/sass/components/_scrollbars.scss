@@ -121,9 +121,15 @@
 }
 
 .os-theme-thin.os-host-transition > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:before {
-  transition: height 0.3s, margin-top 0.3s, background 0.2s;
+  transition:
+    height 0.3s,
+    margin-top 0.3s,
+    background 0.2s;
 }
 
 .os-theme-thin.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
-  transition: width 0.3s, margin-left 0.3s, background 0.2s;
+  transition:
+    width 0.3s,
+    margin-left 0.3s,
+    background 0.2s;
 }

@@ -115,14 +115,17 @@ const DownloadRulesTab: FC = () => {
 
         const formData = formRef.current.getFormData() as Partial<RuleFormData>;
 
-        const currentErrors = Object.keys(validatedFields).reduce((memo, key) => {
-          const validatedField = key as ValidatedField;
+        const currentErrors = Object.keys(validatedFields).reduce(
+          (memo, key) => {
+            const validatedField = key as ValidatedField;
 
-          return {
-            ...memo,
-            [validatedField]: validateField(validatedField, formData[validatedField]),
-          };
-        }, {} as Record<string, string | undefined>);
+            return {
+              ...memo,
+              [validatedField]: validateField(validatedField, formData[validatedField]),
+            };
+          },
+          {} as Record<string, string | undefined>,
+        );
         setErrors(currentErrors);
 
         const isFormValid = Object.keys(currentErrors).every((key) => currentErrors[key] === undefined);
