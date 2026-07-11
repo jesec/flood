@@ -92,7 +92,7 @@
     "@seald-io/nedb": "^3.1.0",
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/react-vite": "^10.0.0",
-    "@storybook/test-runner": "^0.23.0",
+    "@storybook/test-runner": "^0.24.0",
     "@trim21/neptune": "0.1.0-dev.799",
     "@types/bencode": "^2.0.4",
     "@types/content-disposition": "^0.5.9",
