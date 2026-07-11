@@ -15,12 +15,11 @@
     "esModuleInterop": true,
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": false,
-    "baseUrl": "./",
     "paths": {
-      "@client/storybook-mocks/*": [".storybook/mocks/*"],
-      "@client/*": ["client/src/javascript/*"],
-      "@server/*": ["server/*"],
-      "@shared/*": ["shared/*"]
+      "@client/storybook-mocks/*": ["./.storybook/mocks/*"],
+      "@client/*": ["./client/src/javascript/*"],
+      "@server/*": ["./server/*"],
+      "@shared/*": ["./shared/*"]
     }
   },
   "include": ["./**/*.ts", "./**/*.mts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
