@@ -19,7 +19,9 @@ $menu--item--separator--background: $menu--container--border;
 .menu {
   background: $menu--background;
   border-radius: 3px;
-  box-shadow: 0 0 0 1px $menu--container--border, 0 1px 4px $menu--container--shadow,
+  box-shadow:
+    0 0 0 1px $menu--container--border,
+    0 1px 4px $menu--container--shadow,
     0 3px 15px $menu--container--shadow;
   color: $menu--item--foreground;
   text-align: left;
@@ -71,7 +73,9 @@ $menu--item--separator--background: $menu--container--border;
 
     &.is-selectable {
       display: block;
-      transition: background 0.25s, color 0.25s;
+      transition:
+        background 0.25s,
+        color 0.25s;
 
       > button {
         outline: none;

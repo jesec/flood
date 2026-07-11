@@ -27,7 +27,9 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
   visibility: hidden;
   z-index: 1000;
 
