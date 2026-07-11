@@ -39,14 +39,14 @@ importers:
         specifier: ^9.39.4
         version: 9.39.4
       '@fastify/compress':
-        specifier: ^8.3.1
-        version: 8.3.1
+        specifier: ^9.0.0
+        version: 9.0.0
       '@fastify/cookie':
         specifier: ^11.0.0
         version: 11.1.1
       '@fastify/rate-limit':
-        specifier: ^10.3.0
-        version: 10.3.0
+        specifier: ^11.0.0
+        version: 11.1.0
       '@fastify/send':
         specifier: ^4.1.0
         version: 4.1.0
@@ -1520,8 +1520,8 @@ packages:
   '@fastify/ajv-compiler@4.0.5':
     resolution: {integrity: sha512-KoWKW+MhvfTRWL4qrhUwAAZoaChluo0m0vbiJlGMt2GXvL4LVPQEjt8kSpHI3IBq5Rez8fg+XeH3cneztq+C7A==}
 
-  '@fastify/compress@8.3.1':
-    resolution: {integrity: sha512-BUpItLr6MUX9e9ukg5Y6xekyA/7pBFG8QWtFCrUDm9ctoBc3R2/nA16yOaOWtVoccpXGjdDEYA/MxAb5+8cxag==}
+  '@fastify/compress@9.0.0':
+    resolution: {integrity: sha512-PZRg+ut5xd/ubsGPWfoPNryoCOtEdHboIWpDieTUHov1gKdLitF8mRmT3JbqNnRbelQXSNXUsIpakAEKR6AcTQ==}
 
   '@fastify/cookie@11.1.1':
     resolution: {integrity: sha512-sJ0NXzGVYjUB4OynPZRsIcQ1mKSP4rW45xLCN0aelRq5Vl37xVVbz5kJ6Y0a9m2T0mCUjYCuvlUA9QlTafrZWw==}
@@ -1541,8 +1541,8 @@ packages:
   '@fastify/proxy-addr@5.1.0':
     resolution: {integrity: sha512-INS+6gh91cLUjB+PVHfu1UqcB76Sqtpyp7bnL+FYojhjygvOPA9ctiD/JDKsyD9Xgu4hUhCSJBPig/w7duNajw==}
 
-  '@fastify/rate-limit@10.3.0':
-    resolution: {integrity: sha512-eIGkG9XKQs0nyynatApA3EVrojHOuq4l6fhB4eeCk4PIOeadvOJz9/4w3vGI44Go17uaXOWEcPkaD8kuKm7g6Q==}
+  '@fastify/rate-limit@11.1.0':
+    resolution: {integrity: sha512-BeJ9tizLvmTXGD7deYU5G04OtHhwk5uHxbpEPVp09gKvUBIXmau/4Bshxhu9ci54MvVWfGjCEx4RzvsTntojwA==}
 
   '@fastify/send@4.1.0':
     resolution: {integrity: sha512-TMYeQLCBSy2TOFmV95hQWkiTYgC/SEx7vMdV+wnZVX4tt8VBLKzmH8vV9OzJehV0+XBfg+WxPMt5wp+JBUKsVw==}
@@ -4181,9 +4181,6 @@ packages:
   duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
 
-  duplexify@4.1.3:
-    resolution: {integrity: sha512-M3BmBhwJRZsSx38lZyhE53Csddgzl5R7xGJNk7CVddZD6CcmwMCH8J+7AprIrQKH7TonKxaCjcv27Qmf+sQ+oA==}
-
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
@@ -6518,9 +6515,6 @@ packages:
   pump@3.0.4:
     resolution: {integrity: sha512-VS7sjc6KR7e1ukRFhQSY5LM2uBWAUPiOPa/A3mkKmiMwSmRFUITt0xuj+/lesgnCv+dPIEYlkzrcyXgquIHMcA==}
 
-  pumpify@2.0.1:
-    resolution: {integrity: sha512-m7KOje7jZxrmutanlkS1daj1dS6z6BgslzOXmcSEpIlCxM3VJH7lG5QLeck/6hgF6F4crFf01UtQmNsJfweTAw==}
-
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
@@ -7298,10 +7292,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  toad-cache@3.7.0:
-    resolution: {integrity: sha512-/m8M+2BJUpoJdgAHoG+baCwBT+tf2VraSfkBgl0Y00qIWt41DJ8R5B8nsEw0I58YwF5IZH6z24/2TobDKnqSWw==}
-    engines: {node: '>=12'}
 
   toad-cache@3.7.4:
     resolution: {integrity: sha512-m1TdR/rvT7kgGJZhspNtXdsdYk0fddFpJJFlG5s+UkPFo6lkLoZ3YLOaovPYjq1R75NP5JfeTlSHaOsE09peCg==}
@@ -8979,15 +8969,13 @@ snapshots:
       ajv-formats: 3.0.1(ajv@8.20.0)
       fast-uri: 3.1.3
 
-  '@fastify/compress@8.3.1':
+  '@fastify/compress@9.0.0':
     dependencies:
       '@fastify/accept-negotiator': 2.0.1
       fastify-plugin: 5.1.0
       mime-db: 1.54.0
       minipass: 7.1.3
       peek-stream: 1.1.3
-      pump: 3.0.4
-      pumpify: 2.0.1
       readable-stream: 4.7.0
 
   '@fastify/cookie@11.1.1':
@@ -9012,11 +9000,11 @@ snapshots:
       '@fastify/forwarded': 3.0.1
       ipaddr.js: 2.4.0
 
-  '@fastify/rate-limit@10.3.0':
+  '@fastify/rate-limit@11.1.0':
     dependencies:
       '@lukeed/ms': 2.0.2
-      fastify-plugin: 5.1.0
-      toad-cache: 3.7.0
+      fastify-plugin: 6.0.0
+      toad-cache: 3.7.4
 
   '@fastify/send@4.1.0':
     dependencies:
@@ -11901,13 +11889,6 @@ snapshots:
       end-of-stream: 1.4.5
       inherits: 2.0.4
       readable-stream: 2.3.8
-      stream-shift: 1.0.3
-
-  duplexify@4.1.3:
-    dependencies:
-      end-of-stream: 1.4.5
-      inherits: 2.0.4
-      readable-stream: 3.6.2
       stream-shift: 1.0.3
 
   eastasianwidth@0.2.0: {}
@@ -14833,12 +14814,6 @@ snapshots:
       end-of-stream: 1.4.5
       once: 1.4.0
 
-  pumpify@2.0.1:
-    dependencies:
-      duplexify: 4.1.3
-      inherits: 2.0.4
-      pump: 3.0.4
-
   punycode@2.3.1: {}
 
   pure-rand@7.0.1: {}
@@ -15802,8 +15777,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  toad-cache@3.7.0: {}
 
   toad-cache@3.7.4: {}
 
