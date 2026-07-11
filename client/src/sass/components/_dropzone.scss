@@ -23,7 +23,9 @@ $dropzone--file--foreground: $dropzone--foreground;
 .dropzone {
   position: relative;
   text-align: center;
-  transition: border 0.25s, color 0.25s;
+  transition:
+    border 0.25s,
+    color 0.25s;
   width: 100%;
   z-index: 2;
 
@@ -139,7 +141,9 @@ $dropzone--file--foreground: $dropzone--foreground;
       z-index: 2;
       text-align: center;
       opacity: 0;
-      transition: opacity 250ms ease-in, visibility 1ms linear 250ms;
+      transition:
+        opacity 250ms ease-in,
+        visibility 1ms linear 250ms;
     }
 
     &.dropzone--is-dragging .dropzone__overlay {

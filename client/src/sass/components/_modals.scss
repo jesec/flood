@@ -148,8 +148,11 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     &__wrapper {
       background: $modal--background;
       border-radius: $modal--border-radius;
-      box-shadow: 0 0 256px rgba($modal--content--shadow, 0.1), 0 2px 4px rgba($modal--content--shadow, 0.5),
-        0 2px 8px rgba($modal--content--shadow, 0.1), 0 4px 32px rgba($modal--content--shadow, 0.3);
+      box-shadow:
+        0 0 256px rgba($modal--content--shadow, 0.1),
+        0 2px 4px rgba($modal--content--shadow, 0.5),
+        0 2px 8px rgba($modal--content--shadow, 0.1),
+        0 4px 32px rgba($modal--content--shadow, 0.3);
       display: flex;
       flex-direction: column;
       height: auto;
