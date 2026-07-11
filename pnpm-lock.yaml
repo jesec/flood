@@ -147,8 +147,8 @@ importers:
         specifier: ^1.0.17
         version: 1.0.17
       '@types/passport-jwt':
-        specifier: ^3.0.13
-        version: 3.0.13
+        specifier: ^4.0.0
+        version: 4.0.1
       '@types/react':
         specifier: ^18.3.28
         version: 18.3.31
@@ -2914,8 +2914,8 @@ packages:
   '@types/parse-torrent@5.8.8':
     resolution: {integrity: sha512-CInK3z3BxMXUeO/UiUeSfpQ0CkjOAWZUCUigVn3ZkppeLZTm32/TepolcxzgYuk6q3z91gdWsmOW2S6fYx326w==}
 
-  '@types/passport-jwt@3.0.13':
-    resolution: {integrity: sha512-fjHaC6Bv8EpMMqzTnHP32SXlZGaNfBPC/Po5dmRGYi2Ky7ljXPbGnOy+SxZqa6iZvFgVhoJ1915Re3m93zmcfA==}
+  '@types/passport-jwt@4.0.1':
+    resolution: {integrity: sha512-Y0Ykz6nWP4jpxgEUYq8NoVZeCQPo1ZndJLfapI249g1jHChvRfZRO/LS3tqu26YgAS/laI1qx98sYGz0IalRXQ==}
 
   '@types/passport-strategy@0.2.38':
     resolution: {integrity: sha512-GC6eMqqojOooq993Tmnmp7AUTbbQSgilyvpCYQjT+H6JfG/g6RGc7nXEniZlp0zyKJ0WUdOiZWLBZft9Yug1uA==}
@@ -10549,9 +10549,8 @@ snapshots:
       '@types/node': 22.19.17
       '@types/parse-torrent-file': 4.0.6
 
-  '@types/passport-jwt@3.0.13':
+  '@types/passport-jwt@4.0.1':
     dependencies:
-      '@types/express': 5.0.6
       '@types/jsonwebtoken': 9.0.10
       '@types/passport-strategy': 0.2.38
 
