@@ -90,6 +90,14 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
     },
     {
       type: 'action',
+      action: 'setCategory',
+      label: TorrentContextMenuActions.setCategory,
+      clickHandler: () => {
+        UIStore.setActiveModal({id: 'set-category'});
+      },
+    },
+    {
+      type: 'action',
       action: 'setTaxonomy',
       label: TorrentContextMenuActions.setTaxonomy,
       clickHandler: () => {

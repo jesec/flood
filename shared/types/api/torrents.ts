@@ -23,6 +23,8 @@ export const CreateTorrentOptionsSchema = z.object({
   isInitialSeeding: z.boolean().optional(),
   // Whether to start torrent
   start: z.boolean().optional(),
+  // Category, not added to torrent file
+  category: z.string().optional(),
   // Tags, not added to torrent file
   tags: z.array(z.string()).optional(),
 });

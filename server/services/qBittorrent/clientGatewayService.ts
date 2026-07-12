@@ -6,6 +6,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {UserInDatabase} from '@shared/schema/Auth';
@@ -101,6 +102,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
   async addTorrentsByFile({
     files,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -135,6 +137,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
     await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
+        category: category,
         tags: tags.join(','),
         [method]: !start,
         root_folder: !isBasePath,
@@ -153,6 +156,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -172,6 +176,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
       await this.clientRequestManager
         .torrentsAddURLs(urls, {
           savepath: destination,
+          category: category,
           tags: tags.join(','),
           [method]: !start,
           root_folder: !isBasePath,
@@ -186,6 +191,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
       return this.addTorrentsByFile({
         files: files.map((file) => file.toString('base64')) as [string, ...string[]],
         destination,
+        category,
         tags,
         isBasePath,
         isCompleted,
@@ -339,6 +345,12 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentsCategory({hashes, category}: SetTorrentsCategoryOptions): Promise<void> {
+    return this.clientRequestManager
+      .torrentsSetCategory(hashes, category)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     return this.clientRequestManager.torrentsRemoveTags(hashes).then(() => {
       this.clientRequestManager
@@ -431,6 +443,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
               const isSeeding = info.state.endsWith('UP');
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
+                category: info.category,
                 comment: comment,
                 dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
                 dateAdded: info.added_on,

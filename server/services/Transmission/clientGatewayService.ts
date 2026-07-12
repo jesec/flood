@@ -4,6 +4,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {UserInDatabase} from '@shared/schema/Auth';
@@ -92,6 +93,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -134,6 +136,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
         ...(await this.addTorrentsByFile({
           files: files.map((file) => file.toString('base64')) as [string, ...string[]],
           destination,
+          category,
           tags,
           isBasePath,
           isCompleted,
@@ -289,6 +292,10 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     throw new Error('Transmission does not support this feature.');
   }
 
+  async setTorrentsCategory(_options: SetTorrentsCategoryOptions): Promise<void> {
+    return;
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     return this.clientRequestManager
       .setTorrentsProperties({ids: hashes, labels: tags})
@@ -405,6 +412,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
               const torrentProperties: TorrentProperties = {
                 hash: torrent.hashString.toUpperCase(),
                 name: torrent.name,
+                category: '',
                 comment: torrent.comment,
                 bytesDone: torrent.haveValid,
                 dateActive: torrent.rateDownload > 0 || torrent.rateUpload > 0 ? -1 : torrent.activityDate,

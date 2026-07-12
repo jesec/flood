@@ -96,6 +96,7 @@ const createTorrent = (hash: string, overrides: Partial<TorrentProperties>): Tor
   const base: TorrentProperties = {
     hash,
     name: 'Torrent ' + hash,
+    category: '',
     status: ['stopped'],
     bytesDone: 0,
     comment: '',
