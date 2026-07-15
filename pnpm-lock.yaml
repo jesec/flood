@@ -273,8 +273,8 @@ importers:
         specifier: ^1.5.1
         version: 1.5.1
       globals:
-        specifier: ^15.15.0
-        version: 15.15.0
+        specifier: ^17.0.0
+        version: 17.7.0
       hash-wasm:
         specifier: ^4.12.0
         version: 4.12.0
@@ -4800,6 +4800,10 @@ packages:
 
   globals@15.15.0:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
+    engines: {node: '>=18'}
+
+  globals@17.7.0:
+    resolution: {integrity: sha512-Czmyns5dUsq4seFBR/Kdydhmo8y9kC79hiSkPn0YcGtNnYWnrgt0vjrSjx9tspoDGWm2CMarffRuLjM4xUz8xg==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -12685,6 +12689,8 @@ snapshots:
   globals@14.0.0: {}
 
   globals@15.15.0: {}
+
+  globals@17.7.0: {}
 
   globalthis@1.0.4:
     dependencies:
