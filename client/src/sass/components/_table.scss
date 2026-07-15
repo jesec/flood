@@ -50,7 +50,9 @@ $table--heading--resize--indicator--width: 1px;
       position: absolute;
       right: 3px;
       top: 50%;
-      transition: opacity 0.2s, transform 0.2s;
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
     }
 
     &--is-sorted {

@@ -41,7 +41,10 @@ $dropdown--item--foreground--active: base-menu.$menu--item--foreground--active;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: background 0.25s, border 0.25s, color 0.25s;
+    transition:
+      background 0.25s,
+      border 0.25s,
+      color 0.25s;
     white-space: nowrap;
     outline: none;
     -webkit-tap-highlight-color: transparent;

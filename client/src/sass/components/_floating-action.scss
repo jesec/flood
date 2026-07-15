@@ -19,7 +19,9 @@ $textbox-repeater--button--foreground--hover: #12191f;
     margin-right: 6px;
     padding: 0;
     position: relative;
-    transition: background 0.25s, box-shadow 0.25s;
+    transition:
+      background 0.25s,
+      box-shadow 0.25s;
     width: 16px;
 
     &:last-child {

@@ -24,7 +24,9 @@ $search-torrents--icon--foreground--active: colors.$blue;
     pointer-events: none;
     position: absolute;
     top: 50%;
-    transition: fill 0.25s, opacity 0.25s;
+    transition:
+      fill 0.25s,
+      opacity 0.25s;
     transform: translateY(-50%);
     width: 22px;
 
@@ -67,7 +69,10 @@ $search-torrents--icon--foreground--active: colors.$blue;
     font-size: 1em;
     outline: none;
     padding: 12px 0 12px 45px;
-    transition: background 0.25s, border 0.25s, color 0.25s;
+    transition:
+      background 0.25s,
+      border 0.25s,
+      color 0.25s;
     width: 100%;
 
     &::placeholder {
