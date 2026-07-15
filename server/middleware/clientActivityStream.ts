@@ -1,7 +1,7 @@
 import type {Operation} from 'fast-json-patch';
 import type {FastifyReply, FastifyRequest} from 'fastify';
-import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
+import type {EventMap} from 'typed-emitter';
 
 import type {TransferHistory} from '../../shared/types/TransferData';
 import type {DiskUsageSummary} from '../models/DiskUsage';
