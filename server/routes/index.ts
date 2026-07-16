@@ -39,6 +39,20 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   });
 
   if (process.env.NODE_ENV !== 'test') {
+    morgan.token('url', (req) => {
+      const url = req.url ?? '';
+      // Redact the `token` query parameter to prevent credentials in access logs.
+      try {
+        const u = new URL(url, 'http://localhost');
+        if (u.searchParams.has('token')) {
+          u.searchParams.set('token', '[REDACTED]');
+          return u.pathname + u.search;
+        }
+      } catch {
+        // URL parse failed; fall through to return raw URL.
+      }
+      return url;
+    });
     fastify.addHook('onRequest', (request, reply, done) => {
       morgan('dev')(request.raw, reply.raw, done);
     });
