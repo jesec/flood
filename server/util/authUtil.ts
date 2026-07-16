@@ -1,4 +1,5 @@
 import type {CookieSerializeOptions} from '@fastify/cookie';
+import type {ContentToken} from '@shared/schema/api/torrents';
 import type {AuthToken} from '@shared/schema/Auth';
 import type {FastifyReply} from 'fastify';
 import jwt from 'jsonwebtoken';
@@ -6,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import config from '../../config';
 
 const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
+const CONTENT_TOKEN_EXPIRATION_SECONDS = 60 * 5; // 5 minutes
 
 export const getCookieOptions = (): CookieSerializeOptions => ({
   path: '/',
@@ -45,6 +47,16 @@ export const getAuthToken = (username: string, iat?: number): string => {
 export const getToken = <T extends Record<string, unknown>>(payload: Omit<T, 'iat' | 'exp'>) =>
   jwt.sign(payload, config.secret, {
     expiresIn: EXPIRATION_SECONDS,
+  });
+
+/**
+ * Create a scoped content-retrieval token. These tokens are valid for a short
+ * duration (5 minutes) and are accepted only on the torrent content data route
+ * — they cannot authenticate other API endpoints.
+ */
+export const getContentToken = (payload: Omit<ContentToken, 'type' | 'iat' | 'exp'>): string =>
+  jwt.sign({...payload, type: 'content'}, config.secret, {
+    expiresIn: CONTENT_TOKEN_EXPIRATION_SECONDS,
   });
 
 export const verifyToken = async (token: string): Promise<Record<string, unknown>> =>

@@ -9,10 +9,9 @@ import type {
   AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
-import type {ContentToken} from '../../../shared/schema/api/torrents';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
-import {getAuthToken, getToken} from '../../util/authUtil';
+import {getAuthToken, getContentToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
 vi.useRealTimers();
@@ -220,23 +219,13 @@ describe('Query string token authentication', () => {
     }
   });
 
-  it('Authenticates with a content token (extra fields) in query string', async () => {
-    const token = getToken<ContentToken>({
+  it('Rejects a content token on general API routes (scoped to data route only)', async () => {
+    const token = getContentToken({
       username: testAdminUser.username,
       hash: 'abc123',
       indices: '0,1,2',
     });
-    const res = await request
-      .get(`/api/auth/verify?token=${token}`)
-      .send()
-      .set('Accept', 'application/json')
-      .expect(200);
-
-    const verificationResponse: AuthVerificationResponse = res.body;
-    expect(verificationResponse.initialUser).toBe(false);
-    if (verificationResponse.initialUser === false) {
-      expect(verificationResponse.username).toBe(testAdminUser.username);
-    }
+    await request.get(`/api/auth/verify?token=${token}`).send().set('Accept', 'application/json').expect(401);
   });
 
   it('Rejects an invalid query string token', async () => {
