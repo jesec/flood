@@ -6,7 +6,7 @@ import send from '@fastify/send';
 import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
 import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
-import contentDisposition from 'content-disposition';
+import {create as contentDisposition} from 'content-disposition';
 import type {CreateTorrentOptions, TorrentInput} from 'create-torrent';
 import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
