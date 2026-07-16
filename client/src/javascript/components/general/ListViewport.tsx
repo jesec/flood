@@ -57,8 +57,10 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
   );
 });
 
-interface ListViewportProps
-  extends Pick<FixedSizeListProps, 'className' | 'itemCount' | 'itemKey' | 'itemSize' | 'outerRef'> {
+interface ListViewportProps extends Pick<
+  FixedSizeListProps,
+  'className' | 'itemCount' | 'itemKey' | 'itemSize' | 'outerRef'
+> {
   itemRenderer: FC<ListChildComponentProps>;
 }
 
