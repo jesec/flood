@@ -49,7 +49,7 @@ const clientSettingMethodCallConfigs = {
     },
   },
   networkPortRange: {
-    methodCall: 'network.port_range',
+    methodCall: ['network.port_range', 'network.listen.port.range'],
     transformValue: (value: unknown): string => {
       return typeof value === 'string' ? value : (value as Array<string>)?.[0];
     },
