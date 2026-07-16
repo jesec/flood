@@ -207,8 +207,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.3
       content-disposition:
-        specifier: ^0.5.4
-        version: 0.5.4
+        specifier: ^2.0.0
+        version: 2.0.1
       create-torrent:
         specifier: ^6.1.0
         version: 6.1.2
@@ -3880,10 +3880,6 @@ packages:
 
   confbox@0.2.4:
     resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==}
-
-  content-disposition@0.5.4:
-    resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
-    engines: {node: '>= 0.6'}
 
   content-disposition@1.1.0:
     resolution: {integrity: sha512-5jRCH9Z/+DRP7rkvY83B+yGIGX96OYdJmzngqnw2SBSxqCFPd0w2km3s5iawpGX8krnwSGmF0FW5Nhr0Hfai3g==}
@@ -11608,10 +11604,6 @@ snapshots:
       yargs: 18.0.0
 
   confbox@0.2.4: {}
-
-  content-disposition@0.5.4:
-    dependencies:
-      safe-buffer: 5.2.1
 
   content-disposition@1.1.0: {}
 
