@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-backend-matrix:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -22,7 +22,7 @@ jobs:
       - uses: pnpm/action-setup@v6
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
