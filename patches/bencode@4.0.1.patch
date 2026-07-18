@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index 89dd4291874c9d5a49b06b4e63b4354d1212d93b..8e0527146bccb106001e42affa4e32d7cbdf612e 100644
+--- a/package.json
++++ b/package.json
+@@ -44,7 +44,7 @@
+     "node": ">=12.20.0"
+   },
+   "exports": {
+-    "import": "./index.js"
++    ".": "./index.js"
+   },
+   "repository": {
+     "type": "git",

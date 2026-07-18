@@ -8,3 +8,5 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 minimumReleaseAgeStrict: false
+patchedDependencies:
+  bencode@4.0.1: patches/bencode@4.0.1.patch

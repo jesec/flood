@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  bencode@4.0.1: 2518f6f17ad50dfb3dd98826e75d43ba60d36e8c0a0116091c75d5f4536cd554
+
 importers:
 
   .:
@@ -196,7 +199,7 @@ importers:
         version: 2.1.0(axios@1.18.1)
       bencode:
         specifier: ^4.0.0
-        version: 4.0.1
+        version: 4.0.1(patch_hash=2518f6f17ad50dfb3dd98826e75d43ba60d36e8c0a0116091c75d5f4536cd554)
       chalk:
         specifier: ^5.0.0
         version: 5.6.2
@@ -11403,7 +11406,7 @@ snapshots:
 
   bencode@2.0.3: {}
 
-  bencode@4.0.1:
+  bencode@4.0.1(patch_hash=2518f6f17ad50dfb3dd98826e75d43ba60d36e8c0a0116091c75d5f4536cd554):
     dependencies:
       uint8-util: 2.2.6
 
@@ -11710,7 +11713,7 @@ snapshots:
 
   create-torrent@6.1.2:
     dependencies:
-      bencode: 4.0.1
+      bencode: 4.0.1(patch_hash=2518f6f17ad50dfb3dd98826e75d43ba60d36e8c0a0116091c75d5f4536cd554)
       block-iterator: 1.1.2
       fast-readable-async-iterator: 2.0.0
       is-file: 1.0.0
