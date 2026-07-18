@@ -165,8 +165,8 @@ importers:
         specifier: ^1.8.8
         version: 1.8.8
       '@types/supertest':
-        specifier: ^2.0.16
-        version: 2.0.16
+        specifier: ^7.0.0
+        version: 7.2.0
       '@types/tar-fs':
         specifier: ^2.0.4
         version: 2.0.4
@@ -3038,8 +3038,8 @@ packages:
   '@types/superagent@8.1.9':
     resolution: {integrity: sha512-pTVjI73witn+9ILmoJdajHGW2jkSaOzhiFYF1Rd3EQ94kymLqB9PjD9ISg7WaALC7+dCHT0FGe9T2LktLq/3GQ==}
 
-  '@types/supertest@2.0.16':
-    resolution: {integrity: sha512-6c2ogktZ06tr2ENoZivgm7YnprnhYE4ZoXGMY+oA7IuAf17M8FWvujXZGmxLv8y0PTyts4x5A+erSwVUFA8XSg==}
+  '@types/supertest@7.2.0':
+    resolution: {integrity: sha512-uh2Lv57xvggst6lCqNdFAmDSvoMG7M/HDtX4iUCquxQ5EGPtaPM5PL5Hmi7LCvOG8db7YaCPNJEeoI8s/WzIQw==}
 
   '@types/tar-fs@2.0.4':
     resolution: {integrity: sha512-ipPec0CjTmVDWE+QKr9cTmIIoTl7dFG/yARCM5MqK8i6CNLIG1P8x4kwDsOQY1ChZOZjH0wO9nvfgBvWl4R3kA==}
@@ -10568,8 +10568,9 @@ snapshots:
       '@types/node': 22.20.1
       form-data: 4.0.6
 
-  '@types/supertest@2.0.16':
+  '@types/supertest@7.2.0':
     dependencies:
+      '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
 
   '@types/tar-fs@2.0.4':
