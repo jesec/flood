@@ -244,8 +244,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(eslint@9.39.5(jiti@2.6.1))
       eslint-plugin-simple-import-sort:
-        specifier: ^13.0.0
-        version: 13.0.0(eslint@9.39.5(jiti@2.6.1))
+        specifier: ^14.0.0
+        version: 14.0.0(eslint@9.39.5(jiti@2.6.1))
       eslint-plugin-storybook:
         specifier: ^10.0.0
         version: 10.5.2(eslint@9.39.5(jiti@2.6.1))(storybook@10.5.2(@types/react@18.3.31)(prettier@3.9.5)(react@18.3.1))(typescript@6.0.3)
@@ -4453,8 +4453,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
 
-  eslint-plugin-simple-import-sort@13.0.0:
-    resolution: {integrity: sha512-McAc+/Nlvcg4byY/CABGH8kqnefWBj8s3JA2okEtz8ixbECQgU46p0HkTUKa4YS7wvgGceimlc34p1nXqbWqtA==}
+  eslint-plugin-simple-import-sort@14.0.0:
+    resolution: {integrity: sha512-NUJO0+XFCkk+o5EsAJruTgnfMEpeWrPWeJS15UVF60GgXmqz1BJ9/3hzlvG7lkL8Bubzos5cCLptThbFfPnSMQ==}
     peerDependencies:
       eslint: '>=5.0.0'
 
@@ -12198,7 +12198,7 @@ snapshots:
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
 
-  eslint-plugin-simple-import-sort@13.0.0(eslint@9.39.5(jiti@2.6.1)):
+  eslint-plugin-simple-import-sort@14.0.0(eslint@9.39.5(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.5(jiti@2.6.1)
 
