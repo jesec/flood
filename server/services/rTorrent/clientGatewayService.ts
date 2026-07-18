@@ -25,6 +25,7 @@ import type {
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentContent} from '@shared/types/TorrentContent';
+import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
@@ -399,7 +400,10 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     let selectedSize = cached.selectedSize;
     try {
       const contents = await this.getTorrentContents(hash);
-      selectedSize = contents.reduce((sum, file) => (file.priority > 0 ? sum + file.sizeBytes : sum), 0);
+      selectedSize = contents.reduce(
+        (sum, file) => (file.priority !== TorrentContentPriority.DO_NOT_DOWNLOAD ? sum + file.sizeBytes : sum),
+        0,
+      );
     } catch {
       return cached.selectedSize;
     }
@@ -622,12 +626,12 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     // Delete contents of torrents
-    for await (const contentPath of contentPaths) {
+    for (const contentPath of contentPaths) {
       await fs.promises.unlink(contentPath).catch(() => undefined);
     }
 
     // Try to remove empty directories
-    for await (const directoryPath of directoryPaths) {
+    for (const directoryPath of directoryPaths) {
       await fs.promises.rmdir(directoryPath).catch(() => undefined);
     }
   }
@@ -952,7 +956,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
     const configs = clientSettingMethodCallConfigs;
-    const {methodList} = await this.availableMethodCalls;
+    const {methodList} = this.availableMethodCalls;
     const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
       const property = key as keyof SetClientSettingsOptions;
       let methodName = '';
@@ -998,7 +1002,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
       accumulator.push({
         methodName,
-        params: ['', `${param}`],
+        params: ['', Array.isArray(param) ? param.join(',') : String(param)],
       });
 
       return accumulator;

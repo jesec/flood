@@ -10,7 +10,7 @@ const readFile = (file: File): Promise<ProcessedFiles[number]> =>
         reject(new Error(`Unable to read file: ${file.name}`));
       }
     };
-    reader.onerror = () => reject(reader.error);
+    reader.onerror = () => reject(new Error('File read failed', {cause: reader.error}));
     reader.readAsDataURL(file);
   });
 

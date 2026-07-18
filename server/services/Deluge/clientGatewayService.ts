@@ -45,7 +45,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
     this.clientRequestManager = clientRequestManager;
   }
 
-  static async create(user: UserInDatabase): Promise<DelugeClientGatewayService> {
+  static create(user: UserInDatabase): DelugeClientGatewayService {
     const clientRequestManager = new ClientRequestManager(user.client as DelugeConnectionSettings);
     return new DelugeClientGatewayService(user, clientRequestManager);
   }
@@ -73,7 +73,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
 
     if (isCompleted) {
       // Deluge does not provide function to add completed torrents
-      for await (const hash of result) {
+      for (const hash of result) {
         await this.checkTorrents({hashes: [hash]});
       }
     }
