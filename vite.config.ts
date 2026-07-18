@@ -18,6 +18,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         silenceDeprecations: ['import'],
+        loadPaths: ['node_modules'],
       },
     },
   },
