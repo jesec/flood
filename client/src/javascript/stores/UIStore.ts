@@ -131,7 +131,6 @@ class UIStore {
   createStyleElement() {
     if (this.styleElement == null) {
       const stylesheetRef = document.createElement('style');
-      stylesheetRef.type = 'text/css';
 
       document.head.appendChild(stylesheetRef);
 

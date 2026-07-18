@@ -21,7 +21,7 @@ interface TorrentListRowExpandedProps {
   handleRightClick: (hash: string, event: KeyboardEvent | MouseEvent) => void;
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
-  handleKeyPress: (event: KeyboardEvent) => void;
+  handleKeyDown: (event: KeyboardEvent) => void;
   'data-testid'?: string;
   'data-torrent-status'?: string;
   'data-torrent-name'?: string;
@@ -55,7 +55,7 @@ const TorrentListRowExpanded = observer(
         handleRightClick,
         handleTouchStart,
         handleTouchEnd,
-        handleKeyPress,
+        handleKeyDown,
         ...dataAttributes
       }: TorrentListRowExpandedProps,
       ref,
@@ -127,7 +127,7 @@ const TorrentListRowExpanded = observer(
           onDoubleClick={() => handleDoubleClick(hash)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           ref={ref}
           {...dataAttributes}
         >

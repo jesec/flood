@@ -156,7 +156,7 @@ const torrentListMethodCallConfigs = {
             return trackers;
           }
 
-          trackers.push(tracker.substr(1));
+          trackers.push(tracker.substring(1));
 
           return trackers;
         }, []),
@@ -173,7 +173,7 @@ const torrentListMethodCallConfigs = {
       if (typeof value !== 'string') {
         return 0;
       }
-      return Number(value.substr(0, value.indexOf('|||')));
+      return Number(value.substring(0, value.indexOf('|||')));
     },
   },
   peersConnected: {
@@ -186,7 +186,7 @@ const torrentListMethodCallConfigs = {
       if (typeof value !== 'string') {
         return 0;
       }
-      return Number(value.substr(0, value.indexOf('|||')));
+      return Number(value.substring(0, value.indexOf('|||')));
     },
   },
 } as const;

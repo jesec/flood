@@ -1,5 +1,5 @@
-import {FC, ReactNode, useEffect, useRef} from 'react';
-import ReactDOM from 'react-dom';
+import {FC, ReactNode, useEffect, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
 
 interface PortalProps {
   children: ReactNode;
@@ -7,33 +7,33 @@ interface PortalProps {
 
 const Portal: FC<PortalProps> = ({children}: PortalProps) => {
   const mountPoint = useRef<HTMLDivElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    mountPoint.current = document.createElement('div');
-    mountPoint.current.classList.add('portal');
+    const container = document.createElement('div');
+    container.classList.add('portal');
+    mountPoint.current = container;
 
     const appElement = document.getElementById('app');
     if (appElement == null) {
-      document.body.appendChild(mountPoint.current);
+      document.body.appendChild(container);
     } else {
-      appElement.appendChild(mountPoint.current);
+      appElement.appendChild(container);
     }
+    setIsReady(true);
 
     return () => {
-      if (mountPoint.current != null) {
-        ReactDOM.unmountComponentAtNode(mountPoint.current);
-        if (appElement == null) {
-          document.body.removeChild(mountPoint.current);
-        } else {
-          appElement.removeChild(mountPoint.current);
-        }
+      if (appElement == null) {
+        document.body.removeChild(container);
+      } else {
+        appElement.removeChild(container);
       }
     };
   }, []);
 
-  if (mountPoint.current == null) return null;
+  if (!isReady || mountPoint.current == null) return null;
 
-  return ReactDOM.createPortal(children, mountPoint.current);
+  return createPortal(children, mountPoint.current);
 };
 
 export default Portal;
