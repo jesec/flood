@@ -89,7 +89,7 @@
     "@lingui/vite-plugin": "^6.0.0",
     "@maxmind/geoip2-node": "^7.0.0",
     "@pandacss/dev": "^1.10.0",
-    "@seald-io/nedb": "^3.1.0",
+    "@seald-io/nedb": "^4.0.0",
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/react-vite": "^10.0.0",
     "@storybook/test-runner": "^0.24.0",
