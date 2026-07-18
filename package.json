@@ -65,11 +65,11 @@
     "test-storybook": "test-storybook"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/eslint-parser": "^7.28.6",
-    "@babel/preset-env": "^7.29.3",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
+    "@babel/core": "^8.0.0",
+    "@babel/eslint-parser": "^8.0.0",
+    "@babel/preset-env": "^8.0.0",
+    "@babel/preset-react": "^8.0.0",
+    "@babel/preset-typescript": "^8.0.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
@@ -93,7 +93,7 @@
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/react-vite": "^10.0.0",
     "@storybook/test-runner": "^0.24.0",
-    "@trim21/neptune": "0.1.0-dev.837",
+    "@trim21/neptune": "0.1.0-dev.876",
     "@types/bencode": "^2.0.4",
     "@types/content-disposition": "^0.5.9",
     "@types/create-torrent": "^6.1.1",
@@ -218,5 +218,5 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown -w"
   },
-  "packageManager": "pnpm@11.13.1"
+  "packageManager": "pnpm@11.14.0"
 }
