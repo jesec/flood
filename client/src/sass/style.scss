@@ -2,10 +2,8 @@
 // third-party layer for vendor styles (higher priority than reset, lower than base)
 @layer reset, third-party, base, tokens, recipes, utilities;
 
-// Import ress in the reset layer
-@layer reset {
-  @import 'ress';
-}
+// Import ress in the reset layer - use CSS native import since ress is pure CSS
+@import 'ress/dist/ress.min.css' layer(reset);
 
 @import 'tools/themes';
 
