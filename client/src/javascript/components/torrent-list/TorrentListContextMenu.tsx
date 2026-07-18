@@ -1,4 +1,4 @@
-import {createRef, FC, MutableRefObject} from 'react';
+import {createRef, FC, RefObject} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {Checkmark} from '@client/ui/icons';
@@ -222,7 +222,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
           onChange={() => undefined}
           priorityType="torrent"
           showLabel={false}
-          changePriorityFuncRef={changePriorityFuncRef as MutableRefObject<() => number>}
+          changePriorityFuncRef={changePriorityFuncRef as RefObject<() => number>}
           clickHandled
         />
       ),

@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import {forwardRef, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState} from 'react';
+import {forwardRef, RefObject, ReactElement, ReactNode, useEffect, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 
@@ -43,7 +43,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     const [isDirectoryListOpen, setIsDirectoryListOpen] = useState<boolean>(false);
 
     const formRowRef = useRef<HTMLDivElement>(null);
-    const textboxRef = useEnsuredForwardedRef(ref as MutableRefObject<HTMLInputElement>);
+    const textboxRef = useEnsuredForwardedRef(ref as RefObject<HTMLInputElement>);
 
     const {i18n} = useLingui();
 

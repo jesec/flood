@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {forwardRef, MutableRefObject, ReactElement, useRef, useState} from 'react';
+import {forwardRef, RefObject, ReactElement, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
@@ -28,7 +28,7 @@ const TableHeading = observer(
       const focusedCell = useRef<TorrentListColumn>(undefined);
       const focusedCellWidth = useRef<number>(undefined);
       const lastPointerX = useRef<number>(undefined);
-      const tableHeading = useEnsuredForwardedRef<HTMLDivElement>(ref as MutableRefObject<HTMLDivElement>);
+      const tableHeading = useEnsuredForwardedRef<HTMLDivElement>(ref as RefObject<HTMLDivElement>);
       const resizeLine = useRef<HTMLDivElement>(null);
 
       const {i18n} = useLingui();
