@@ -17,7 +17,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        silenceDeprecations: ['import'],
         loadPaths: ['node_modules'],
       },
     },
