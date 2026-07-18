@@ -43,9 +43,9 @@ const detectLocale = (): LocaleConfig => {
       }
       if (Object.prototype.hasOwnProperty.call(Languages, detectedLocales.locale)) {
         detectedLocales.language = detectedLocales.locale as Exclude<Language, 'auto'>;
-      } else if (Object.prototype.hasOwnProperty.call(Languages, detectedLocales.locale.substr(0, 2))) {
+      } else if (Object.prototype.hasOwnProperty.call(Languages, detectedLocales.locale.substring(0, 2))) {
         // In rare cases, user provides a locale (eg. en-US) without fallback (eg. en)
-        detectedLocales.language = detectedLocales.locale.substr(0, 2) as Exclude<Language, 'auto'>;
+        detectedLocales.language = detectedLocales.locale.substring(0, 2) as Exclude<Language, 'auto'>;
       }
     });
 

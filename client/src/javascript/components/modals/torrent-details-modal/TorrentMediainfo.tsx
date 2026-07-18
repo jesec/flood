@@ -65,16 +65,9 @@ const TorrentMediainfo: FC = () => {
               priority="tertiary"
               onClick={() => {
                 if (mediainfo != null) {
-                  if (typeof navigator.clipboard?.writeText === 'function') {
-                    navigator.clipboard.writeText(mediainfo).then(() => {
-                      setIsCopiedToClipboard(true);
-                    });
-                  } else if (clipboardRef.current != null) {
-                    clipboardRef.current.value = mediainfo;
-                    clipboardRef.current.select();
-                    document.execCommand('copy');
+                  navigator.clipboard.writeText(mediainfo).then(() => {
                     setIsCopiedToClipboard(true);
-                  }
+                  });
                 }
               }}
             >
