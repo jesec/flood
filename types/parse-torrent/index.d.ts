@@ -23,20 +23,18 @@ declare function parseTorrent(
   torrentId: string | ArrayBufferView | ParseTorrent.Instance,
 ): Promise<ParseTorrent.Instance>;
 
-declare namespace parseTorrent {
-  function remote(
-    torrentId: string | ArrayBufferView | ParseTorrent.Instance | Blob,
-    opts?: Record<string, unknown>,
-    cb?: (err: Error | null, torrent?: ParseTorrent.Instance) => void,
-  ): void;
+export default parseTorrent;
 
-  function remote(
-    torrentId: string | ArrayBufferView | ParseTorrent.Instance | Blob,
-    cb: (err: Error | null, torrent?: ParseTorrent.Instance) => void,
-  ): void;
+export function remote(
+  torrentId: string | ArrayBufferView | ParseTorrent.Instance | Blob,
+  opts?: Record<string, unknown>,
+  cb?: (err: Error | null, torrent?: ParseTorrent.Instance) => void,
+): void;
 
-  function toMagnetURI(parsed: ParseTorrent.Instance): string;
-  function toTorrentFile(parsed: ParseTorrent.Instance): Uint8Array;
-}
+export function remote(
+  torrentId: string | ArrayBufferView | ParseTorrent.Instance | Blob,
+  cb: (err: Error | null, torrent?: ParseTorrent.Instance) => void,
+): void;
 
-export = parseTorrent;
+export function toMagnetURI(parsed: ParseTorrent.Instance): string;
+export function toTorrentFile(parsed: ParseTorrent.Instance): Uint8Array;
