@@ -1,6 +1,6 @@
 {
   "name": "flood",
-  "version": "4.14.3",
+  "version": "4.15.0",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
   "keywords": [
     "typescript",
@@ -93,7 +93,7 @@
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/react-vite": "^10.0.0",
     "@storybook/test-runner": "^0.24.0",
-    "@trim21/neptune": "0.1.0-dev.799",
+    "@trim21/neptune": "0.1.0-dev.837",
     "@types/bencode": "^2.0.4",
     "@types/content-disposition": "^0.5.9",
     "@types/create-torrent": "^6.1.1",
@@ -127,11 +127,11 @@
     "autoprefixer": "^10.5.0",
     "axios": "^1.15.2",
     "axios-mock-adapter": "^2.1.0",
-    "bencode": "^2.0.3",
-    "chalk": "^4.1.2",
+    "bencode": "^4.0.0",
+    "chalk": "^5.0.0",
     "classnames": "^2.5.1",
-    "concurrently": "^9.2.1",
-    "content-disposition": "^0.5.4",
+    "concurrently": "^10.0.0",
+    "content-disposition": "^2.0.0",
     "create-torrent": "^6.1.0",
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
@@ -139,8 +139,8 @@
     "d3-shape": "^3.2.0",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
-    "eslint-config-prettier": "^9.1.2",
-    "eslint-plugin-n": "^17.24.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-n": "^18.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
@@ -218,5 +218,5 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown -w"
   },
-  "packageManager": "pnpm@11.11.0"
+  "packageManager": "pnpm@11.13.1"
 }

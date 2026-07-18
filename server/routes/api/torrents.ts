@@ -4,9 +4,8 @@ import path from 'node:path';
 
 import send from '@fastify/send';
 import {normalizeTorrentUrl} from '@server/util/torrentUrlUtil';
-import type {ContentToken} from '@shared/schema/api/torrents';
 import {CreateTorrentOptionsSchema} from '@shared/types/api/torrents';
-import contentDisposition from 'content-disposition';
+import {create as contentDisposition} from 'content-disposition';
 import type {CreateTorrentOptions, TorrentInput} from 'create-torrent';
 import type {FastifyInstance} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
@@ -31,11 +30,12 @@ import {
   startTorrentsSchema,
   stopTorrentsSchema,
 } from '../../../shared/schema/api/torrents';
-import {getRequiredAuthContext} from '../../middleware/authenticate';
+import {UnauthorizedError} from '../../errors';
+import {authWithContentToken, getAuthContext, getRequiredAuthContext} from '../../middleware/authenticate';
 import {getTempPath} from '../../models/TemporaryStorage';
 import type {ServiceInstances} from '../../services';
 import {asyncFilter} from '../../util/async';
-import {getToken} from '../../util/authUtil';
+import {getContentToken} from '../../util/authUtil';
 import {
   accessDeniedError,
   existAsync,
@@ -729,7 +729,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       const authedContext = getRequiredAuthContext(request);
       const {user} = authedContext;
 
-      return getToken<ContentToken>({
+      return getContentToken({
         username: user.username,
         hash,
         indices,
@@ -770,22 +770,15 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     },
     async (request, reply) => {
       const {hash, indices: stringIndices} = request.params;
-      const authedContext = getRequiredAuthContext(request);
-      const {services, user} = authedContext;
 
-      if (request.query.token == null) {
-        if (request.headers?.['user-agent']?.includes('Firefox/') !== true) {
-          reply.redirect(
-            `?token=${getToken<ContentToken>({
-              username: user.username,
-              hash,
-              indices: stringIndices,
-            })}`,
-          );
-          return;
-        }
+      // Try cookie/auth-token first (set by authenticateHook), then content token.
+      const authedContext = getAuthContext(request) ?? (await authWithContentToken(request, hash, stringIndices));
+
+      if (authedContext == null) {
+        throw new UnauthorizedError();
       }
 
+      const {services} = authedContext;
       const selectedTorrent = services.torrentService.getTorrent(hash);
       if (!selectedTorrent) {
         return reply.status(404).send({error: 'Torrent not found.'});

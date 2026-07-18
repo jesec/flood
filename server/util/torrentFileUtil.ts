@@ -6,11 +6,33 @@ import bencode from 'bencode';
 import type {LibTorrentResume, RTorrentFile, TorrentFile} from '../../shared/types/TorrentFile';
 import {LibTorrentFilePriority} from '../../shared/types/TorrentFile';
 
+/**
+ * Recursively converts Uint8Array values to Buffer.
+ * bencode v4 returns Uint8Array instead of Buffer for byte strings,
+ * but the rest of the codebase expects Buffer values.
+ */
+const convertToBuffer = (data: unknown): unknown => {
+  if (data instanceof Uint8Array && !Buffer.isBuffer(data)) {
+    return Buffer.from(data);
+  }
+  if (Array.isArray(data)) {
+    return data.map(convertToBuffer);
+  }
+  if (data != null && typeof data === 'object') {
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(data as Record<string, unknown>)) {
+      result[key] = convertToBuffer((data as Record<string, unknown>)[key]);
+    }
+    return result;
+  }
+  return data;
+};
+
 const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | null> => {
   let torrentData: TorrentFile | null = null;
 
   try {
-    torrentData = bencode.decode(await fs.promises.readFile(torrentPath));
+    torrentData = convertToBuffer(bencode.decode(await fs.promises.readFile(torrentPath))) as TorrentFile;
   } catch {
     return null;
   }
@@ -23,7 +45,7 @@ const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | 
 };
 
 export const getComment = async (torrent: Buffer): Promise<string | undefined> => {
-  const torrentData: TorrentFile | null = await bencode.decode(torrent);
+  const torrentData: TorrentFile | null = convertToBuffer(bencode.decode(torrent)) as TorrentFile;
 
   if (torrentData == null) {
     return;
@@ -72,7 +94,7 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
   }
 
   try {
-    await fs.promises.writeFile(torrent, bencode.encode(torrentData));
+    await fs.promises.writeFile(torrent, Buffer.from(bencode.encode(torrentData)));
   } catch {
     return false;
   }
@@ -81,7 +103,7 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
 };
 
 export const setCompleted = async (torrent: Buffer, destination: string, isBasePath = true): Promise<Buffer | null> => {
-  const torrentData: TorrentFile | null = await bencode.decode(torrent);
+  const torrentData: TorrentFile | null = convertToBuffer(bencode.decode(torrent)) as TorrentFile;
 
   if (torrentData == null) {
     return null;
@@ -156,7 +178,7 @@ export const setCompleted = async (torrent: Buffer, destination: string, isBaseP
   });
 
   try {
-    return bencode.encode(torrentDataWithResume);
+    return Buffer.from(bencode.encode(torrentDataWithResume));
   } catch {
     return null;
   }
