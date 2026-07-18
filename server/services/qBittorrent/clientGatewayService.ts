@@ -116,7 +116,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
           try {
             const fileBuffer = Buffer.from(file, 'base64');
 
-            const {infoHash} = parseTorrent(fileBuffer);
+            const {infoHash} = await parseTorrent(fileBuffer);
             fileBuffers.push(fileBuffer);
 
             return infoHash;
