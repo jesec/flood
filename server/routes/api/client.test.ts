@@ -7,7 +7,7 @@ import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
 const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: true});
-let request: supertest.SuperTest<supertest.Test>;
+let request: supertest.Agent;
 
 beforeAll(async () => {
   await constructRoutes(app);

@@ -28,7 +28,7 @@ const app = fastify({
   logController: new LogController({disableRequestLogging: true}),
   forceCloseConnections: true,
 });
-let request: supertest.SuperTest<supertest.Test>;
+let request: supertest.Agent;
 
 const activityStream = new stream.PassThrough();
 const authToken = `jwt=${getAuthToken('_config')}`;

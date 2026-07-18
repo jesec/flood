@@ -13,7 +13,7 @@ import constructRoutes from '..';
 vi.useRealTimers();
 
 const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: false});
-let request: supertest.SuperTest<supertest.Test>;
+let request: supertest.Agent;
 
 beforeAll(async () => {
   await constructRoutes(app);
