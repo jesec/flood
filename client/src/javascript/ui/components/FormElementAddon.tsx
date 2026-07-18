@@ -3,7 +3,7 @@ import {FC, ReactNode} from 'react';
 
 import {css} from '@client/styled-system/css';
 
-interface FormElementAddonProps {
+export interface FormElementAddonProps {
   children: ReactNode;
   addonPlacement?: 'before' | 'after';
   addonIndex?: number;

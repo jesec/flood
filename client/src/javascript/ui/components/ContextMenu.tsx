@@ -17,7 +17,7 @@ interface ContextMenuProps {
     x: number;
     y: number;
   };
-  triggerRef?: RefObject<Element>;
+  triggerRef?: RefObject<Element | null>;
   matchTriggerWidth?: boolean;
   padding?: boolean;
   scrolling?: boolean;

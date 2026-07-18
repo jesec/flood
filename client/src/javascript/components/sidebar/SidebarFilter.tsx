@@ -15,7 +15,7 @@ const focusStyle = css({
   },
 });
 
-const useRefTextOverflowed = (ref: RefObject<HTMLElement>) => {
+const useRefTextOverflowed = (ref: RefObject<HTMLElement | null>) => {
   const [overflowed, setOverflowed] = useState(false);
 
   useEffect(() => {

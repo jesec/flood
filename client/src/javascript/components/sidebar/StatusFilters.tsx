@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, JSX, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 

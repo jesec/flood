@@ -1,5 +1,5 @@
 import {FC, ReactNode, useEffect, useRef} from 'react';
-import ReactDOM from 'react-dom';
+import {createPortal} from 'react-dom';
 
 interface PortalProps {
   children: ReactNode;
@@ -21,7 +21,6 @@ const Portal: FC<PortalProps> = ({children}: PortalProps) => {
 
     return () => {
       if (mountPoint.current != null) {
-        ReactDOM.unmountComponentAtNode(mountPoint.current);
         if (appElement == null) {
           document.body.removeChild(mountPoint.current);
         } else {
@@ -33,7 +32,7 @@ const Portal: FC<PortalProps> = ({children}: PortalProps) => {
 
   if (mountPoint.current == null) return null;
 
-  return ReactDOM.createPortal(children, mountPoint.current);
+  return createPortal(children, mountPoint.current);
 };
 
 export default Portal;
