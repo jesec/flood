@@ -85,7 +85,7 @@ const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string
   // Sort keys so that Object.values(configs) (methodCalls) and
   // Object.keys(configs) (processMethodCallResponse) stay in sync.
   for (const key of Object.keys(configs).sort()) {
-    const config = configs[key]!;
+    const config = configs[key];
     const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
     const availableMethod = methodList.length > 0 ? methods.find((m) => methodList.includes(m)) : methods[0];
     if (availableMethod) {
@@ -324,7 +324,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
     if (files[0]) {
       await this.addTorrentsByFile({
-        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')),
         destination,
         tags,
         isBasePath,
@@ -906,7 +906,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     const methodCalls: MultiMethodCalls = Object.keys(configs)
       .sort()
       .map((key) => ({
-        methodName: configs[key]!.methodCall as string,
+        methodName: configs[key].methodCall as string,
         params: [''],
       }));
 
@@ -934,7 +934,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     const methodCalls: MultiMethodCalls = Object.keys(configs)
       .sort()
       .map((key) => ({
-        methodName: configs[key]!.methodCall as string,
+        methodName: configs[key].methodCall as string,
         params: [''],
       }));
 

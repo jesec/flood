@@ -22,7 +22,7 @@ const getFlag = (countryCode?: string): string | null => {
     const loader = flagModules[key];
     if (loader) {
       try {
-        flag = (await loader()) as string;
+        flag = await loader();
       } catch {
         flag = null;
       }

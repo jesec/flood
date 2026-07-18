@@ -53,7 +53,7 @@ const SetTagsModal: FC = () => {
 
             if (selectedTorrents?.length > 0) {
               TorrentActions.setTags({
-                hashes: selectedTorrents as [string, ...string[]],
+                hashes: selectedTorrents,
                 tags,
               });
             }

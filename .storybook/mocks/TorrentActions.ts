@@ -427,7 +427,7 @@ const TorrentActions = {
         : ['file://default.torrent'];
 
     return TorrentActions.addTorrentsByUrls({
-      urls: fileUrls as [string, ...string[]],
+      urls: fileUrls,
       destination,
       tags,
       isBasePath,

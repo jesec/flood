@@ -113,7 +113,7 @@ class Users {
         }
 
         throw new Error();
-      }) as Promise<UserInDatabase>;
+      });
   }
 
   /**
