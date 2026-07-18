@@ -132,20 +132,20 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       transform: translate(-50%, -50%);
     }
 
-    &-enter {
+    &--pre-enter {
       opacity: 0;
-
-      &-active {
-        opacity: 1;
-      }
     }
 
-    &-exit {
+    &--entering {
       opacity: 1;
+    }
 
-      &-active {
-        opacity: 0;
-      }
+    &--pre-exit {
+      opacity: 1;
+    }
+
+    &--exiting {
+      opacity: 0;
     }
   }
 
