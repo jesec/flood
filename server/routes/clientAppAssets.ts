@@ -75,7 +75,7 @@ const registerEmbeddedClientAppAssetsRoutes = async (
   fastify.get('/overview', sendIndex);
 
   fastify.get<{Params: {'*': string}}>('/*', (request, reply) => {
-    const relativePath = decodeAssetPath((request.params as {['*']: string})['*']);
+    const relativePath = decodeAssetPath(request.params['*']);
 
     if (
       relativePath === '' ||
@@ -130,7 +130,7 @@ export const registerClientAppAssetsRoutes = async (fastify: FastifyInstance): P
   }
 
   const embeddedAssets: EmbeddedAssets | undefined =
-    typeof __FLOOD_EMBEDDED_ASSETS__ === 'undefined' ? undefined : (__FLOOD_EMBEDDED_ASSETS__ as EmbeddedAssets);
+    typeof __FLOOD_EMBEDDED_ASSETS__ === 'undefined' ? undefined : __FLOOD_EMBEDDED_ASSETS__;
 
   if (embeddedAssets) {
     return await registerEmbeddedClientAppAssetsRoutes(fastify, {embeddedAssets});

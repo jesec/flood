@@ -971,7 +971,7 @@ export const FilteredView: Story = {
       await setupOverviewData();
       // Set filters that will be preserved when component starts activity stream
       setFilters({
-        status: ['downloading' as TorrentStatus],
+        status: ['downloading'],
         tags: ['linux'],
       });
     },

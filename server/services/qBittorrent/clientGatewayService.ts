@@ -184,7 +184,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
 
     if (files[0]) {
       return this.addTorrentsByFile({
-        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')),
         destination,
         tags,
         isBasePath,

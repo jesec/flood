@@ -128,7 +128,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         if (user == null) {
           throw new UnauthorizedError();
         }
-        setAuthContext(req, {user, services: getAllServices(user)!});
+        setAuthContext(req, {user, services: getAllServices(user)});
         if (reply.sent) {
           return;
         }

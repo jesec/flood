@@ -95,7 +95,7 @@ const AddTorrentsByFile: FC = () => {
           const tagsArray = tags != null ? tags.split(',').filter((tag) => tag.length > 0) : undefined;
 
           TorrentActions.addTorrentsByFiles({
-            files: filesData as [string, ...string[]],
+            files: filesData,
             destination,
             tags: tagsArray,
             isBasePath,

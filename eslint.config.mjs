@@ -34,6 +34,14 @@ export default [
     files: ['**/*.ts', '**/*.tsx'],
   })),
 
+  // TypeScript type-checked rules for .ts/.tsx files
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+    },
+  },
+
   // Prettier config (disables conflicting rules)
   prettierConfig,
 

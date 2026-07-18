@@ -118,7 +118,7 @@ class TorrentFilterStore {
         const increment = currentKeyIndex > lastKeyIndex ? -1 : 1;
 
         for (; currentKeyIndex !== lastKeyIndex; currentKeyIndex += increment) {
-          const foundKey = keys[currentKeyIndex] as T;
+          const foundKey = keys[currentKeyIndex];
           // if the filter isn't already selected, add the filter to the array.
           if (!currentFilters.includes(foundKey)) {
             currentFilters.push(foundKey);

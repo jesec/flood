@@ -120,7 +120,7 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
     if (files[0]) {
       result.push(
         ...(await this.addTorrentsByFile({
-          files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+          files: files.map((file) => file.toString('base64')),
           destination,
           tags,
           isBasePath,
