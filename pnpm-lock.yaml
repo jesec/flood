@@ -270,8 +270,8 @@ importers:
         specifier: ^11.0.0
         version: 11.3.6
       get-user-locale:
-        specifier: ^1.5.1
-        version: 1.5.1
+        specifier: ^3.0.0
+        version: 3.0.0
       globals:
         specifier: ^17.0.0
         version: 17.7.0
@@ -4721,8 +4721,8 @@ packages:
   get-tsconfig@4.14.0:
     resolution: {integrity: sha512-yTb+8DXzDREzgvYmh6s9vHsSVCHeC0G3PI5bEXNBHtmshPnO+S5O7qgLEOn0I5QvMy6kpZN8K1NKGyilLb93wA==}
 
-  get-user-locale@1.5.1:
-    resolution: {integrity: sha512-WiNpoFRcHn1qxP9VabQljzGwkAQDrcpqUtaP0rNBEkFxJdh4f3tik6MfZsMYZc+UgQJdGCxWEjL9wnCUlRQXag==}
+  get-user-locale@3.0.0:
+    resolution: {integrity: sha512-iJfHSmdYV39UUBw7Jq6GJzeJxUr4U+S03qdhVuDsR9gCEnfbqLy9gYDJFBJQL1riqolFUKQvx36mEkp2iGgJ3g==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -5679,9 +5679,6 @@ packages:
   lodash.isstring@4.0.1:
     resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
 
-  lodash.memoize@4.1.2:
-    resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
-
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
@@ -5797,6 +5794,10 @@ packages:
 
   memoize-one@5.2.1:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+
+  memoize@10.2.0:
+    resolution: {integrity: sha512-DeC6b7QBrZsRs3Y02A6A7lQyzFbsQbqgjI6UW0GigGWV+u1s25TycMr0XHZE4cJce7rY/vyw2ctMQqfDkIhUEA==}
+    engines: {node: '>=18'}
 
   merge-descriptors@2.0.0:
     resolution: {integrity: sha512-Snk314V5ayFLhp3fkUREub6WtjBfPdCPY1Ln8/8munuLuiYhsABgBVWsozAG+MWMbVEvcdcpbi9R7ww22l9Q3g==}
@@ -12512,9 +12513,9 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  get-user-locale@1.5.1:
+  get-user-locale@3.0.0:
     dependencies:
-      lodash.memoize: 4.1.2
+      memoize: 10.2.0
 
   glob-parent@5.1.2:
     dependencies:
@@ -13666,8 +13667,6 @@ snapshots:
 
   lodash.isstring@4.0.1: {}
 
-  lodash.memoize@4.1.2: {}
-
   lodash.merge@4.6.2: {}
 
   lodash.once@4.1.1: {}
@@ -13842,6 +13841,10 @@ snapshots:
   media-typer@1.1.0: {}
 
   memoize-one@5.2.1: {}
+
+  memoize@10.2.0:
+    dependencies:
+      mimic-function: 5.0.1
 
   merge-descriptors@2.0.0: {}
 
