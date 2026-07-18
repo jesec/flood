@@ -90,14 +90,17 @@ const FeedsTab: FC = () => {
 
           setIsSubmitting(true);
 
-          const currentErrors = Object.keys(validatedFields).reduce((memo, key) => {
-            const validatedField = key as ValidatedField;
+          const currentErrors = Object.keys(validatedFields).reduce(
+            (memo, key) => {
+              const validatedField = key as ValidatedField;
 
-            return {
-              ...memo,
-              [validatedField]: validateField(validatedField, feedForm[validatedField]),
-            };
-          }, {} as Record<string, string | undefined>);
+              return {
+                ...memo,
+                [validatedField]: validateField(validatedField, feedForm[validatedField]),
+              };
+            },
+            {} as Record<string, string | undefined>,
+          );
           setErrors(currentErrors);
 
           const isFormValid = Object.keys(currentErrors).every((key) => currentErrors[key] === undefined);

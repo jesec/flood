@@ -1,5 +1,5 @@
 # Use node alpine docker image
-FROM docker.io/node:22-alpine
+FROM docker.io/node:24-alpine
 LABEL org.opencontainers.image.source="https://github.com/jesec/flood"
 
 ARG PACKAGE_TARBALL=artifacts/flood.tgz
