@@ -290,7 +290,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
                 z
                   .object({
                     username: z.string(),
-                    level: z.nativeEnum(AccessLevel),
+                    level: z.enum(AccessLevel),
                   })
                   .strict(),
               ),
