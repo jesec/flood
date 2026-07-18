@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
+import {formatNumber} from '@client/util/format';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
@@ -33,7 +34,7 @@ const TorrentListCellPercentageNumber: FC<TorrentListCellContentProps> = observe
     const {i18n} = useLingui();
     return (
       <span>
-        {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
+        {formatNumber(i18n.locale, torrent.percentComplete, {maximumFractionDigits: 1})}
         <em className="unit">%</em>
         &nbsp;&mdash;&nbsp;
         <Size value={torrent.downTotal} />
