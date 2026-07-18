@@ -51,7 +51,7 @@ jobs:
       - name: Update encoded source
         run: node scripts/update-mmdb.mjs
 
-      - run: pnpm exec prettier -w
+      - run: pnpm exec prettier --ignore-unknown -w
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8

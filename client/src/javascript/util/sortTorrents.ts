@@ -5,8 +5,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 type SortRule = {
   [direction in FloodSettings['sortTorrents']['direction']]:
-    | keyof TorrentProperties
-    | ((p: TorrentProperties) => unknown);
+    keyof TorrentProperties | ((p: TorrentProperties) => unknown);
 };
 
 function sortTorrents(

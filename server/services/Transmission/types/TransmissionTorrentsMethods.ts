@@ -330,8 +330,7 @@ interface TransmissionTorrentAddByFileArguments extends TransmissionTorrentAddCo
 }
 
 export type TransmissionTorrentAddArguments =
-  | TransmissionTorrentAddByURLArguments
-  | TransmissionTorrentAddByFileArguments;
+  TransmissionTorrentAddByURLArguments | TransmissionTorrentAddByFileArguments;
 
 // Method name: "torrent-remove"
 export interface TransmissionTorrentsRemoveArguments {

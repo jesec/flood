@@ -1,5 +1,5 @@
 import type {infer as zodInfer} from 'zod';
-import {array, boolean, number, record, strictObject, string} from 'zod';
+import {array, boolean, literal, number, record, strictObject, string} from 'zod';
 
 import {tagSchema, tagsSchema} from './tags';
 
@@ -138,6 +138,7 @@ export const setTorrentContentsPropertiesSchema = strictObject({
 
 // GET /api/torrents/{hash}/contents/{indices}/data
 export const contentTokenSchema = strictObject({
+  type: literal('content'),
   username: string(),
   hash: string(),
   indices: string(),
