@@ -44,7 +44,7 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
       role="button"
       tabIndex={0}
       onClick={onClick}
-      onKeyPress={(e) => {
+      onKeyDown={(e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
           onClick?.();

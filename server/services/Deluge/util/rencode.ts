@@ -86,7 +86,7 @@ class Buff {
   }
 
   slice() {
-    return this.buff.slice(0, this.length);
+    return this.buff.subarray(0, this.length);
   }
 }
 

@@ -75,15 +75,9 @@ const GenerateMagnetModal: FC = () => {
               >
                 <FormElementAddon
                   onClick={() => {
-                    if (typeof navigator.clipboard?.writeText === 'function') {
-                      navigator.clipboard.writeText(magnetLink).then(() => {
-                        setIsMagnetCopied(true);
-                      });
-                    } else if (magnetTextboxRef.current != null) {
-                      magnetTextboxRef.current?.select();
-                      document.execCommand('copy');
+                    navigator.clipboard.writeText(magnetLink).then(() => {
                       setIsMagnetCopied(true);
-                    }
+                    });
                   }}
                 >
                   {isMagnetCopied ? <CheckmarkThick /> : <Clipboard />}
@@ -109,15 +103,9 @@ const GenerateMagnetModal: FC = () => {
                 >
                   <FormElementAddon
                     onClick={() => {
-                      if (typeof navigator.clipboard?.writeText === 'function') {
-                        navigator.clipboard.writeText(trackerState.magnetTrackersLink).then(() => {
-                          setIsMagnetTrackersCopied(true);
-                        });
-                      } else if (magnetTrackersTextboxRef.current != null) {
-                        magnetTrackersTextboxRef.current?.select();
-                        document.execCommand('copy');
+                      navigator.clipboard.writeText(trackerState.magnetTrackersLink).then(() => {
                         setIsMagnetTrackersCopied(true);
-                      }
+                      });
                     }}
                   >
                     {isMagnetTrackersCopied ? <CheckmarkThick /> : <Clipboard />}

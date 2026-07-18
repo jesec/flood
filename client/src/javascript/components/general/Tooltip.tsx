@@ -470,7 +470,7 @@ const Tooltip = forwardRef<TooltipHandle, TooltipProps>(
         role="button"
         data-testid="tooltip-trigger"
         onClick={onClick}
-        onKeyPress={(e) => {
+        onKeyDown={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
             onClick?.();

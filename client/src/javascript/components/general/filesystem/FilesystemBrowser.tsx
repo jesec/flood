@@ -86,8 +86,8 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
     const listRef = useRef<HTMLUListElement>(null);
 
     const lastSegmentIndex = directory.lastIndexOf(separator) + 1;
-    const currentDirectory = lastSegmentIndex > 0 ? directory.substr(0, lastSegmentIndex) : directory;
-    const lastSegment = directory.substr(lastSegmentIndex);
+    const currentDirectory = lastSegmentIndex > 0 ? directory.substring(0, lastSegmentIndex) : directory;
+    const lastSegment = directory.substring(lastSegmentIndex);
 
     useEffect(() => {
       if (!currentDirectory) {
