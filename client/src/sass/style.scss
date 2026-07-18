@@ -1,3 +1,5 @@
+@use 'sass:meta';
+
 // Must match Panda's layers: reset, base, tokens, recipes, utilities
 // third-party layer for vendor styles (higher priority than reset, lower than base)
 @layer reset, third-party, base, tokens, recipes, utilities;
@@ -5,60 +7,60 @@
 // Import ress in the reset layer - use CSS native import since ress is pure CSS
 @import 'ress/dist/ress.min.css' layer(reset);
 
-@import 'tools/themes';
+@include meta.load-css('tools/themes');
 
 // Global styles in base layer
 @layer base {
-  @import 'ui/index';
+  @include meta.load-css('ui/index');
 
-  @import 'tools/variables';
-  @import 'tools/reset';
+  @include meta.load-css('tools/variables');
+  @include meta.load-css('tools/reset');
 
-  @import 'base/animations';
-  @import 'base/font-families';
-  @import 'base/layout';
-  @import 'base/main';
-  @import 'base/typography';
+  @include meta.load-css('base/animations');
+  @include meta.load-css('base/font-families');
+  @include meta.load-css('base/layout');
+  @include meta.load-css('base/main');
+  @include meta.load-css('base/typography');
 
-  @import 'components/action-bar';
-  @import 'components/app-wrapper';
-  @import 'components/alerts';
-  @import 'components/attached-panel';
-  @import 'components/badge';
-  @import 'components/base-menu';
-  @import 'components/client-stats';
-  @import 'components/connection-status';
-  @import 'components/dependency-list';
-  @import 'components/directory-tree';
-  @import 'components/dropdown';
-  @import 'components/dropzone';
-  @import 'components/duration';
-  @import 'components/floating-action';
-  @import 'components/icons';
-  @import 'components/interactive-list';
-  @import 'components/loading-indicator';
-  @import 'components/mediainfo';
-  @import 'components/modals';
-  @import 'components/notifications';
-  @import 'components/peers-list';
-  @import 'components/priority-meter';
-  @import 'components/progress-bar';
-  @import 'components/scrollbars';
-  @import 'components/search';
-  @import 'components/sidebar';
-  @import 'components/sidebar-filter';
-  @import 'components/sort-dropdown';
-  @import 'components/sortable-list';
-  @import 'components/table';
-  @import 'components/tags';
-  @import 'components/textbox-repeater';
-  @import 'components/toolbar';
-  @import 'components/tooltip';
-  @import 'components/torrent-details-panel';
-  @import 'components/torrents';
-  @import 'components/torrent';
-  @import 'components/transfer-data';
+  @include meta.load-css('components/action-bar');
+  @include meta.load-css('components/app-wrapper');
+  @include meta.load-css('components/alerts');
+  @include meta.load-css('components/attached-panel');
+  @include meta.load-css('components/badge');
+  @include meta.load-css('components/base-menu');
+  @include meta.load-css('components/client-stats');
+  @include meta.load-css('components/connection-status');
+  @include meta.load-css('components/dependency-list');
+  @include meta.load-css('components/directory-tree');
+  @include meta.load-css('components/dropdown');
+  @include meta.load-css('components/dropzone');
+  @include meta.load-css('components/duration');
+  @include meta.load-css('components/floating-action');
+  @include meta.load-css('components/icons');
+  @include meta.load-css('components/interactive-list');
+  @include meta.load-css('components/loading-indicator');
+  @include meta.load-css('components/mediainfo');
+  @include meta.load-css('components/modals');
+  @include meta.load-css('components/notifications');
+  @include meta.load-css('components/peers-list');
+  @include meta.load-css('components/priority-meter');
+  @include meta.load-css('components/progress-bar');
+  @include meta.load-css('components/scrollbars');
+  @include meta.load-css('components/search');
+  @include meta.load-css('components/sidebar');
+  @include meta.load-css('components/sidebar-filter');
+  @include meta.load-css('components/sort-dropdown');
+  @include meta.load-css('components/sortable-list');
+  @include meta.load-css('components/table');
+  @include meta.load-css('components/tags');
+  @include meta.load-css('components/textbox-repeater');
+  @include meta.load-css('components/toolbar');
+  @include meta.load-css('components/tooltip');
+  @include meta.load-css('components/torrent-details-panel');
+  @include meta.load-css('components/torrents');
+  @include meta.load-css('components/torrent');
+  @include meta.load-css('components/transfer-data');
 
-  @import 'views/login';
-  @import 'views/feeds';
+  @include meta.load-css('views/login');
+  @include meta.load-css('views/feeds');
 }

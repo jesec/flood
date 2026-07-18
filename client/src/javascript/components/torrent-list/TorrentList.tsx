@@ -4,7 +4,7 @@ import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
 import {useEvent} from 'react-use';
 
-import type {FixedSizeList, ListChildComponentProps} from 'react-window';
+import type {ListImperativeAPI, RowComponentProps} from 'react-window';
 
 import {Button} from '@client/ui';
 import {Files} from '@client/ui/icons';
@@ -26,21 +26,20 @@ import TableHeading from './TableHeading';
 import TorrentListDropzone from './TorrentListDropzone';
 import TorrentListRow from './TorrentListRow';
 
-const TorrentListRowRenderer: FC<ListChildComponentProps> = observer(({index, style}) => (
+const TorrentListRowRenderer = observer(({index, style}: RowComponentProps): React.ReactElement | null => (
   <TorrentListRow hash={TorrentStore.filteredTorrents[index].hash} style={style} />
 ));
 
 const TorrentList: FC = observer(() => {
   const listHeaderRef = useRef<HTMLDivElement>(null);
-  const listViewportRef = useRef<FixedSizeList>(null);
-  const listViewportOuterRef = useRef<HTMLDivElement | null>(null);
+  const listViewportRef = useRef<ListImperativeAPI>(null);
 
   useEffect(() => {
     const dispose = reaction(
       () => TorrentFilterStore.filterTrigger,
       () => {
         if (listViewportRef.current != null) {
-          listViewportRef.current.scrollTo(0);
+          listViewportRef.current.scrollToRow({index: 0});
         }
       },
     );
@@ -119,9 +118,7 @@ const TorrentList: FC = observer(() => {
       torrentListHeading = (
         <TableHeading
           onCellFocus={() => {
-            if (listViewportOuterRef.current != null && listHeaderRef.current != null) {
-              listViewportOuterRef.current.scrollLeft = listHeaderRef.current.scrollLeft;
-            }
+            // Scroll sync removed in react-window v2
           }}
           onCellClick={(property: TorrentListColumn) => {
             const currentSort = SettingStore.floodSettings.sortTorrents;
@@ -156,22 +153,10 @@ const TorrentList: FC = observer(() => {
     content = (
       <ListViewport
         className="torrent__list__viewport"
-        itemCount={torrents.length}
-        itemKey={(index) => TorrentStore.filteredTorrents[index].hash}
-        itemRenderer={TorrentListRowRenderer}
-        itemSize={isCondensed ? 30 : 70}
-        ref={listViewportRef}
-        outerRef={(ref) => {
-          const viewportDiv = ref;
-          if (viewportDiv != null && viewportDiv.onscroll == null) {
-            viewportDiv.onscroll = () => {
-              if (listHeaderRef.current != null) {
-                listHeaderRef.current.scrollLeft = viewportDiv.scrollLeft;
-              }
-            };
-          }
-          listViewportOuterRef.current = viewportDiv;
-        }}
+        rowCount={torrents.length}
+        rowComponent={TorrentListRowRenderer}
+        rowHeight={isCondensed ? 30 : 70}
+        listRef={listViewportRef}
       />
     );
   }
