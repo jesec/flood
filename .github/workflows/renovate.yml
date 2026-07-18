@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Self-hosted Renovate
-        uses: renovatebot/github-action@v46.1.18
+        uses: renovatebot/github-action@v46.1.19
         with:
           configurationFile: .github/renovate.json
           token: ${{ secrets.GITHUB_TOKEN }}
