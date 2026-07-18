@@ -1,5 +1,5 @@
 import type {infer as zodInfer} from 'zod';
-import {literal, number, strictObject, string, union} from 'zod';
+import {literal, number, strictObject, string, union, url} from 'zod';
 
 const delugeConnectionSettingsSchema = strictObject({
   client: literal('Deluge'),
@@ -17,7 +17,7 @@ const qBittorrentConnectionSettingsSchema = strictObject({
   client: literal('qBittorrent'),
   type: literal('web'),
   version: literal(1),
-  url: string().url(),
+  url: url(),
   username: string(),
   password: string(),
 });
@@ -54,7 +54,7 @@ const transmissionConnectionSettingsSchema = strictObject({
   client: literal('Transmission'),
   type: literal('rpc'),
   version: literal(1),
-  url: string().url(),
+  url: url(),
   username: string(),
   password: string(),
 });
@@ -65,7 +65,7 @@ const neptuneConnectionSettingsSchema = strictObject({
   client: literal('Neptune'),
   type: literal('rpc'),
   version: literal(1),
-  url: string().url(),
+  url: url(),
   token: string(),
 });
 

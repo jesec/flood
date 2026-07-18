@@ -16,11 +16,10 @@ export type AuthAuthenticationOptions = zodInfer<typeof authAuthenticationRequir
 export const authAuthenticationSchema = authAuthenticationRequiredSchema;
 
 export const authAuthenticationRequestSchema = z
-  .object({
+  .looseObject({
     username: z.string().nullable().optional(),
     password: z.string().nullable().optional(),
   })
-  .passthrough()
   .optional();
 export type AuthAuthenticationRequestOptions = zodInfer<typeof authAuthenticationRequestSchema>;
 
@@ -35,7 +34,7 @@ export const authAuthenticationResponseSchema = z
   .object({
     success: z.literal(true),
     username: z.string(),
-    level: z.nativeEnum(AccessLevel),
+    level: z.enum(AccessLevel),
   })
   .strict();
 
@@ -97,7 +96,7 @@ export const authVerificationResponseSchema = z.union([
     .object({
       initialUser: z.literal(false),
       username: z.string(),
-      level: z.nativeEnum(AccessLevel),
+      level: z.enum(AccessLevel),
       configs: authVerificationPreloadConfigsSchema,
     })
     .strict(),
