@@ -10,3 +10,4 @@ allowBuilds:
 minimumReleaseAgeStrict: false
 patchedDependencies:
   bencode@4.0.1: patches/bencode@4.0.1.patch
+  uint8-util@2.2.6: patches/uint8-util@2.2.6.patch
