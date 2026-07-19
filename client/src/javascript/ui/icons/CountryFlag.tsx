@@ -33,7 +33,6 @@ const getFlag = (countryCode?: string): string | null => {
     return flag;
   };
 
-  // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Suspense pattern: throw promise
   throw loadFlag();
 };
 

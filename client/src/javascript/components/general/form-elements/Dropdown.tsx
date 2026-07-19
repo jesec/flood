@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {EventHandler, FC, MutableRefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
+import {EventHandler, FC, RefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
@@ -55,7 +55,7 @@ interface DropdownProps<T extends string = string> {
   header: ReactNode;
   trigger?: ReactNode;
   dropdownButtonClass?: string;
-  dropdownClickRef?: MutableRefObject<() => void>;
+  dropdownClickRef?: RefObject<() => void>;
   menuItems: Array<DropdownItems<T>>;
   handleItemSelect: (item: DropdownItem<T>) => void;
   onOpen?: () => void;

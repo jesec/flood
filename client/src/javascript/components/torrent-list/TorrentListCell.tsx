@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
-import {FC} from 'react';
+import {FC, JSX} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 

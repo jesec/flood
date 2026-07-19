@@ -1,5 +1,5 @@
 import {css} from '@client/styled-system/css';
-import {FC, memo, ReactNodeArray, useEffect, useRef, useState} from 'react';
+import {FC, memo, ReactNode, useEffect, useRef, useState} from 'react';
 import {sort} from 'fast-sort';
 import {Trans} from '@lingui/react';
 import {useKey} from 'react-use';
@@ -146,7 +146,7 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
     });
 
     let errorMessage: string | null = null;
-    let listItems: ReactNodeArray = [];
+    let listItems: ReactNode[] = [];
 
     if ((directories == null && selectable === 'directories') || (files == null && selectable === 'files')) {
       errorMessage = 'filesystem.fetching';
@@ -202,7 +202,7 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
             })()
           : [];
 
-      const directoryList: ReactNodeArray =
+      const directoryList: ReactNode[] =
         (directories?.length &&
           sort(directories.slice())
             .desc((subDirectory) => directoryMatched.includes(subDirectory))
@@ -230,7 +230,7 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
 
       const isFileSelectable = selectable !== 'directories';
       const fileMatched = lastSegment ? termMatch(files, (file) => file, lastSegment) : [];
-      const fileList: ReactNodeArray =
+      const fileList: ReactNode[] =
         (files?.length &&
           sort(files.slice())
             .desc((file) => fileMatched.includes(file))

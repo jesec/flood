@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {cloneElement, ReactElement, ReactNode, ReactNodeArray, Children, useState, useEffect, useRef, FC} from 'react';
+import {cloneElement, ReactElement, ReactNode, Children, useState, useEffect, useRef, FC} from 'react';
 import {useEvent, useKey} from 'react-use';
 
 import {Chevron} from '@client/ui/icons';
@@ -62,7 +62,7 @@ const Select: FC<SelectProps> = ({
   const [selectedID, setSelectedID] = useState<string | number>(
     defaultID ??
       (
-        (children as ReactNodeArray)?.find(
+        (children as ReactNode[])?.find(
           (child) => (child as ReactElement<SelectItemProps>)?.props?.id != null,
         ) as ReactElement<SelectItemProps>
       )?.props.id ??
@@ -148,7 +148,7 @@ const Select: FC<SelectProps> = ({
           <FormElementAddon className="select__indicator">
             <Chevron />
           </FormElementAddon>
-          {selectedItem && cloneElement(selectedItem as ReactElement, {isTrigger: true})}
+          {selectedItem && cloneElement(selectedItem as ReactElement<SelectItemProps>, {isTrigger: true})}
         </Button>
         <Portal>
           <ContextMenu
@@ -169,7 +169,7 @@ const Select: FC<SelectProps> = ({
               }
 
               accumulator.push(
-                cloneElement(child as ReactElement, {
+                cloneElement(child as ReactElement<SelectItemProps>, {
                   onClick: (selection: string | number) => {
                     setIsOpen(false);
                     setSelectedID(selection);
