@@ -61,7 +61,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
     this.clientRequestManager = clientRequestManager;
   }
 
-  static async create(user: UserInDatabase): Promise<QBittorrentClientGatewayService> {
+  static create(user: UserInDatabase): QBittorrentClientGatewayService {
     const clientRequestManager = new ClientRequestManager(user.client as QBittorrentConnectionSettings);
     return new QBittorrentClientGatewayService(user, clientRequestManager);
   }
@@ -408,7 +408,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
         // qBittorrent can not handle requests in a highly concurrent way.
         const TRACKER_MESSAGE_TTL = 60 * 60 * 1000; // 1 hour
 
-        for await (const {hash} of infos) {
+        for (const {hash} of infos) {
           if (this.cachedProperties[hash] == null) {
             await this.fetchProperties(hash, true);
           } else if (Date.now() - this.cachedProperties[hash].trackerMessageFetchedAt > TRACKER_MESSAGE_TTL) {

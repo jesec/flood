@@ -34,13 +34,13 @@ export default [
     files: ['**/*.ts', '**/*.tsx'],
   })),
 
-  // TypeScript type-checked rules for .ts/.tsx files
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {
-      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-    },
-  },
+  // TypeScript type-checked rules for .ts/.tsx files - all recommendedTypeChecked rules
+  ...typescriptEslint.configs.recommendedTypeChecked
+    .filter((config) => config.rules)
+    .map((config) => ({
+      ...config,
+      files: ['**/*.ts', '**/*.tsx'],
+    })),
 
   // Prettier config (disables conflicting rules)
   prettierConfig,
@@ -82,6 +82,16 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
       '@typescript-eslint/no-explicit-any': 'off', // Allow any for now
       '@typescript-eslint/no-non-null-assertion': 'off', // Allow ! operator
+      '@typescript-eslint/require-await': 'off', // Too many false positives with Fastify plugins
+
+      // TODO: Enable these rules and fix violations
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
     },
   },
 
@@ -198,6 +208,16 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+    },
+  },
+
+  // Storybook files
+  {
+    files: ['**/*.stories.ts', '**/*.stories.tsx'],
+    rules: {
+      '@typescript-eslint/no-base-to-string': 'off',
     },
   },
 ];

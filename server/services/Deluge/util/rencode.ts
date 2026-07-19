@@ -368,7 +368,7 @@ function decodeKeyValuePair(d: RencodableObject, data: Buff, decodeUTF8: boolean
   const key = decode(data, decodeUTF8);
   const value = decode(data, decodeUTF8);
   if (!(typeof key == 'string' || typeof key == 'number'))
-    throw TypeError('Received invalid value for dictionary key: ' + key);
+    throw TypeError(`Received invalid value for dictionary key: ${JSON.stringify(key)}`);
   d[key] = value;
 }
 
