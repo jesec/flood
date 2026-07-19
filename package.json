@@ -175,7 +175,7 @@
     "prettier": "3.9.5",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "react-dropzone": "19.0.2",
+    "react-dropzone": "19.1.1",
     "react-markdown": "10.1.0",
     "react-measure": "2.5.2",
     "react-router": "8.2.0",
