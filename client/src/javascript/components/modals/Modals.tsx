@@ -1,7 +1,10 @@
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import React, {FC} from 'react';
+import classnames from 'classnames';
+import React, {FC, useLayoutEffect, useRef} from 'react';
+import {useTransitionMap} from 'react-transition-state';
 import {observer} from 'mobx-react-lite';
 import {useKeyPressEvent} from 'react-use';
+
+import {getTransitionClassName} from '@client/ui';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
@@ -46,28 +49,51 @@ const createModal = (id: Modal['id']): React.ReactNode => {
 
 const Modals: FC = observer(() => {
   const {id} = UIStore.activeModal || {};
+  const previousID = useRef<Modal['id'] | null>(null);
+  const {setItem, stateMap, toggle} = useTransitionMap<Modal['id']>({
+    allowMultiple: true,
+    mountOnEnter: true,
+    preEnter: true,
+    preExit: true,
+    timeout: {enter: 500, exit: 500},
+    unmountOnExit: true,
+  });
+
+  useLayoutEffect(() => {
+    if (id != null) {
+      if (!stateMap.has(id)) {
+        setItem(id);
+      }
+      toggle(id, true);
+    }
+
+    if (previousID.current != null && previousID.current !== id) {
+      toggle(previousID.current, false);
+    }
+
+    previousID.current = id ?? null;
+  }, [id, setItem, stateMap, toggle]);
 
   useKeyPressEvent('Escape', () => UIStore.setActiveModal(null));
 
-  let modal;
-  if (id != null) {
-    modal = (
-      <CSSTransition key={id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
-        <div className="modal">
-          <div
-            className="modal__overlay"
-            role="none"
-            onClick={() => {
-              UIStore.setActiveModal(null);
-            }}
-          />
-          {createModal(id)}
-        </div>
-      </CSSTransition>
-    );
-  }
-
-  return <TransitionGroup>{modal}</TransitionGroup>;
+  return (
+    <>
+      {Array.from(stateMap).map(([modalID, state]) =>
+        state.isMounted ? (
+          <div className={classnames('modal', getTransitionClassName('modal__animation', state.status))} key={modalID}>
+            <div
+              className="modal__overlay"
+              role="none"
+              onClick={() => {
+                UIStore.setActiveModal(null);
+              }}
+            />
+            {createModal(modalID)}
+          </div>
+        ) : null,
+      )}
+    </>
+  );
 });
 
 export default Modals;
