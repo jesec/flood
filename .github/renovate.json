@@ -11,6 +11,10 @@
   },
   "packageRules": [
     {
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    },
+    {
       "description": "Group all non-major npm/pnpm dependencies into one PR",
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
