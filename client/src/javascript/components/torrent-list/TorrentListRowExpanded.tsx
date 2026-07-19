@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
+import {formatNumber} from '@client/util/format';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
@@ -20,7 +21,7 @@ interface TorrentListRowExpandedProps {
   handleRightClick: (hash: string, event: KeyboardEvent | MouseEvent) => void;
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
-  handleKeyPress: (event: KeyboardEvent) => void;
+  handleKeyDown: (event: KeyboardEvent) => void;
   'data-testid'?: string;
   'data-torrent-status'?: string;
   'data-torrent-name'?: string;
@@ -33,7 +34,7 @@ const TorrentListCellPercentageNumber: FC<TorrentListCellContentProps> = observe
     const {i18n} = useLingui();
     return (
       <span>
-        {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
+        {formatNumber(i18n.locale, torrent.percentComplete, {maximumFractionDigits: 1})}
         <em className="unit">%</em>
         &nbsp;&mdash;&nbsp;
         <Size value={torrent.downTotal} />
@@ -54,7 +55,7 @@ const TorrentListRowExpanded = observer(
         handleRightClick,
         handleTouchStart,
         handleTouchEnd,
-        handleKeyPress,
+        handleKeyDown,
         ...dataAttributes
       }: TorrentListRowExpandedProps,
       ref,
@@ -126,7 +127,7 @@ const TorrentListRowExpanded = observer(
           onDoubleClick={() => handleDoubleClick(hash)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           ref={ref}
           {...dataAttributes}
         >

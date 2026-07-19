@@ -11,7 +11,7 @@ interface PriorityMeterProps {
   priorityType: keyof typeof PriorityLevels;
   showLabel?: boolean;
   clickHandled?: boolean;
-  changePriorityFuncRef?: React.MutableRefObject<() => number>;
+  changePriorityFuncRef?: React.RefObject<() => number>;
   onChange: (id: this['id'], level: this['level']) => void;
 }
 

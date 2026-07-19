@@ -72,7 +72,7 @@ export const getFeedItemsMatchingRules = (
 
         if (!isAlreadyDownloaded && torrentUrls[0] != null) {
           matchedItems.push({
-            urls: torrentUrls as [string, ...string[]],
+            urls: torrentUrls,
             tags: rule.tags,
             matchTitle: feedItem.title as string,
             ruleID: rule._id,

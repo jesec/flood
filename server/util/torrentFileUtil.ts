@@ -20,7 +20,7 @@ const convertToBuffer = (data: unknown): unknown => {
   }
   if (data != null && typeof data === 'object') {
     const result: Record<string, unknown> = {};
-    for (const key of Object.keys(data as Record<string, unknown>)) {
+    for (const key of Object.keys(data)) {
       result[key] = convertToBuffer((data as Record<string, unknown>)[key]);
     }
     return result;

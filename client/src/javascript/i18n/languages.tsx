@@ -31,7 +31,7 @@ async function getMessages(locale: Exclude<Language, 'auto'>): Promise<Record<st
     return cached;
   }
 
-  return loadMessages(locale as Exclude<Language, 'auto' | 'en'>);
+  return loadMessages(locale);
 }
 
 interface AsyncIntlProviderProps {

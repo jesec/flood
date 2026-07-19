@@ -25,7 +25,7 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
       role="button"
       tabIndex={0}
       onClick={onClick}
-      onKeyPress={(e) => {
+      onKeyDown={(e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
           onClick?.(e);

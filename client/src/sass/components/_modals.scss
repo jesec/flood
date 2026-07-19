@@ -231,7 +231,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-enter {
+  &__animation--pre-enter {
     opacity: 0;
 
     .modal {
@@ -243,7 +243,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-enter-active {
+  &__animation--entering {
     opacity: 1;
 
     .modal {
@@ -255,7 +255,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-exit {
+  &__animation--pre-exit {
     opacity: 1;
     pointer-events: none;
 
@@ -268,7 +268,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-exit-active {
+  &__animation--exiting {
     opacity: 0;
 
     .modal {

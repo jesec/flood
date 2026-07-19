@@ -96,7 +96,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
     }
 
     return this.addTorrentsByFile({
-      files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+      files: files.map((file) => file.toString('base64')),
       destination,
       tags,
       isBasePath,

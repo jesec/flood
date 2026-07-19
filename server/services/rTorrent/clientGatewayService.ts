@@ -25,6 +25,7 @@ import type {
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentContent} from '@shared/types/TorrentContent';
+import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
@@ -85,7 +86,7 @@ const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string
   // Sort keys so that Object.values(configs) (methodCalls) and
   // Object.keys(configs) (processMethodCallResponse) stay in sync.
   for (const key of Object.keys(configs).sort()) {
-    const config = configs[key]!;
+    const config = configs[key];
     const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
     const availableMethod = methodList.length > 0 ? methods.find((m) => methodList.includes(m)) : methods[0];
     if (availableMethod) {
@@ -324,7 +325,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
     if (files[0]) {
       await this.addTorrentsByFile({
-        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')),
         destination,
         tags,
         isBasePath,
@@ -399,7 +400,10 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     let selectedSize = cached.selectedSize;
     try {
       const contents = await this.getTorrentContents(hash);
-      selectedSize = contents.reduce((sum, file) => (file.priority > 0 ? sum + file.sizeBytes : sum), 0);
+      selectedSize = contents.reduce(
+        (sum, file) => (file.priority !== TorrentContentPriority.DO_NOT_DOWNLOAD ? sum + file.sizeBytes : sum),
+        0,
+      );
     } catch {
       return cached.selectedSize;
     }
@@ -622,12 +626,12 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     // Delete contents of torrents
-    for await (const contentPath of contentPaths) {
+    for (const contentPath of contentPaths) {
       await fs.promises.unlink(contentPath).catch(() => undefined);
     }
 
     // Try to remove empty directories
-    for await (const directoryPath of directoryPaths) {
+    for (const directoryPath of directoryPaths) {
       await fs.promises.rmdir(directoryPath).catch(() => undefined);
     }
   }
@@ -906,7 +910,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     const methodCalls: MultiMethodCalls = Object.keys(configs)
       .sort()
       .map((key) => ({
-        methodName: configs[key]!.methodCall as string,
+        methodName: configs[key].methodCall as string,
         params: [''],
       }));
 
@@ -934,7 +938,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     const methodCalls: MultiMethodCalls = Object.keys(configs)
       .sort()
       .map((key) => ({
-        methodName: configs[key]!.methodCall as string,
+        methodName: configs[key].methodCall as string,
         params: [''],
       }));
 
@@ -952,7 +956,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
     const configs = clientSettingMethodCallConfigs;
-    const {methodList} = await this.availableMethodCalls;
+    const {methodList} = this.availableMethodCalls;
     const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
       const property = key as keyof SetClientSettingsOptions;
       let methodName = '';
@@ -998,7 +1002,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
       accumulator.push({
         methodName,
-        params: ['', `${param}`],
+        params: ['', Array.isArray(param) ? param.join(',') : String(param)],
       });
 
       return accumulator;

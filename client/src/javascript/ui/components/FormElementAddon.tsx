@@ -3,7 +3,7 @@ import {FC, ReactNode} from 'react';
 
 import {css} from '@client/styled-system/css';
 
-interface FormElementAddonProps {
+export interface FormElementAddonProps {
   children: ReactNode;
   addonPlacement?: 'before' | 'after';
   addonIndex?: number;
@@ -44,7 +44,7 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
       role="button"
       tabIndex={0}
       onClick={onClick}
-      onKeyPress={(e) => {
+      onKeyDown={(e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
           onClick?.();

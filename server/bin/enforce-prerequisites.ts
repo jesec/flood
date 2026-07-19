@@ -1,4 +1,4 @@
-const enforcePrerequisites = async (): Promise<void> => {
+const enforcePrerequisites = (): void => {
   // Ensures that WebAssembly support is present
   if (typeof WebAssembly === 'undefined') {
     throw new Error('WebAssembly is not supported in this environment!');

@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import {CSSTransition} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useEffectOnce} from 'react-use';
@@ -12,6 +11,7 @@ import AuthStore from '@client/stores/AuthStore';
 import ConfigStore from '@client/stores/ConfigStore';
 import ClientStatusStore from '@client/stores/ClientStatusStore';
 import UIStore from '@client/stores/UIStore';
+import {Transition} from '@client/ui';
 
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
 import WindowTitle from './general/WindowTitle';
@@ -63,29 +63,33 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
   return (
     <div className={classnames('application', className)}>
       <WindowTitle />
-      <CSSTransition
+      <Transition
         mountOnEnter={true}
         unmountOnExit={true}
         in={showDepsOverlay}
         timeout={{enter: 1000, exit: 1000}}
-        classNames="application__loading-overlay"
+        classNamePrefix="application__loading-overlay"
       >
-        <LoadingOverlay dependencies={UIStore.dependencies} />
-      </CSSTransition>
-      <CSSTransition
+        {(transitionClassName) => (
+          <LoadingOverlay className={transitionClassName} dependencies={UIStore.dependencies} />
+        )}
+      </Transition>
+      <Transition
         mountOnEnter={true}
         unmountOnExit={true}
         in={showConnOverlay}
         timeout={{enter: 1000, exit: 1000}}
-        classNames="application__loading-overlay"
+        classNamePrefix="application__loading-overlay"
       >
-        <div className="application__loading-overlay">
-          <div className="application__entry-barrier">
-            <LogoutButton className={css({position: 'absolute', left: '5px', top: '5px'})} />
-            <ClientConnectionInterruption />
+        {(transitionClassName) => (
+          <div className={classnames('application__loading-overlay', transitionClassName)}>
+            <div className="application__entry-barrier">
+              <LogoutButton className={css({position: 'absolute', left: '5px', top: '5px'})} />
+              <ClientConnectionInterruption />
+            </div>
           </div>
-        </div>
-      </CSSTransition>
+        )}
+      </Transition>
       {children}
     </div>
   );
