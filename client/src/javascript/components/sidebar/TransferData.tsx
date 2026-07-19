@@ -22,7 +22,6 @@ const TransferData: FC = observer(() => {
         }
       }}
     >
-      {/* eslint-disable-next-line @typescript-eslint/unbound-method -- react-measure render props */}
       {({measureRef}) => (
         <div ref={measureRef} className="client-stats__wrapper sidebar__item">
           <div
