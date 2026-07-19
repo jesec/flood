@@ -208,6 +208,16 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+    },
+  },
+
+  // Storybook files
+  {
+    files: ['**/*.stories.ts', '**/*.stories.tsx'],
+    rules: {
+      '@typescript-eslint/no-base-to-string': 'off',
     },
   },
 ];
