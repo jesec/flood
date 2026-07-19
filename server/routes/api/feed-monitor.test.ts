@@ -138,7 +138,7 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/);
 
-    addedFeed = {...(addedFeed as Feed), ...modifyFeedOptions};
+    addedFeed = {...addedFeed, ...modifyFeedOptions};
 
     expect(res.body).toStrictEqual([addedFeed]);
   });

@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
+  "rangeStrategy": "pin",
   "rebaseWhen": "conflicted",
   "osvVulnerabilityAlerts": true,
   "separateMultipleMajor": true,
@@ -9,6 +10,10 @@
     "enabled": false
   },
   "packageRules": [
+    {
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    },
     {
       "description": "Group all non-major npm/pnpm dependencies into one PR",
       "matchManagers": ["npm"],

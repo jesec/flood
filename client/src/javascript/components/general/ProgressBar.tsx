@@ -4,6 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+import {formatNumber} from '../../util/format';
 
 import TorrentStatusIcon from './TorrentStatusIcon';
 
@@ -18,8 +19,8 @@ const ProgressBar: FC<ProgressBarProps> = observer(({percent, status, showPercen
   const clampedPercent = Math.min(Math.max(percent, 0), 100);
   const percentLabel =
     clampedPercent === 0 || clampedPercent === 100
-      ? i18n.number(clampedPercent, {maximumFractionDigits: 0})
-      : i18n.number(clampedPercent, {minimumFractionDigits: 1, maximumFractionDigits: 1});
+      ? formatNumber(i18n.locale, clampedPercent, {maximumFractionDigits: 0})
+      : formatNumber(i18n.locale, clampedPercent, {minimumFractionDigits: 1, maximumFractionDigits: 1});
 
   return (
     <div className={classnames('progress-bar', {'progress-bar--with-percent': showPercentLabel})}>

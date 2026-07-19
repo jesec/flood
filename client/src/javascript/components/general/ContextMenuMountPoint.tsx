@@ -43,7 +43,7 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
         switch (item.type) {
           case 'action':
             menuItemClasses = classnames('menu__item', {
-              'is-selectable': item.clickHandler,
+              'is-selectable': true, // action type always has clickHandler
             });
             menuItemContent = (
               <span>

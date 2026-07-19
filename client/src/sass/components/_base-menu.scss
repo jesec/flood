@@ -94,11 +94,13 @@ $menu--item--separator--background: $menu--container--border;
     }
   }
 
-  &-enter {
+  &--pre-enter,
+  &--entering {
     animation: fade-in 0.25s both;
   }
 
-  &-exit {
+  &--pre-exit,
+  &--exiting {
     animation: fade-out 0.25s both;
   }
 }

@@ -49,7 +49,7 @@ const AuthActions = {
         Promise.all([
           ClientActions.fetchSettings(),
           SettingActions.fetchSettings(),
-          FloodActions.restartActivityStream(),
+          Promise.resolve(FloodActions.restartActivityStream()),
         ]),
       ),
 

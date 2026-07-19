@@ -113,7 +113,7 @@ class Users {
         }
 
         throw new Error();
-      }) as Promise<UserInDatabase>;
+      });
   }
 
   /**
@@ -126,7 +126,7 @@ class Users {
     return this.db.findOneAsync<UserInDatabase>({username}).then(async ({_id}) => {
       await destroyUserServices(_id, true);
 
-      await this.db.remove({username}, {});
+      await this.db.removeAsync({username}, {});
       await fs.promises.rm(path.join(config.dbPath, _id), {recursive: true}).catch(() => undefined);
 
       return _id;

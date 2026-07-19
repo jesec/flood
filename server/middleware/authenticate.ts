@@ -31,7 +31,7 @@ export const getRequiredAuthContext = (request: FastifyRequest): AuthedContext =
 };
 
 /** Verify a raw JWT string and return its decoded payload, or undefined on failure. */
-const decodeToken = (token: string): unknown | undefined => {
+const decodeToken = (token: string): unknown => {
   try {
     return jwt.verify(token, config.secret);
   } catch {

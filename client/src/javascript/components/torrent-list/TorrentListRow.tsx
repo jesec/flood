@@ -53,7 +53,7 @@ const displayTorrentDetails = (hash: string) => UIStore.setActiveModal({id: 'tor
 const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
   TorrentStore.setSelectedTorrents({hash, event});
 
-const onKeyPress = (hash: string, e: KeyboardEvent) => {
+const onKeyDown = (hash: string, e: KeyboardEvent) => {
   if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {
     e.preventDefault();
     if (TorrentStore.selectedTorrents.includes(hash)) {
@@ -135,7 +135,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
-        handleKeyPress={(e) => onKeyPress(hash, e)}
+        handleKeyDown={(e) => onKeyDown(hash, e)}
         data-testid={torrentTestId}
         data-torrent-status={torrentStatus}
         data-torrent-name={torrent?.name}
@@ -156,7 +156,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
-      handleKeyPress={(e) => onKeyPress(hash, e)}
+      handleKeyDown={(e) => onKeyDown(hash, e)}
       data-testid={torrentTestId}
       data-torrent-status={torrentStatus}
       data-torrent-name={torrent?.name}

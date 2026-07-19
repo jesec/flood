@@ -1,30 +1,32 @@
 import type {infer as zodInfer} from 'zod';
-import {literal, nativeEnum, number, strictObject, string, union} from 'zod';
+import z from 'zod';
 
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
 import {AccessLevel} from './constants/Auth';
 
-export const authMethodSchema = union([literal('default'), literal('none')]);
+export const authMethodSchema = z.union([z.literal('default'), z.literal('none')]);
 
 export type AuthMethod = zodInfer<typeof authMethodSchema>;
 
-export const credentialsSchema = strictObject({
-  username: string(),
-  password: string(),
-  client: clientConnectionSettingsSchema,
-  level: nativeEnum(AccessLevel),
-}).strip();
+export const credentialsSchema = z
+  .strictObject({
+    username: z.string(),
+    password: z.string(),
+    client: clientConnectionSettingsSchema,
+    level: z.enum(AccessLevel),
+  })
+  .strip();
 
 export type Credentials = zodInfer<typeof credentialsSchema>;
 
 export type UserInDatabase = Required<Credentials> & {_id: string; timestamp: number};
 
-export const authTokenSchema = strictObject({
-  username: string(),
+export const authTokenSchema = z.strictObject({
+  username: z.string(),
   // issued at
-  iat: number(),
+  iat: z.number(),
   // expiration
-  exp: number(),
+  exp: z.number(),
 });
 
 export type AuthToken = zodInfer<typeof authTokenSchema>;

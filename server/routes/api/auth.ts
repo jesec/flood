@@ -128,7 +128,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         if (user == null) {
           throw new UnauthorizedError();
         }
-        setAuthContext(req, {user, services: getAllServices(user)!});
+        setAuthContext(req, {user, services: getAllServices(user)});
         if (reply.sent) {
           return;
         }
@@ -290,7 +290,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
                 z
                   .object({
                     username: z.string(),
-                    level: z.nativeEnum(AccessLevel),
+                    level: z.enum(AccessLevel),
                   })
                   .strict(),
               ),

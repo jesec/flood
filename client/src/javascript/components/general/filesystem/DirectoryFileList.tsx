@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, ReactText, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 
 import {Checkbox} from '@client/ui';
 import {Checkmark, Clipboard, File as FileIcon} from '@client/ui/icons';
@@ -87,7 +87,7 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
               level={file.priority}
               id={file.index}
               maxLevel={2}
-              onChange={(fileIndex: ReactText, priorityLevel: number) =>
+              onChange={(fileIndex: string | number, priorityLevel: number) =>
                 TorrentActions.setFilePriority(hash, {
                   indices: [Number(fileIndex)],
                   priority: priorityLevel,
