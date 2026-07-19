@@ -102,8 +102,8 @@ importers:
         specifier: 0.1.0-dev.876
         version: 0.1.0-dev.876
       '@types/bencode':
-        specifier: ^2.0.4
-        version: 2.0.4
+        specifier: ^4.0.0
+        version: 4.0.0
       '@types/content-disposition':
         specifier: ^0.5.9
         version: 0.5.9
@@ -2863,8 +2863,8 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
-  '@types/bencode@2.0.4':
-    resolution: {integrity: sha512-sirDu3HUSG7jZMlhTDvCzSFiPR4lkUYBQA75CoMi6DEf2alFZWJWtHgfjBbb9PachPZhPMB1IlH09deyMNBipQ==}
+  '@types/bencode@4.0.0':
+    resolution: {integrity: sha512-aR7+TiqkXI05IFEGAsn5Y6i0BYgBTX+H4/TPbREdkdRegepFW/EdNynP0VTuvt2pcku+2vfmVgfz5S4YJCaVSA==}
 
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
@@ -10403,9 +10403,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.7
 
-  '@types/bencode@2.0.4':
-    dependencies:
-      '@types/node': 22.20.1
+  '@types/bencode@4.0.0': {}
 
   '@types/body-parser@1.19.6':
     dependencies:

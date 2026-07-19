@@ -95,7 +95,7 @@
     "@storybook/react-vite": "^10.0.0",
     "@storybook/test-runner": "^0.24.0",
     "@trim21/neptune": "0.1.0-dev.876",
-    "@types/bencode": "^2.0.4",
+    "@types/bencode": "^4.0.0",
     "@types/content-disposition": "^0.5.9",
     "@types/create-torrent": "^6.1.1",
     "@types/d3": "^7.4.3",
