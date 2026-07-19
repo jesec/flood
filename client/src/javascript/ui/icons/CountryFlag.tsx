@@ -22,7 +22,7 @@ const getFlag = (countryCode?: string): string | null => {
     const loader = flagModules[key];
     if (loader) {
       try {
-        flag = (await loader()) as string;
+        flag = await loader();
       } catch {
         flag = null;
       }
@@ -33,6 +33,7 @@ const getFlag = (countryCode?: string): string | null => {
     return flag;
   };
 
+  // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Suspense pattern: throw promise
   throw loadFlag();
 };
 

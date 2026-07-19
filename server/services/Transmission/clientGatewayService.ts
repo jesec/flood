@@ -45,7 +45,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     this.clientRequestManager = clientRequestManager;
   }
 
-  static async create(user: UserInDatabase): Promise<TransmissionClientGatewayService> {
+  static create(user: UserInDatabase): TransmissionClientGatewayService {
     const clientRequestManager = new ClientRequestManager(user.client as TransmissionConnectionSettings);
     return new TransmissionClientGatewayService(user, clientRequestManager);
   }
@@ -77,7 +77,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     }
 
     if (tags.length > 0) {
-      await this.setTorrentsTags({hashes: addedTorrents as [string, ...string[]], tags});
+      await this.setTorrentsTags({hashes: addedTorrents, tags});
     }
 
     if (isCompleted) {
@@ -126,13 +126,13 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     }
 
     if (result[0] && tags.length > 0) {
-      await this.setTorrentsTags({hashes: result as [string, ...string[]], tags});
+      await this.setTorrentsTags({hashes: result, tags});
     }
 
     if (files[0]) {
       result.push(
         ...(await this.addTorrentsByFile({
-          files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+          files: files.map((file) => file.toString('base64')),
           destination,
           tags,
           isBasePath,

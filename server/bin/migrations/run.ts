@@ -5,7 +5,7 @@ import HistoryEra from './02-HistoryEra';
 const migrations = [UserInDatabase2, UserInDatabase3, HistoryEra];
 
 const migrate = async () => {
-  for await (const migrate of migrations) {
+  for (const migrate of migrations) {
     await migrate();
   }
 };

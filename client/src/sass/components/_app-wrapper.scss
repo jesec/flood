@@ -17,13 +17,14 @@
     width: 100%;
     z-index: 1000;
 
-    &-exit {
+    &--pre-exit {
       opacity: 1;
       transition: opacity 1s;
+    }
 
-      &-active {
-        opacity: 0;
-      }
+    &--exiting {
+      opacity: 0;
+      transition: opacity 1s;
     }
   }
 

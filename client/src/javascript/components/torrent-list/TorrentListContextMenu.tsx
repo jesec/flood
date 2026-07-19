@@ -81,7 +81,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       label: TorrentContextMenuActions.reannounce,
       clickHandler: () => {
         TorrentActions.reannounce({
-          hashes: TorrentStore.selectedTorrents as [string, ...string[]],
+          hashes: TorrentStore.selectedTorrents,
         });
       },
     },

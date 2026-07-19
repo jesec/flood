@@ -21,7 +21,7 @@ const buildLocationFilterTree = (location: LocationTreeNode): ReactNode => {
 
   return (
     <SidebarFilter
-      handleClick={(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) =>
+      handleClick={(filter: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
         TorrentFilterStore.setLocationFilters(filter, event)
       }
       count={location.containedCount}

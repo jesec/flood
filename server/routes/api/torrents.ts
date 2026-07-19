@@ -53,7 +53,7 @@ async function createTorrentAsync(input: TorrentInput, option: CreateTorrentOpti
     createTorrent(input, option, (error, torrent) => {
       if (error) return reject(error);
 
-      resolve(Buffer.from(torrent!));
+      resolve(Buffer.from(torrent));
     });
   });
 }

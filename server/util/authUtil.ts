@@ -63,7 +63,7 @@ export const verifyToken = async (token: string): Promise<Record<string, unknown
   new Promise((resolve, reject) => {
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err !== null || decoded == null) {
-        reject(err);
+        reject(err ?? new Error('Token verification failed'));
         return;
       }
 

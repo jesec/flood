@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {EventHandler, FC, RefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import uniqueId from 'lodash/uniqueId';
@@ -7,6 +6,7 @@ import {useKeyPressEvent} from 'react-use';
 
 import {css} from '@client/styled-system/css';
 import UIStore from '@client/stores/UIStore';
+import {Transition} from '@client/ui';
 
 interface DropdownButtonProps {
   className?: string;
@@ -128,61 +128,50 @@ const Dropdown = observer(
       dropdownClickRef.current = handleDropdownClick;
     }
 
-    let contentElement: ReactNode;
-    if (isOpen) {
-      const headerElement = (
-        <div className="dropdown__header" key="dropdown-header">
-          <DropdownButton
-            className={dropdownButtonClass}
-            label={header}
-            isFocusHandled={isFocusHandled ?? false}
-            onClick={handleDropdownClick}
-          />
-        </div>
-      );
+    const headerElement = (
+      <div className="dropdown__header" key="dropdown-header">
+        <DropdownButton
+          className={dropdownButtonClass}
+          label={header}
+          isFocusHandled={isFocusHandled ?? false}
+          onClick={handleDropdownClick}
+        />
+      </div>
+    );
 
-      const listElement = (
-        <ul className="dropdown__items" key="dropdown-items">
-          {menuItems.map((items, index) => (
-            <div className="dropdown__list" key={index}>
-              {items.map((item, itemIndex) => {
-                const classes = classnames('dropdown__item menu__item', item.className, {
-                  'is-selectable': item.selectable !== false,
-                  'is-selected': item.selected,
-                });
+    const listElement = (
+      <ul className="dropdown__items" key="dropdown-items">
+        {menuItems.map((items, index) => (
+          <div className="dropdown__list" key={index}>
+            {items.map((item, itemIndex) => {
+              const classes = classnames('dropdown__item menu__item', item.className, {
+                'is-selectable': item.selectable !== false,
+                'is-selected': item.selected,
+              });
 
-                return (
-                  <li className={classes} key={itemIndex}>
-                    <button
-                      type="button"
-                      disabled={item.selectable === false}
-                      onClick={
-                        item.selectable === false
-                          ? undefined
-                          : () => {
-                              closeDropdown();
-                              handleItemSelect(item);
-                            }
-                      }
-                    >
-                      {item.displayName}
-                    </button>
-                  </li>
-                );
-              })}
-            </div>
-          ))}
-        </ul>
-      );
-
-      contentElement = (
-        <CSSTransition classNames="menu" timeout={{enter: 250, exit: 250}}>
-          <div className="dropdown__content menu">
-            {direction === 'up' ? [listElement, headerElement] : [headerElement, listElement]}
+              return (
+                <li className={classes} key={itemIndex}>
+                  <button
+                    type="button"
+                    disabled={item.selectable === false}
+                    onClick={
+                      item.selectable === false
+                        ? undefined
+                        : () => {
+                            closeDropdown();
+                            handleItemSelect(item);
+                          }
+                    }
+                  >
+                    {item.displayName}
+                  </button>
+                </li>
+              );
+            })}
           </div>
-        </CSSTransition>
-      );
-    }
+        ))}
+      </ul>
+    );
 
     return (
       <div className={dropdownWrapperClassName}>
@@ -192,7 +181,13 @@ const Dropdown = observer(
           isFocusHandled={isFocusHandled ?? false}
           onClick={handleDropdownClick}
         />
-        <TransitionGroup>{contentElement}</TransitionGroup>
+        <Transition classNamePrefix="menu" in={isOpen} mountOnEnter timeout={{enter: 250, exit: 250}} unmountOnExit>
+          {(transitionClassName) => (
+            <div className={classnames('dropdown__content menu', transitionClassName)}>
+              {direction === 'up' ? [listElement, headerElement] : [headerElement, listElement]}
+            </div>
+          )}
+        </Transition>
       </div>
     );
   },

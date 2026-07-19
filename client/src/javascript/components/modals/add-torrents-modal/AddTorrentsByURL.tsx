@@ -130,7 +130,7 @@ const AddTorrentsByURL: FC = () => {
           const tags = formData.tags != null ? formData.tags.split(',').filter((tag) => tag.length > 0) : undefined;
 
           TorrentActions.addTorrentsByUrls({
-            urls: urls as [string, ...string[]],
+            urls: urls,
             cookies: processedCookies,
             destination: formData.destination,
             isBasePath: formData.isBasePath,
