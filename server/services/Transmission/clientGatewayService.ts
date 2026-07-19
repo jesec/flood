@@ -45,7 +45,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     this.clientRequestManager = clientRequestManager;
   }
 
-  static async create(user: UserInDatabase): Promise<TransmissionClientGatewayService> {
+  static create(user: UserInDatabase): TransmissionClientGatewayService {
     const clientRequestManager = new ClientRequestManager(user.client as TransmissionConnectionSettings);
     return new TransmissionClientGatewayService(user, clientRequestManager);
   }

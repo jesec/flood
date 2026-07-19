@@ -60,7 +60,7 @@ class TorrentFilterStore {
     this.filterTrigger = !this.filterTrigger;
   }
 
-  setLocationFilters(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) {
+  setLocationFilters(filter: string, event: KeyboardEvent | MouseEvent | TouchEvent) {
     // keys: [] to disable shift-clicking as it doesn't make sense in a tree
     this.computeFilters([], this.locationFilter, filter, event);
     this.filterTrigger = !this.filterTrigger;
@@ -93,7 +93,7 @@ class TorrentFilterStore {
     this.filterTrigger = !this.filterTrigger;
   }
 
-  private computeFilters<T extends TorrentStatus | string>(
+  private computeFilters<T extends string>(
     keys: readonly T[],
     currentFilters: Array<T>,
     newFilter: T,

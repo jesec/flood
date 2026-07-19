@@ -25,7 +25,7 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 const main = async () => {
-  await enforcePrerequisites();
+  enforcePrerequisites();
   await migrateData();
   await startWebServer();
 };

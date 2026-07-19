@@ -42,7 +42,7 @@ const value = (value: XMLRPCValue): string => {
     value = members(value as {[key: string]: XMLRPCValue});
   }
 
-  return `<value><${type}>${value}</${type}></value>`;
+  return `<value><${type}>${value as string}</${type}></value>`;
 };
 
 const data = (values: XMLRPCValue[]) => {
