@@ -8,7 +8,7 @@ import {i18n} from '@lingui/core';
 import {I18nProvider} from '@lingui/react';
 import type {Preview} from '@storybook/react';
 import React, {useEffect} from 'react';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router';
 
 // Import language files with Lingui loader
 import {messages as enMessages} from '../client/src/javascript/i18n/strings/en.json?lingui';

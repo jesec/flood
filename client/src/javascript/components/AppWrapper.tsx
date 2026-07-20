@@ -2,8 +2,7 @@ import classnames from 'classnames';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useEffectOnce} from 'react-use';
-import {useNavigate} from 'react-router';
-import {useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router';
 import {css} from '@client/styled-system/css';
 
 import AuthActions from '@client/actions/AuthActions';
