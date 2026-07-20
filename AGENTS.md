@@ -47,7 +47,7 @@ pnpm run test                        # Run tests to catch regressions
 ```bash
 # Package Manager: pnpm (v11.5.2) is the project's package manager
 pnpm install --frozen-lockfile  # Install dependencies with lockfile
-pnpm run build                   # Build production (esbuild for server, Vite for client)
+pnpm run build                   # Build production (rolldown for server, Vite for client)
 pnpm start                       # Start production server (node --enable-source-maps dist/index.js)
 pnpm start -- --port 8080       # With custom options (pass args after --)
 ```
@@ -135,7 +135,7 @@ Flood provides an OpenAPI specification and interactive Swagger UI:
 
 ### Build Process
 
-- **Server**: esbuild bundles to single file (`dist/index.js`) with source maps
+- **Server**: rolldown bundles to single file (`dist/index.js`) with source maps
 - **Client**: Vite with code splitting, CSS extraction, asset optimization
 - **Assets**: Static files copied to `dist/assets/`
 - **CSS**: Panda CSS generates styled-system via `panda codegen`
@@ -316,7 +316,7 @@ For reverse proxy setups:
 
 - **TypeScript errors?** Run `pnpm run check-types` and fix from top to bottom
 - **Lint errors?** Run `pnpm run lint` - most are auto-fixable with `pnpm run format-source`
-- **Build fails?** Check both server (esbuild) and client (Vite) output
+- **Build fails?** Check both server (rolldown) and client (Vite) output
 - **Tests fail?** Run specific test file with `pnpm test -- path/to/test`
 - **Panda CSS issues?** Run `panda codegen` to regenerate styled-system
 
