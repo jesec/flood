@@ -3,7 +3,6 @@ import path from 'node:path';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import {build as rolldownBuild} from 'rolldown';
-import {replacePlugin} from 'rolldown/plugins';
 import {build as viteBuild} from 'vite';
 
 import {buildPaths} from '../shared/config/buildPaths.mjs';
@@ -116,15 +115,13 @@ const build = async () => {
       sourcemap: 'inline',
     },
     transform: {
+      define: {
+        __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),
+      },
       target: 'node12',
     },
     platform: 'node',
     external: ['geoip-country'],
-    plugins: [
-      replacePlugin({
-        __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),
-      }),
-    ],
   });
 
   console.log('Client build complete.');
