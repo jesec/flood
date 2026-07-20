@@ -1,4 +1,5 @@
 import {forwardRef, useCallback, useEffect, useRef} from 'react';
+import {reaction} from 'mobx';
 import {List} from 'react-window';
 import {observer} from 'mobx-react-lite';
 import {OverlayScrollbars} from 'overlayscrollbars';
@@ -64,17 +65,21 @@ const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: Li
   }, []);
 
   // Update scrollbar theme when dark/light mode changes
-  // ConfigStore.isPreferDark is a MobX computed value tracked by observer()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    osInstanceRef.current?.options({
-      scrollbars: {
-        autoHide: 'leave',
-        clickScroll: true,
-        theme: `os-theme-${ConfigStore.isPreferDark ? 'light' : 'dark'}`,
+    const dispose = reaction(
+      () => ConfigStore.isPreferDark,
+      (isDark) => {
+        osInstanceRef.current?.options({
+          scrollbars: {
+            autoHide: 'leave',
+            clickScroll: true,
+            theme: `os-theme-${isDark ? 'light' : 'dark'}`,
+          },
+        });
       },
-    });
-  }, [ConfigStore.isPreferDark]);
+    );
+    return dispose;
+  }, []);
 
   return (
     <div className={className} style={{height: Math.max(rowHeight * 30, 600), width: '100%'}}>
