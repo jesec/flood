@@ -33,6 +33,17 @@ function sortTorrents(
         },
       } as SortRule);
       break;
+    case 'dateActive':
+      sortRules.push({
+        [sortBy.direction]: (p: TorrentProperties) => {
+          // -1 means currently active, i.e. more recent than any timestamp
+          if (p.dateActive === -1) {
+            return Infinity;
+          }
+          return p.dateActive;
+        },
+      } as SortRule);
+      break;
     case 'tags':
       sortRules.push({
         [sortBy.direction]: (p: TorrentProperties) => p[property].join(',').toLowerCase(),
