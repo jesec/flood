@@ -94,7 +94,7 @@
     "@storybook/addon-onboarding": "10.5.2",
     "@storybook/react-vite": "10.5.2",
     "@storybook/test-runner": "0.24.4",
-    "@trim21/neptune": "0.1.0-dev.876",
+    "@trim21/neptune": "0.1.0-dev.908",
     "@types/bencode": "4.0.0",
     "@types/content-disposition": "0.5.9",
     "@types/create-torrent": "6.1.1",
@@ -183,7 +183,7 @@
     "react-use": "17.6.1",
     "react-window": "2.2.7",
     "ress": "5.0.2",
-    "rolldown": "1.1.5",
+    "rolldown": "1.2.0",
     "sanitize-filename": "1.6.4",
     "sass": "1.101.0",
     "saxen": "11.1.0",
@@ -216,5 +216,5 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown -w"
   },
-  "packageManager": "pnpm@11.15.0"
+  "packageManager": "pnpm@11.15.1"
 }
