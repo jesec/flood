@@ -115,6 +115,9 @@ const build = async () => {
       format: 'cjs',
       sourcemap: 'inline',
     },
+    transform: {
+      target: 'node12',
+    },
     platform: 'node',
     external: ['geoip-country'],
     plugins: [
