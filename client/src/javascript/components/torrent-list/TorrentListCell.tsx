@@ -68,6 +68,11 @@ const DateCell: FC<{date: number}> = observer(({date}: {date: number}) => {
     return null;
   }
 
+  // -1 is the client gateways' "currently active" sentinel for dateActive
+  if (date === -1) {
+    return <span>{i18n._('torrents.details.general.date.active.now')}</span>;
+  }
+
   return <span>{formatDate(i18n.locale, new Date(date * 1000))}</span>;
 });
 
