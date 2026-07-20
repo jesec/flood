@@ -1,4 +1,4 @@
-import {forwardRef, useCallback, useEffect, useRef} from 'react';
+import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 import {reaction} from 'mobx';
 import {List} from 'react-window';
 import {observer} from 'mobx-react-lite';
@@ -18,12 +18,12 @@ interface ListViewportProps {
 
 const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: ListViewportProps, ref) => {
   const {className, rowCount, rowComponent, rowHeight, listRef} = props;
-  const innerListRef = useRef<ListImperativeAPI | null>(null);
-  const osInstanceRef = useRef<ReturnType<typeof OverlayScrollbars> | null>(null);
+  const hostElementRef = useRef<HTMLDivElement>(null);
+  const [listElement, setListElement] = useState<HTMLDivElement | null>(null);
 
   const mergedRef = useCallback(
     (instance: ListImperativeAPI | null) => {
-      innerListRef.current = instance;
+      setListElement(instance?.element ?? null);
 
       // Forward to listRef prop
       if (typeof listRef === 'function') {
@@ -44,45 +44,46 @@ const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: Li
     [listRef, ref],
   );
 
-  // Initialize OverlayScrollbars on the List's outer DOM element after mount
+  // react-window exposes its DOM element after the initial ref callback.
   useEffect(() => {
-    const element = innerListRef.current?.element;
-    if (!element) return;
+    const hostElement = hostElementRef.current;
+    if (hostElement == null || listElement == null) return;
 
-    const osInstance = OverlayScrollbars(element, {
-      scrollbars: {
-        autoHide: 'leave',
-        clickScroll: true,
-        theme: `os-theme-${ConfigStore.isPreferDark ? 'light' : 'dark'}`,
+    const osInstance = OverlayScrollbars(
+      {
+        target: hostElement,
+        elements: {
+          viewport: listElement,
+        },
       },
-    });
-    osInstanceRef.current = osInstance;
+      {
+        scrollbars: {
+          autoHide: 'leave',
+          clickScroll: true,
+          theme: `os-theme-${ConfigStore.isPreferDark ? 'light' : 'dark'}`,
+        },
+      },
+    );
 
-    return () => {
-      osInstance.destroy();
-      osInstanceRef.current = null;
-    };
-  }, []);
-
-  // Update scrollbar theme when dark/light mode changes
-  useEffect(() => {
     const dispose = reaction(
       () => ConfigStore.isPreferDark,
       (isDark) => {
-        osInstanceRef.current?.options({
+        osInstance.options({
           scrollbars: {
-            autoHide: 'leave',
-            clickScroll: true,
             theme: `os-theme-${isDark ? 'light' : 'dark'}`,
           },
         });
       },
     );
-    return dispose;
-  }, []);
+
+    return () => {
+      dispose();
+      osInstance.destroy();
+    };
+  }, [listElement]);
 
   return (
-    <div className={className} style={{height: Math.max(rowHeight * 30, 600), width: '100%'}}>
+    <div className={className} ref={hostElementRef} style={{height: Math.max(rowHeight * 30, 600), width: '100%'}}>
       <List
         defaultHeight={Math.max(rowHeight * 30, 600)}
         rowCount={rowCount}
