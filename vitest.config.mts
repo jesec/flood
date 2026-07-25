@@ -1,9 +1,6 @@
 import {defineConfig, defineProject, type ViteUserConfig} from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 type VitestPlugin = NonNullable<ViteUserConfig['plugins']>[number];
-
-const tsconfigPathsPlugin = tsconfigPaths() as VitestPlugin;
 
 const baseTestConfig = {
   environment: 'node' as const,
@@ -20,13 +17,17 @@ const baseTestConfig = {
 };
 
 export default defineConfig({
-  plugins: [tsconfigPathsPlugin],
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     globals: true,
     environment: 'node',
     projects: [
       defineProject({
-        plugins: [tsconfigPathsPlugin],
+        resolve: {
+          tsconfigPaths: true,
+        },
         test: {
           ...baseTestConfig,
           name: 'auth',
@@ -35,7 +36,9 @@ export default defineConfig({
         },
       }),
       defineProject({
-        plugins: [tsconfigPathsPlugin],
+        resolve: {
+          tsconfigPaths: true,
+        },
         test: {
           ...baseTestConfig,
           name: 'qbittorrent',
@@ -45,7 +48,9 @@ export default defineConfig({
         },
       }),
       defineProject({
-        plugins: [tsconfigPathsPlugin],
+        resolve: {
+          tsconfigPaths: true,
+        },
         test: {
           ...baseTestConfig,
           name: 'rtorrent',
@@ -55,7 +60,9 @@ export default defineConfig({
         },
       }),
       defineProject({
-        plugins: [tsconfigPathsPlugin],
+        resolve: {
+          tsconfigPaths: true,
+        },
         test: {
           ...baseTestConfig,
           name: 'transmission',
