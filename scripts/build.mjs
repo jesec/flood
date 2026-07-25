@@ -118,7 +118,7 @@ const build = async () => {
       define: {
         __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),
       },
-      target: 'node12',
+      target: 'node22',
     },
     platform: 'node',
     external: ['geoip-country'],
