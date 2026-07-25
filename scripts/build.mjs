@@ -2,12 +2,9 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import {build as rolldownBuild} from 'rolldown';
 import {build as viteBuild} from 'vite';
 
 import {buildPaths} from '../shared/config/buildPaths.mjs';
-
-const paths = buildPaths;
 
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
@@ -102,26 +99,16 @@ const build = async () => {
     mode: 'production',
   });
 
-  const embeddedAssets = collectEmbeddedAssets(paths.appBuild);
+  const embeddedAssets = collectEmbeddedAssets(buildPaths.appBuild);
 
   console.log('building server (embedding ui assets)...');
 
-  await rolldownBuild({
-    input: [path.resolve(buildPaths.appSrc, 'server/bin/start.ts')],
-    output: {
-      file: path.resolve(buildPaths.appSrc, 'dist/index.js'),
-      codeSplitting: false,
-      format: 'cjs',
-      sourcemap: 'inline',
+  await viteBuild({
+    configFile: path.resolve('vite.server.config.ts'),
+    mode: 'production',
+    define: {
+      __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),
     },
-    transform: {
-      define: {
-        __FLOOD_EMBEDDED_ASSETS__: JSON.stringify(embeddedAssets),
-      },
-      target: 'node12',
-    },
-    platform: 'node',
-    external: ['geoip-country'],
   });
 
   console.log('Client build complete.');

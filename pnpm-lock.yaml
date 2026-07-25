@@ -362,9 +362,6 @@ importers:
       ress:
         specifier: 5.0.2
         version: 5.0.2
-      rolldown:
-        specifier: 1.2.0
-        version: 1.2.0
       sanitize-filename:
         specifier: 1.6.4
         version: 1.6.4
@@ -9693,7 +9690,8 @@ snapshots:
 
   '@oxc-project/types@0.139.0': {}
 
-  '@oxc-project/types@0.140.0': {}
+  '@oxc-project/types@0.140.0':
+    optional: true
 
   '@oxc-resolver/binding-android-arm-eabi@11.24.2':
     optional: true
@@ -15133,6 +15131,7 @@ snapshots:
       '@rolldown/binding-wasm32-wasi': 1.2.0
       '@rolldown/binding-win32-arm64-msvc': 1.2.0
       '@rolldown/binding-win32-x64-msvc': 1.2.0
+    optional: true
 
   rollup@4.62.0:
     dependencies:
