@@ -10,3 +10,4 @@ allowBuilds:
 minimumReleaseAgeStrict: false
 patchedDependencies:
   bencode@4.0.1: patches/bencode@4.0.1.patch
+minimumReleaseAge: 0
