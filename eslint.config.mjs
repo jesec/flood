@@ -1,4 +1,3 @@
-import babelParser from '@babel/eslint-parser';
 import js from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import nodePlugin from 'eslint-plugin-n';
@@ -98,15 +97,6 @@ export default [
   // JavaScript files override
   {
     files: ['**/*.js', '**/*.jsx'],
-    languageOptions: {
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          babelrc: true,
-        },
-      },
-    },
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/no-require-imports': 'off',

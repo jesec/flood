@@ -203,7 +203,7 @@ Each client in `/server/services/[client]/` follows this pattern:
 
 - JSON message catalogs in `/client/src/javascript/i18n/strings/`
 - Lazy-loaded based on user preference
-- Build extracts messages via Babel plugin
+- Lingui catalogs are loaded and compiled through `@lingui/vite-plugin`;
 - **Only modify `en.json`** — all other locale files are generated from a translation platform and should never be edited directly
 
 ### Testing Infrastructure
@@ -377,7 +377,7 @@ npm run test-storybook          # Run Storybook tests
 - Stories located in `client/src/javascript/components/**/*.stories.tsx`
 - Webpack aliases configured for `@client/` and `@shared/` paths
 - Full CSS module support matching production Vite config
-- Babel decorators enabled for MobX compatibility
+- Storybook uses Vite to match the application build
 
 ### Frontend Mocking Strategy
 
