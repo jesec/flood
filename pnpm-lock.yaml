@@ -177,7 +177,7 @@ importers:
         specifier: 8.65.0
         version: 8.65.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)
       '@typescript/native':
-        specifier: npm:typescript@^7.0.2
+        specifier: npm:typescript@7.0.2
         version: typescript@7.0.2
       '@vitejs/plugin-react':
         specifier: 6.0.4
