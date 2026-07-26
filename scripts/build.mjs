@@ -110,7 +110,7 @@ const build = async () => {
     output: {
       file: path.resolve(buildPaths.appSrc, 'dist/index.js'),
       codeSplitting: false,
-      format: 'cjs',
+      format: 'esm',
       sourcemap: 'inline',
     },
     transform: {
