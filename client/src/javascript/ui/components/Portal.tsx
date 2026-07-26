@@ -1,4 +1,4 @@
-import {FC, ReactNode, useEffect, useRef} from 'react';
+import {FC, ReactNode, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 
 interface PortalProps {
@@ -6,33 +6,30 @@ interface PortalProps {
 }
 
 const Portal: FC<PortalProps> = ({children}: PortalProps) => {
-  const mountPoint = useRef<HTMLDivElement | null>(null);
+  const [mountPoint] = useState(() => {
+    const element = document.createElement('div');
+    element.classList.add('portal');
+    return element;
+  });
 
   useEffect(() => {
-    mountPoint.current = document.createElement('div');
-    mountPoint.current.classList.add('portal');
-
     const appElement = document.getElementById('app');
     if (appElement == null) {
-      document.body.appendChild(mountPoint.current);
+      document.body.appendChild(mountPoint);
     } else {
-      appElement.appendChild(mountPoint.current);
+      appElement.appendChild(mountPoint);
     }
 
     return () => {
-      if (mountPoint.current != null) {
-        if (appElement == null) {
-          document.body.removeChild(mountPoint.current);
-        } else {
-          appElement.removeChild(mountPoint.current);
-        }
+      if (appElement == null) {
+        document.body.removeChild(mountPoint);
+      } else {
+        appElement.removeChild(mountPoint);
       }
     };
-  }, []);
+  }, [mountPoint]);
 
-  if (mountPoint.current == null) return null;
-
-  return createPortal(children, mountPoint.current);
+  return createPortal(children, mountPoint);
 };
 
 export default Portal;

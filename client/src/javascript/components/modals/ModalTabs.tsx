@@ -22,9 +22,7 @@ const ModalTabs: FC<ModalTabsProps> = ({activeTabId, tabs = {}, onTabChange}: Mo
   return (
     <ul className="modal__tabs">
       {Object.keys(tabs).map((tabId) => {
-        const currentTab = tabs[tabId];
-
-        currentTab.id = tabId;
+        const currentTab = {...tabs[tabId], id: tabId};
 
         const classes = classnames('modal__tab', {
           'is-active': tabId === activeTabId,
