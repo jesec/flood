@@ -9,7 +9,6 @@ import {buildPaths} from '../shared/config/buildPaths.mjs';
 
 const paths = buildPaths;
 
-process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 
 // Makes the script crash on unhandled rejections instead of silently
