@@ -1,4 +1,4 @@
-import {FC, useRef} from 'react';
+import {FC, useState} from 'react';
 
 import SettingStore from '@client/stores/SettingStore';
 import ToggleList from '@client/components/general/ToggleList';
@@ -17,7 +17,9 @@ interface TorrentContextMenuActionsListProps {
 const TorrentContextMenuActionsList: FC<TorrentContextMenuActionsListProps> = ({
   onSettingsChange,
 }: TorrentContextMenuActionsListProps) => {
-  const changedTorrentContextMenuActionsRef = useRef<FloodSettings['torrentContextMenuActions']>(
+  const [changedTorrentContextMenuActions, setChangedTorrentContextMenuActions] = useState<
+    FloodSettings['torrentContextMenuActions']
+  >(() =>
     defaultFloodSettings.torrentContextMenuActions.map(({id, visible: defaultVisible}) => ({
       id,
       visible:
@@ -32,15 +34,13 @@ const TorrentContextMenuActionsList: FC<TorrentContextMenuActionsListProps> = ({
       items={Object.keys(TorrentContextMenuActions).map((action) => ({
         label: TorrentContextMenuActions[action as TorrentContextMenuAction],
         isLocked: action === 'start' || action === 'stop' || action === 'setTaxonomy' || action === 'torrentDetails',
-        defaultChecked: changedTorrentContextMenuActionsRef.current.some(
-          (setting) => setting.id === action && setting.visible,
-        ),
-        onClick: () => {
-          const currentSetting = changedTorrentContextMenuActionsRef.current.find((setting) => setting.id === action);
-          if (currentSetting != null) {
-            currentSetting.visible = !currentSetting.visible;
-          }
-          onSettingsChange({torrentContextMenuActions: changedTorrentContextMenuActionsRef.current});
+        checked: changedTorrentContextMenuActions.some((setting) => setting.id === action && setting.visible),
+        onClick: (visible) => {
+          const nextSettings = changedTorrentContextMenuActions.map((setting) =>
+            setting.id === action ? {...setting, visible} : setting,
+          );
+          setChangedTorrentContextMenuActions(nextSettings);
+          onSettingsChange({torrentContextMenuActions: nextSettings});
         },
       }))}
     />

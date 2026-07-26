@@ -1,4 +1,4 @@
-import {FC, Suspense, useEffect, useState} from 'react';
+import {FC, Suspense, useCallback, useEffect, useState} from 'react';
 import {Trans} from '@lingui/react';
 import {useInterval} from 'react-use';
 
@@ -15,10 +15,8 @@ import Size from '../../general/Size';
 
 const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
-  const [pollingDelay, setPollingDelay] = useState<number | null>(null);
 
-  const fetchPeers = () => {
-    setPollingDelay(null);
+  const fetchPeers = useCallback(() => {
     if (UIStore.activeModal?.id === 'torrent-details') {
       TorrentActions.fetchTorrentPeers(UIStore.activeModal?.hash).then((data) => {
         if (data != null) {
@@ -26,11 +24,10 @@ const TorrentPeers: FC = () => {
         }
       });
     }
-    setPollingDelay(ConfigStore.pollInterval);
-  };
+  }, []);
 
-  useEffect(() => fetchPeers(), []);
-  useInterval(() => fetchPeers(), pollingDelay);
+  useEffect(() => fetchPeers(), [fetchPeers]);
+  useInterval(fetchPeers, ConfigStore.pollInterval);
 
   return (
     <div className="torrent-details__section torrent-details__section--peers">
