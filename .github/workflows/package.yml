@@ -43,6 +43,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
 
+    env:
+      PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false'
+
     outputs:
       version: ${{ steps.meta.outputs.version }}
       tarball: ${{ steps.pack.outputs.tarball }}
