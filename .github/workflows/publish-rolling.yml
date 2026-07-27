@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+env:
+  PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false'
+
 jobs:
   version:
     runs-on: ubuntu-24.04
