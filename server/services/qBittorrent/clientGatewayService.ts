@@ -429,10 +429,11 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
               } = this.cachedProperties[info.hash] || {};
 
               const isSeeding = info.state.endsWith('UP');
+              const isTransferring = info.dlspeed > 0 || info.upspeed > 0;
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
                 comment: comment,
-                dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
+                dateActive: isTransferring ? -1 : info.last_activity,
                 dateAdded: info.added_on,
                 dateCreated,
                 dateFinished: info.completion_on,
@@ -457,7 +458,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
                 seedsTotal: info.num_complete,
                 sizeBytes: info.total_size,
                 selectedSizeBytes: info.size,
-                status: getTorrentStatusFromState(info.state, trackerMessage),
+                status: getTorrentStatusFromState(info.state, trackerMessage, isTransferring),
                 tags: info.tags === '' ? [] : info.tags.split(',').map((tag) => tag.trim()),
                 trackerURIs,
                 upRate: info.upspeed,
