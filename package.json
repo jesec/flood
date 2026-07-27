@@ -123,7 +123,7 @@
     "axios": "1.18.1",
     "axios-mock-adapter": "2.1.0",
     "bencode": "4.0.1",
-    "chalk": "5.6.2",
+    "chalk": "6.0.0",
     "classnames": "2.5.1",
     "concurrently": "10.0.4",
     "content-disposition": "2.0.1",
