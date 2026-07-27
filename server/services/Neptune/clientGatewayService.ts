@@ -292,7 +292,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
             bytesDone: torrent.completed,
             comment: torrent.comment,
             dateActive: 0,
-            dateAdded: torrent.add_at,
+            dateAdded: torrent.add_at / 1000,
             dateCreated: 0,
             dateFinished: torrent.completed_at,
             directory: torrent.directory_base,
