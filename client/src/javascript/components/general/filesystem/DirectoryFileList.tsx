@@ -6,7 +6,11 @@ import {Checkmark, Clipboard, File as FileIcon} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
 
-import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
+import type {
+  TorrentContentPriority,
+  TorrentContentSelection,
+  TorrentContentSelectionTree,
+} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import PriorityMeter from '../PriorityMeter';
@@ -18,9 +22,17 @@ interface DirectoryFilesProps {
   items: TorrentContentSelectionTree['files'];
   path: Array<string>;
   onItemSelect: (selection: TorrentContentSelection) => void;
+  onPriorityChange: (index: number, priority: TorrentContentPriority) => void;
 }
 
-const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onItemSelect}: DirectoryFilesProps) => {
+const DirectoryFiles: FC<DirectoryFilesProps> = ({
+  depth,
+  items,
+  hash,
+  path,
+  onItemSelect,
+  onPriorityChange,
+}: DirectoryFilesProps) => {
   const [copiedToClipboard, setCopiedToClipboard] = useState<number | null>(null);
   const contentPermalinks = useRef<Record<number, string | null>>({});
 
@@ -83,15 +95,12 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
             file__detail--priority"
           >
             <PriorityMeter
-              key={`${file.index}-${file.filename}`}
+              key={`${file.index}-${file.filename}-${file.priority}`}
               level={file.priority}
               id={file.index}
               maxLevel={2}
               onChange={(fileIndex: string | number, priorityLevel: number) =>
-                TorrentActions.setFilePriority(hash, {
-                  indices: [Number(fileIndex)],
-                  priority: priorityLevel,
-                })
+                onPriorityChange(Number(fileIndex), priorityLevel)
               }
               priorityType="file"
             />
