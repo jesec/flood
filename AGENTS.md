@@ -83,6 +83,8 @@ pnpm test -- --project transmission
 pnpm test -- --project auth
 ```
 
+> **Note**: `vitest.config.mts` only configures backend (`server/`) integration test projects. The frontend (`client/`) does not use Vitest — frontend tests are covered by Storybook interaction tests (`pnpm run test-storybook`). Do not add Vitest projects or `.test.ts` unit tests for client code.
+
 ## Critical Architectural Patterns
 
 ### Frontend State Management
