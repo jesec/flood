@@ -282,11 +282,11 @@ importers:
         specifier: 3.0.2
         version: 3.0.2
       mobx:
-        specifier: 6.16.1
-        version: 6.16.1
+        specifier: 7.0.0
+        version: 7.0.0
       mobx-react-lite:
-        specifier: 4.1.1
-        version: 4.1.1(mobx@6.16.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 5.0.0
+        version: 5.0.0(mobx@7.0.0)(react@19.2.8)
       morgan:
         specifier: 1.11.0
         version: 1.11.0(supports-color@10.2.2)
@@ -5576,21 +5576,14 @@ packages:
     resolution: {integrity: sha512-7e87vk0DdWT647wjcfEtWeMtjm+zVGqNohN/aeIymbUfjHQ2T4Sx5kM+1irVDBSloNC3CkGKxswdMoo8yhqTDg==}
     engines: {node: '>=10', npm: '>=6'}
 
-  mobx-react-lite@4.1.1:
-    resolution: {integrity: sha512-iUxiMpsvNraCKXU+yPotsOncNNmyeS2B5DKL+TL6Tar/xm+wwNJAubJmtRSeAoYawdZqwv8Z/+5nPRHeQxTiXg==}
+  mobx-react-lite@5.0.0:
+    resolution: {integrity: sha512-+Kg+KhOQx/ggkFuHViUJvsOsgmAFvBUHfGb/cimNX5Csb1MfMYjbp5CcUu6kw2zr11HwB1gaD7FnqdAcCryvhg==}
     peerDependencies:
-      mobx: ^6.9.0
-      react: ^16.8.0 || ^17 || ^18 || ^19
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
+      mobx: ^7.0.0
+      react: ^18 || ^19
 
-  mobx@6.16.1:
-    resolution: {integrity: sha512-syNcDdX3KT+Jq3je6eGjBhuc24Z68td2VG0zNFqRswaE433D9SNH5VRy/xrGbJsUixfppLLccXhAW9JSf6n+SQ==}
+  mobx@7.0.0:
+    resolution: {integrity: sha512-J+hR/wq6RdBnB4QXQRqGrWL9vOOLKaYhXh0ooxLAW4AE72av10Y5+xiaxohUYmPZiUswfpxMjQooYqpWkv+Fxg==}
 
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
@@ -12792,15 +12785,12 @@ snapshots:
 
   mmdb-lib@3.0.2: {}
 
-  mobx-react-lite@4.1.1(mobx@6.16.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  mobx-react-lite@5.0.0(mobx@7.0.0)(react@19.2.8):
     dependencies:
-      mobx: 6.16.1
+      mobx: 7.0.0
       react: 19.2.8
-      use-sync-external-store: 1.6.0(react@19.2.8)
-    optionalDependencies:
-      react-dom: 19.2.8(react@19.2.8)
 
-  mobx@6.16.1: {}
+  mobx@7.0.0: {}
 
   moo@0.5.3: {}
 
