@@ -1,6 +1,6 @@
 {
   "name": "flood",
-  "version": "4.15.0",
+  "version": "4.16.0",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
   "type": "module",
   "keywords": [
@@ -156,7 +156,7 @@
     "lint-staged": "17.2.0",
     "lodash": "4.18.1",
     "mime-types": "3.0.2",
-    "mobx": "6.16.1",
+    "mobx": "7.0.0",
     "mobx-react-lite": "4.1.1",
     "morgan": "1.11.0",
     "overlayscrollbars": "2.16.0",
