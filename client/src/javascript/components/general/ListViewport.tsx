@@ -83,7 +83,7 @@ const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: Li
   }, [listElement]);
 
   return (
-    <div className={className} ref={hostElementRef} style={{height: Math.max(rowHeight * 30, 600), width: '100%'}}>
+    <div className={className} ref={hostElementRef} style={{flex: '1 1 auto', minHeight: 0, width: '100%'}}>
       <List
         defaultHeight={Math.max(rowHeight * 30, 600)}
         rowCount={rowCount}
