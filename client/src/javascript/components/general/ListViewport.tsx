@@ -14,10 +14,11 @@ interface ListViewportProps {
   rowComponent: (props: RowComponentProps) => React.ReactElement | null;
   rowHeight: number;
   listRef?: React.Ref<ListImperativeAPI>;
+  onScroll?: (scrollLeft: number) => void;
 }
 
 const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: ListViewportProps, ref) => {
-  const {className, rowCount, rowComponent, rowHeight, listRef} = props;
+  const {className, rowCount, rowComponent, rowHeight, listRef, onScroll} = props;
   const hostElementRef = useRef<HTMLDivElement>(null);
   const [listElement, setListElement] = useState<HTMLDivElement | null>(null);
 
@@ -81,6 +82,19 @@ const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: Li
       osInstance.destroy();
     };
   }, [listElement]);
+
+  // The list element is the horizontal scroll container. Report its scroll
+  // position so callers can keep related elements (e.g. the table heading) in sync.
+  useEffect(() => {
+    if (listElement == null || onScroll == null) return;
+
+    const handleScroll = () => onScroll(listElement.scrollLeft);
+    listElement.addEventListener('scroll', handleScroll, {passive: true});
+
+    return () => {
+      listElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [listElement, onScroll]);
 
   return (
     <div className={className} ref={hostElementRef} style={{flex: '1 1 auto', minHeight: 0, width: '100%'}}>
