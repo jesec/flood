@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, ReactNode, useEffect, useRef} from 'react';
+import {FC, KeyboardEvent, ReactNode, useCallback, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
@@ -83,6 +83,13 @@ const TorrentList: FC = observer(() => {
   const isCondensed = torrentListViewSize === 'condensed';
   const isListEmpty = torrents == null || torrents.length === 0;
 
+  // Keep the table heading horizontally in sync with the list viewport.
+  const handleListViewportScroll = useCallback((scrollLeft: number) => {
+    if (listHeaderRef.current != null) {
+      listHeaderRef.current.scrollLeft = scrollLeft;
+    }
+  }, []);
+
   let content: ReactNode = null;
   let torrentListHeading: ReactNode = null;
   if (!ClientStatusStore.isConnected) {
@@ -118,7 +125,12 @@ const TorrentList: FC = observer(() => {
       torrentListHeading = (
         <TableHeading
           onCellFocus={() => {
-            // Scroll sync removed in react-window v2
+            // Keep the viewport in sync when a heading cell is focused
+            // (e.g. via keyboard tabbing), mirroring the heading's scroll position.
+            const viewportElement = listViewportRef.current?.element;
+            if (viewportElement != null && listHeaderRef.current != null) {
+              viewportElement.scrollLeft = listHeaderRef.current.scrollLeft;
+            }
           }}
           onCellClick={(property: TorrentListColumn) => {
             const currentSort = SettingStore.floodSettings.sortTorrents;
@@ -157,6 +169,7 @@ const TorrentList: FC = observer(() => {
         rowComponent={TorrentListRowRenderer}
         rowHeight={isCondensed ? 30 : 70}
         listRef={listViewportRef}
+        onScroll={handleListViewportScroll}
       />
     );
   }
