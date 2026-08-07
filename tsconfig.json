@@ -16,7 +16,6 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": false,
     "paths": {
-      "parse-torrent": ["./types/parse-torrent"],
       "@client/storybook-mocks/*": ["./.storybook/mocks/*"],
       "@client/*": ["./client/src/javascript/*"],
       "@server/*": ["./server/*"],
