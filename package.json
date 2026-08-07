@@ -106,6 +106,7 @@
     "@types/mime-types": "3.0.1",
     "@types/morgan": "1.9.10",
     "@types/node": "22.20.1",
+    "@types/parse-torrent": "11.0.1",
     "@types/passport": "1.0.17",
     "@types/passport-jwt": "4.0.1",
     "@types/react": "19.2.18",
