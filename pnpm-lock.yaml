@@ -351,8 +351,8 @@ importers:
         specifier: 2.3.0
         version: 2.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       ress:
-        specifier: 5.0.2
-        version: 5.0.2
+        specifier: 6.0.0
+        version: 6.0.0
       rolldown:
         specifier: 1.2.2
         version: 1.2.2
@@ -6150,8 +6150,8 @@ packages:
     engines: {node: '>= 0.4'}
     hasBin: true
 
-  ress@5.0.2:
-    resolution: {integrity: sha512-oHBtOWo/Uc8SzQMbQNIKTcgi8wKmAs7IlNlRywmXudbOtF+c27FlOIq7tnwLDVcTywe6JXYo1pDXHO6kABwNYA==}
+  ress@6.0.0:
+    resolution: {integrity: sha512-4JxtIZmaO+i8rlzRTI1m6dTBr1g+T1ZNK/7Cwsc44622R4aOK/BbWLygBzoMo0JHAk8Q4yYvP9x0+7b3qH/xAw==}
 
   restore-cursor@5.1.0:
     resolution: {integrity: sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA==}
@@ -13406,7 +13406,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  ress@5.0.2: {}
+  ress@6.0.0: {}
 
   restore-cursor@5.1.0:
     dependencies:
