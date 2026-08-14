@@ -89,9 +89,6 @@ importers:
       '@types/bencode':
         specifier: 4.0.0
         version: 4.0.0
-      '@types/content-disposition':
-        specifier: 0.5.9
-        version: 0.5.9
       '@types/create-torrent':
         specifier: 6.1.1
         version: 6.1.1
@@ -2289,9 +2286,6 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
-
-  '@types/content-disposition@0.5.9':
-    resolution: {integrity: sha512-8uYXI3Gw35MhiVYhG3s295oihrxRyytcRHjSjqnqZVDDy/xcGBRny7+Xj1Wgfhv5QzRtN2hB2dVRBUX9XW3UcQ==}
 
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
@@ -8995,8 +8989,6 @@ snapshots:
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 22.20.1
-
-  '@types/content-disposition@0.5.9': {}
 
   '@types/cookiejar@2.1.5': {}
 
