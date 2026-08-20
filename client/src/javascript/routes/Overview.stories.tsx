@@ -14,7 +14,7 @@ import TorrentStore from '@client/stores/TorrentStore';
 import AuthActions from '@client/actions/AuthActions';
 import {createMockMouseEvent, TEST_TIMEOUTS} from '../test-utils/storybook-helpers';
 import type {TorrentProperties} from '@shared/types/Torrent';
-import {TorrentPriority} from '@shared/types/Torrent';
+import {TorrentPriority, TorrentHealth} from '@shared/types/Torrent';
 import {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 import MockStateStore from '@client/storybook-mocks/MockStateStore';
@@ -107,6 +107,7 @@ const createTorrent = (hash: string, overrides: Partial<TorrentProperties>): Tor
     downRate: 0,
     downTotal: 0,
     eta: -1,
+    health: TorrentHealth.CRITICAL,
     isPrivate: false,
     isInitialSeeding: false,
     isSequential: false,

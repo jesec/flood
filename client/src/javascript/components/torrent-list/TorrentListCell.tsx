@@ -16,6 +16,7 @@ import {
   DownloadThick,
   FolderClosedSolid,
   Hash,
+  Health,
   Lock,
   TrackerMessage,
   Peers,
@@ -25,6 +26,7 @@ import {
   UploadThick,
 } from '@client/ui/icons';
 import Duration from '@client/components/general/Duration';
+import HealthIndicator from '@client/components/general/HealthIndicator';
 import ProgressBar from '@client/components/general/ProgressBar';
 import Size from '@client/components/general/Size';
 import {formatDate, formatNumber} from '@client/util/format';
@@ -42,6 +44,7 @@ const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   downRate: <DownloadThick />,
   directory: <FolderClosedSolid />,
   hash: <Hash />,
+  health: <Health />,
   dateActive: <Clock />,
   dateAdded: <Calendar />,
   dateCreated: <CalendarCreated />,
@@ -157,6 +160,8 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return <TrackersCell trackers={torrent[column]} />;
       case 'eta':
         return <ETACell eta={torrent[column]} />;
+      case 'health':
+        return <HealthIndicator health={torrent[column]} />;
       case 'seeds':
         return <PeerCell peersConnected={torrent.seedsConnected} totalPeers={torrent.seedsTotal} />;
       case 'peers':

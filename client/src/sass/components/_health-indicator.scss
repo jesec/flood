@@ -1,0 +1,67 @@
+@use '../tools/colors';
+@use '../tools/themes';
+
+.health-indicator {
+  align-items: center;
+  display: flex;
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  // Critical - No seeders (red)
+  &--critical {
+    .health-indicator__label {
+      color: colors.$red;
+    }
+
+    .torrent--is-selected & .health-indicator__label {
+      color: rgba(colors.$white, 0.9);
+    }
+  }
+
+  // Poor - 1-2 seeders (orange)
+  &--poor {
+    .health-indicator__label {
+      color: #f59e0b;
+    }
+
+    .torrent--is-selected & .health-indicator__label {
+      color: rgba(colors.$white, 0.9);
+    }
+  }
+
+  // Fair - 3-5 seeders (yellow)
+  &--fair {
+    .health-indicator__label {
+      color: #eab308;
+    }
+
+    .torrent--is-selected & .health-indicator__label {
+      color: rgba(colors.$white, 0.9);
+    }
+  }
+
+  // Good - 6-10 seeders (light green)
+  &--good {
+    .health-indicator__label {
+      color: #84cc16;
+    }
+
+    .torrent--is-selected & .health-indicator__label {
+      color: rgba(colors.$white, 0.9);
+    }
+  }
+
+  // Excellent - 10+ seeders (green)
+  &--excellent {
+    .health-indicator__label {
+      color: colors.$green;
+    }
+
+    .torrent--is-selected & .health-indicator__label {
+      color: rgba(colors.$white, 0.9);
+    }
+  }
+}

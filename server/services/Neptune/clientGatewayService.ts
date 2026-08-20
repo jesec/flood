@@ -30,6 +30,7 @@ import type {TransferSummary} from '@shared/types/TransferData';
 import {NeptuneConnectionError, NeptuneHTTPError, TorrentState} from '@trim21/neptune';
 
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
+import {calculateTorrentHealth} from '../../../shared/util/torrentHealth';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
@@ -303,6 +304,7 @@ class NeptuneClientGatewayService extends ClientGatewayService {
                 ? (torrent.selected_size - torrent.completed) / torrent.download_rate
                 : -1,
             hash: torrent.hash.toUpperCase(),
+            health: calculateTorrentHealth(torrent.connected_seeding, torrent.total_seeding),
             isPrivate: torrent.private,
             isInitialSeeding: false,
             isSequential: false,
