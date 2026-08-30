@@ -5,7 +5,11 @@ import {css} from '@client/styled-system/css';
 import {Checkbox} from '@client/ui';
 import {FolderClosedSolid, FolderOpenSolid} from '@client/ui/icons';
 
-import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
+import type {
+  TorrentContentPriority,
+  TorrentContentSelection,
+  TorrentContentSelectionTree,
+} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 // TODO: Fix this circular dependency
@@ -20,6 +24,7 @@ interface DirectoryTreeNodeProps {
   itemsTree: TorrentContentSelectionTree;
   isSelected: boolean;
   onItemSelect: (selection: TorrentContentSelection) => void;
+  onPriorityChange: (index: number, priority: TorrentContentPriority) => void;
 }
 
 const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
@@ -31,6 +36,7 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
   path,
   isSelected,
   onItemSelect,
+  onPriorityChange,
 }: DirectoryTreeNodeProps) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const currentPath = [...path, directoryName];
@@ -100,6 +106,7 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
             hash={hash}
             key={`${expanded}-${depth}`}
             onItemSelect={onItemSelect}
+            onPriorityChange={onPriorityChange}
             path={currentPath}
             itemsTree={itemsTree}
           />

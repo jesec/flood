@@ -1,4 +1,9 @@
-import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
+import type {
+  TorrentContent,
+  TorrentContentPriority,
+  TorrentContentSelection,
+  TorrentContentSelectionTree,
+} from '@shared/types/TorrentContent';
 
 const selectAll = (tree: TorrentContentSelectionTree, isSelected: boolean): TorrentContentSelectionTree => ({
   ...tree,
@@ -155,9 +160,44 @@ const getSelectionTree = (contents: Array<TorrentContent>, isSelected = false): 
   return tree;
 };
 
+const applyPriorityToIndices = (
+  tree: TorrentContentSelectionTree,
+  indices: Set<number>,
+  priority: TorrentContentPriority,
+): TorrentContentSelectionTree => ({
+  ...tree,
+  ...(tree.directories != null
+    ? {
+        directories: Object.fromEntries(
+          Object.entries(tree.directories).map(([directory, subTree]) => [
+            directory,
+            applyPriorityToIndices(subTree, indices, priority),
+          ]),
+        ),
+      }
+    : {}),
+  ...(tree.files != null
+    ? {
+        files: Object.fromEntries(
+          Object.entries(tree.files).map(([fileName, file]) => [
+            fileName,
+            indices.has(file.index) ? {...file, priority} : file,
+          ]),
+        ),
+      }
+    : {}),
+});
+
+const applyPriority = (
+  tree: TorrentContentSelectionTree,
+  indices: Array<number>,
+  priority: TorrentContentPriority,
+): TorrentContentSelectionTree => applyPriorityToIndices(tree, new Set(indices), priority);
+
 const selectionTree = {
   selectAll,
   applySelection,
+  applyPriority,
   getSelectedItems,
   getSelectionTree,
 };
