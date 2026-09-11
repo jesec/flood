@@ -34,6 +34,7 @@ import parseTorrent from 'parse-torrent';
 import {TorrentPriority} from '../../../shared/types/Torrent';
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
+import {calculateTorrentHealth} from '../../../shared/util/torrentHealth';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
@@ -444,6 +445,7 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
                 // For non-seeding states, hide ETA when dlspeed is 0 to avoid showing stale values.
                 eta: info.eta >= 8640000 || (!isSeeding && info.dlspeed === 0) ? -1 : info.eta,
                 hash: info.hash.toUpperCase(),
+                health: calculateTorrentHealth(info.num_seeds, info.num_complete),
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,

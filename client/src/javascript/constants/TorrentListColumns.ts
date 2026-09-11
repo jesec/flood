@@ -4,6 +4,7 @@ const TorrentListColumns = {
   downRate: 'torrents.properties.download.speed',
   downTotal: 'torrents.properties.download.total',
   eta: 'torrents.properties.eta',
+  health: 'torrents.properties.health',
   name: 'torrents.properties.name',
   peers: 'torrents.properties.peers',
   percentComplete: 'torrents.properties.percentage',
