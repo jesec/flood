@@ -29,6 +29,7 @@ import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
+import {calculateTorrentHealth} from '@shared/util/torrentHealth';
 import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
@@ -865,6 +866,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
                 downTotal: response.downTotal,
                 eta: getTorrentETAFromProperties(effectiveSizeBytes, response.downRate, response.bytesDone),
                 hash: response.hash,
+                health: calculateTorrentHealth(response.seedsConnected, response.seedsTotal),
                 isPrivate: response.isPrivate,
                 isInitialSeeding: response.isInitialSeeding,
                 isSequential: response.isSequential,
