@@ -275,11 +275,15 @@ class FeedService extends BaseService<Record<string, never>> {
         }
 
         Promise.all(
-          itemsToDownload.map(async (item): Promise<Array<string>> => {
+          itemsToDownload.map(async (item) => {
             const {urls, destination, start, tags, ruleID} = item;
 
-            await this.services?.clientGatewayService
-              ?.addTorrentsByURL({
+            try {
+              if (this.services?.clientGatewayService == null) {
+                throw new Error('Client gateway service is not available');
+              }
+
+              await this.services.clientGatewayService.addTorrentsByURL({
                 urls,
                 cookies: {},
                 destination,
@@ -289,25 +293,32 @@ class FeedService extends BaseService<Record<string, never>> {
                 isCompleted: false,
                 isSequential: false,
                 isInitialSeeding: false,
-              })
-              .then(() => {
-                this.db.update({_id: feedID}, {$inc: {count: 1}}, {upsert: true});
-                this.db.update({_id: ruleID}, {$inc: {count: 1}}, {upsert: true});
-              })
-              .catch(console.error);
+              });
 
-            return urls;
+              await Promise.all([
+                this.db.updateAsync({_id: feedID}, {$inc: {count: 1}}, {upsert: true}),
+                this.db.updateAsync({_id: ruleID}, {$inc: {count: 1}}, {upsert: true}),
+              ]);
+
+              return item;
+            } catch (error) {
+              console.error(error);
+              return null;
+            }
           }),
-        ).then((ArrayOfURLArrays) => {
-          const addedURLs = ArrayOfURLArrays.reduce(
-            (URLArray: Array<string>, urls: Array<string>) => URLArray.concat(urls),
-            [],
-          );
+        ).then((results) => {
+          const successfulItems = results.filter((item): item is NonNullable<typeof item> => item != null);
+
+          if (successfulItems.length === 0) {
+            return;
+          }
+
+          const addedURLs = successfulItems.reduce((URLArray: Array<string>, item) => URLArray.concat(item.urls), []);
 
           this.db.update({type: 'matchedTorrents'}, {$push: {urls: {$each: addedURLs}}}, {upsert: true});
 
           this.services?.notificationService.addNotification(
-            itemsToDownload.map((item) => ({
+            successfulItems.map((item) => ({
               id: 'notification.feed.torrent.added',
               data: {
                 title: item.matchTitle,
