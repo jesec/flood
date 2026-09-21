@@ -31,6 +31,7 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
+import {calculateTorrentHealth} from '../../../shared/util/torrentHealth';
 import {fetchUrls} from '../../util/fetchUtil';
 import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
@@ -344,6 +345,10 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
                 downTotal: status.total_payload_download,
                 eta: status.eta === 0 ? -1 : status.eta,
                 hash: hash.toUpperCase(),
+                health: calculateTorrentHealth(
+                  status.num_seeds,
+                  status.total_seeds < 0 ? 0 : status.total_seeds,
+                ),
                 isPrivate: status.private,
                 isInitialSeeding: status.super_seeding,
                 isSequential: status.sequential_download,
