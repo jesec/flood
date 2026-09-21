@@ -123,6 +123,13 @@ Checkout [Run Flood (and torrent clients) in containers](https://github.com/jese
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
+#### Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform with a one-click Flood template:
+
+[![Deploy on Easypanel](https://easypanel.io/img/deploy-on-easypanel-40.svg)](https://easypanel.io/templates/flood)
+
+
 ## Building Flood
 
 ### Clone from repository
