@@ -3,11 +3,11 @@ import type {TransferHistorySchema} from '../schema/TransferData';
 export interface TransferSummary {
   // Global download rate in B/s
   downRate: number;
-  // Data downloaded this session in bytes
+  // Data downloaded in bytes, accumulated across torrent client sessions
   downTotal: number;
   // Global upload rate in B/s
   upRate: number;
-  // Data uploaded this session in bytes
+  // Data uploaded in bytes, accumulated across torrent client sessions
   upTotal: number;
 }
 
