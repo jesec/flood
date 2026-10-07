@@ -99,6 +99,22 @@ jobs:
             mv dist-pkg/flood-linuxstatic-arm64 dist-pkg/flood-linux-arm64
           fi
 
+      - name: Fetch ICU data
+        working-directory: package
+        env:
+          # must match process.versions.icu of the Node.js bundled in the executables
+          ICU_DATA_VERSION: '78.2'
+        run: |
+          curl -fsSL -o icu-data.zip \
+            "https://github.com/unicode-org/icu/releases/download/release-${ICU_DATA_VERSION}/icu4c-${ICU_DATA_VERSION}-data-bin-l.zip"
+          unzip -j -o icu-data.zip icudt78l.dat LICENSE -d icu-data
+          mv icu-data/LICENSE icu-data/icudt78l.dat.LICENSE
+          rm icu-data.zip
+
+      - name: Verify executables work with ICU data
+        working-directory: package
+        run: NODE_ICU_DATA="$PWD/icu-data" ./dist-pkg/flood-linux-x64 --help > /dev/null
+
       - name: Upload pkg artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -110,4 +126,6 @@ jobs:
             package/dist-pkg/flood-macos-arm64
             package/dist-pkg/flood-win-x64.exe
             package/dist-pkg/flood-win-arm64.exe
+            package/icu-data/icudt78l.dat
+            package/icu-data/icudt78l.dat.LICENSE
           if-no-files-found: error
