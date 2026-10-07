@@ -13,6 +13,10 @@ RUN if [[ `uname -m` == "aarch64" ]]; \
     fi
 RUN mv flood /root/sysroot/bin/flood
 
+# The executables embed a small-icu Node.js, which needs the ICU data for Intl.Segmenter
+RUN mkdir -p /root/sysroot/usr/share/icu \
+    && mv artifacts/icudt78l.dat artifacts/icudt78l.dat.LICENSE /root/sysroot/usr/share/icu/
+
 
 ARG COREUTILS_VERSION=0.9.0
 ARG TARGETARCH
@@ -41,6 +45,7 @@ COPY --from=build /root/sysroot /
 
 # Run as 1001:1001 user
 ENV HOME=/home/download
+ENV NODE_ICU_DATA=/usr/share/icu
 USER 1001:1001
 
 # Expose port 3000
