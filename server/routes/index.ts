@@ -83,6 +83,7 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   if (!config.disableRateLimit) {
     await fastify.register(fastifyRateLimit, {
       global: false,
+      keyGenerator: (request) => normalizeIP(request.ip || 'local'),
     });
   }
 
