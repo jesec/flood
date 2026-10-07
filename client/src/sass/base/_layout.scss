@@ -11,6 +11,12 @@ body {
   width: 100%;
 }
 
+// iOS Safari 26+ blurs the top edge of the page unless a fixed box spans the viewport there.
+#app {
+  inset: 0;
+  position: fixed;
+}
+
 #app,
 .application,
 .application__view {
