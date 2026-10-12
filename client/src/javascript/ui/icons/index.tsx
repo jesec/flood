@@ -38,6 +38,7 @@ export {default as FolderClosedSolid} from './FolderClosedSolid';
 export {default as FolderOpenOutlined} from './FolderOpenOutlined';
 export {default as FolderOpenSolid} from './FolderOpenSolid';
 export {default as Hash} from './Hash';
+export {default as Health} from './Health';
 export {default as Inactive} from './Inactive';
 export {default as InfinityIcon} from './InfinityIcon';
 export {default as Information} from './Information';

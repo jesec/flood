@@ -16,6 +16,15 @@ export enum TorrentPriority {
   HIGH = 3,
 }
 
+// Health score levels based on seeder availability
+export enum TorrentHealth {
+  CRITICAL = 0, // No seeders
+  POOR = 1, // Very few seeders (1-2)
+  FAIR = 2, // Some seeders (3-5)
+  GOOD = 3, // Healthy seeder count (6-10)
+  EXCELLENT = 4, // Many seeders (10+)
+}
+
 export interface TorrentProperties {
   bytesDone: number;
   comment: string;
@@ -31,6 +40,8 @@ export interface TorrentProperties {
   eta: number;
   // Upper-case hash of info section of the torrent
   hash: string;
+  // Health score based on seeder availability (0-4, higher is better)
+  health: TorrentHealth;
   isPrivate: boolean;
   // If initial seeding mode (aka super seeding) is enabled
   isInitialSeeding: boolean;
