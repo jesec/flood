@@ -37,6 +37,11 @@
       "matchManagers": ["bazel", "bazel-module"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "groupName": "bazel non-major updates"
+    },
+    {
+      "description": "@yao-pkg/pkg decides the Node.js and ICU version of the prebuilt binaries, so its updates deserve a PR of their own rather than the grouped one",
+      "matchDepNames": ["@yao-pkg/pkg"],
+      "groupName": "@yao-pkg/pkg"
     }
   ]
 }

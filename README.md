@@ -54,15 +54,12 @@ Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provi
 - macOS users can use [brew](https://brew.sh/) or installer.
 - Check [Node.js website](https://nodejs.org/en/download/package-manager) for more.
 
-Alternatively, download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://nightly.link/jesec/flood/workflows/publish-rolling/master)). It bundles `Node.js` and supports `Linux`, `macOS` and `Windows`.
-
 ### Installation
 
-(sudo) `npm install --global flood` or `npx flood`
-
-Or use `@jesec/flood` for cutting-edge builds.
-
-Or [build from source](https://github.com/jesec/flood#Building-Flood).
+- (sudo) `npm install --global flood` or `npx flood`. Use `@jesec/flood` for cutting-edge builds.
+- Download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://nightly.link/jesec/flood/workflows/publish-rolling/master)). It bundles `Node.js`, so [Pre-Requisites](#pre-requisites) do not apply, and supports `Linux`, `macOS` and `Windows`.
+  - These builds bundle a `small-icu` Node.js without break-iterator data, so `flood --help` aborts in `Intl.Segmenter#segment()` (reached via `yargs` → `cliui` → `string-width`) with a `RangeError`, or a plain crash such as `SIGSEGV` on older builds ([nodejs/node#51752](https://github.com/nodejs/node/issues/51752), [yao-pkg/pkg#289](https://github.com/yao-pkg/pkg/issues/289)). Normal startup is unaffected. The matching ICU data (`icudt78l.dat`) ships next to them, so point `NODE_ICU_DATA` at the directory holding it: `NODE_ICU_DATA=/opt/flood ./flood --help`. It must match `process.versions.icu` of the bundled Node.js. `npm` installs and the standard Docker image run on a stock `full-icu` Node.js and are unaffected; the `.deb` package and the distroless image install the data and set `NODE_ICU_DATA` themselves.
+- [Build from source](https://github.com/jesec/flood#Building-Flood).
 
 ### Run
 
