@@ -37,8 +37,6 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install --reinstall -y qemu-user-static
 
-      - run: pnpm add -g --config.global-bin-dir="$PNPM_HOME" @yao-pkg/pkg
-
       - name: Install Bazel
         run: |
           sudo wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 -O /usr/local/bin/bazel
@@ -59,7 +57,7 @@ jobs:
       - name: Package .deb
         run: |
           mkdir ~/.pkg-cache
-          bazel build flood-deb-arm64 flood-deb-x64 --sandbox_writable_path=$(printf ~/.pkg-cache)
+          PATH="$PWD/node_modules/.bin:$PATH" bazel build flood-deb-arm64 flood-deb-x64 --sandbox_writable_path=$(printf ~/.pkg-cache)
           cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
