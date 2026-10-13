@@ -104,6 +104,12 @@ jobs:
           pull: false
           tags: ${{ steps.local.outputs.flood }}
 
+      - name: Verify flood distroless image
+        if: contains(inputs.platforms, 'linux/amd64')
+        env:
+          LOCAL_TAG: ${{ steps.local.outputs.flood }}
+        run: docker run --rm "$LOCAL_TAG" --help > /dev/null
+
       - name: Mirror flood distroless image to targets
         if: inputs.push
         env:
