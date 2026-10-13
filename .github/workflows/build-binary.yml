@@ -102,16 +102,7 @@ jobs:
       # the ICU data has to sit next to the executables: everything uploaded below then shares
       # dist-pkg as the artifact root, which keeps the artifact and the release assets flat
       - name: Fetch ICU data
-        working-directory: package
-        env:
-          # must match process.versions.icu of the Node.js bundled in the executables
-          ICU_DATA_VERSION: '78.2'
-        run: |
-          curl -fsSL -o icu-data.zip \
-            "https://github.com/unicode-org/icu/releases/download/release-${ICU_DATA_VERSION}/icu4c-${ICU_DATA_VERSION}-data-bin-l.zip"
-          unzip -j -o icu-data.zip icudt78l.dat LICENSE -d dist-pkg
-          mv dist-pkg/LICENSE dist-pkg/icudt78l.dat.LICENSE
-          rm icu-data.zip
+        run: sh scripts/fetch-icu-data.sh package/dist-pkg
 
       - name: Verify executables work with ICU data
         working-directory: package

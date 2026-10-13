@@ -34,6 +34,16 @@ genrule(
     executable = True,
 )
 
+genrule(
+    name = "flood-icu-data",
+    srcs = ["scripts/fetch-icu-data.sh"],
+    outs = [
+        "icu/icudt78l.dat",
+        "icu/icudt78l.dat.LICENSE",
+    ],
+    cmd = "sh $(location scripts/fetch-icu-data.sh) $(RULEDIR)/icu",
+)
+
 pkg_tar(
     name = "flood-assets",
     srcs = glob(["dist/assets/**/*"]),
@@ -46,7 +56,7 @@ pkg_tar(
     name = "flood-bin-arm64",
     srcs = [":flood-pkg-arm64"],
     mode = "0755",
-    package_dir = "/usr/bin",
+    package_dir = "/usr/lib/flood",
     strip_prefix = "/arm64",
 )
 
@@ -54,8 +64,24 @@ pkg_tar(
     name = "flood-bin-x64",
     srcs = [":flood-pkg-x64"],
     mode = "0755",
-    package_dir = "/usr/bin",
+    package_dir = "/usr/lib/flood",
     strip_prefix = "/x64",
+)
+
+pkg_tar(
+    name = "flood-icu",
+    srcs = [":flood-icu-data"],
+    mode = "0644",
+    package_dir = "/usr/lib/flood",
+    strip_prefix = "/icu",
+)
+
+pkg_tar(
+    name = "flood-wrapper",
+    srcs = ["distribution/shared/flood"],
+    mode = "0755",
+    package_dir = "/usr/bin",
+    strip_prefix = "/distribution/shared",
 )
 
 pkg_tar(
@@ -86,7 +112,9 @@ pkg_tar(
         ":flood-assets",
         ":flood-bin-arm64",
         ":flood-docs",
+        ":flood-icu",
         ":flood-service",
+        ":flood-wrapper",
     ],
 )
 
@@ -97,7 +125,9 @@ pkg_tar(
         ":flood-assets",
         ":flood-bin-x64",
         ":flood-docs",
+        ":flood-icu",
         ":flood-service",
+        ":flood-wrapper",
     ],
 )
 

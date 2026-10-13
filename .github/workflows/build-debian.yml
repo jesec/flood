@@ -63,6 +63,11 @@ jobs:
           cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
+      - name: Verify the installed .deb renders its help
+        run: |
+          sudo dpkg -i flood-linux-x64.deb
+          flood --help > /dev/null
+
       - name: Upload Debian artifacts
         uses: actions/upload-artifact@v7
         with:
