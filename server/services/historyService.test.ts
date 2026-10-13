@@ -4,7 +4,8 @@ import {describe, expect, it} from 'vitest';
 
 import HistoryService, {accumulateTotals} from './historyService';
 
-const user = {_id: 'historyServiceTest', client: {client: 'rTorrent'}} as UserInDatabase;
+const rtorrent = {client: 'rTorrent', type: 'socket', version: 1, socket: '/tmp/a.sock'} as const;
+const user = {_id: 'historyServiceTest', client: rtorrent} as UserInDatabase;
 
 // Drives the service as if the torrent client had answered a poll
 const poll = async (service: HistoryService, downTotal: number, upTotal: number) => {
@@ -19,8 +20,8 @@ const poll = async (service: HistoryService, downTotal: number, upTotal: number)
   return [down, up];
 };
 
-const start = async (client = 'rTorrent') => {
-  const service = new HistoryService({...user, client: {client}} as UserInDatabase);
+const start = async (client: UserInDatabase['client'] = rtorrent) => {
+  const service = new HistoryService({...user, client});
   await (service as unknown as {loadTotals: () => Promise<void>}).loadTotals();
   return service;
 };
@@ -59,9 +60,21 @@ describe('HistoryService transfer totals', () => {
     expect(await poll(service, 0, 0)).toEqual([30, 6]);
     await service.destroy(false);
 
-    // switching to another torrent client starts over
-    service = await start('qBittorrent');
+    // another instance of the same client type starts over
+    service = await start({...rtorrent, socket: '/tmp/b.sock'});
     expect(await poll(service, 1, 2)).toEqual([1, 2]);
+    await service.destroy(false);
+
+    // switching to another torrent client starts over
+    service = await start({
+      client: 'qBittorrent',
+      type: 'web',
+      version: 1,
+      url: 'http://q:8080',
+      username: '',
+      password: '',
+    });
+    expect(await poll(service, 3, 4)).toEqual([3, 4]);
     await service.destroy(true);
   });
 });

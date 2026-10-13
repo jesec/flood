@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import Datastore from '@seald-io/nedb';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
 import config from '../../config';
@@ -42,6 +43,11 @@ export const accumulateTotals = (
   };
 };
 
+// Identifies the client instance the totals belong to. Another instance of the
+// same client type has its own session counters, so its totals must not mix.
+export const clientFingerprint = (c: ClientConnectionSettings): string =>
+  [c.client, 'socket' in c ? c.socket : 'url' in c ? c.url : `${c.host}:${c.port}`].join('|');
+
 const TOTALS_PERSIST_INTERVAL = 1000 * 60; // 1 minute
 
 class HistoryService extends BaseService<HistoryServiceEvents> {
@@ -80,8 +86,8 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
 
   private loadTotals = async (): Promise<void> => {
     const doc = await this.totalsDB.findOneAsync<TransferTotals & {client: string}>({_id: 'totals'}).catch(() => null);
-    // Totals from another torrent client are meaningless, start over
-    if (doc != null && doc.client === this.user.client.client) {
+    // Totals from another torrent client instance are meaningless, start over
+    if (doc != null && doc.client === clientFingerprint(this.user.client)) {
       this.totals = {downBase: doc.downBase, upBase: doc.upBase, downLast: doc.downLast, upLast: doc.upLast};
     }
   };
@@ -89,7 +95,11 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   private persistTotals = async (): Promise<void> => {
     this.totalsLastPersisted = Date.now();
     await this.totalsDB
-      .updateAsync({_id: 'totals'}, {$set: {...this.totals, client: this.user.client.client}}, {upsert: true})
+      .updateAsync(
+        {_id: 'totals'},
+        {$set: {...this.totals, client: clientFingerprint(this.user.client)}},
+        {upsert: true},
+      )
       .catch(() => undefined);
   };
 
