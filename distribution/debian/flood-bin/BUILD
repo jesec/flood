@@ -36,12 +36,12 @@ genrule(
 
 genrule(
     name = "flood-icu-data",
-    srcs = ["scripts/fetch-icu-data.sh"],
+    srcs = ["scripts/fetch-icu-data.mjs"],
     outs = [
         "icu/icudt78l.dat",
         "icu/icudt78l.dat.LICENSE",
     ],
-    cmd = "sh $(location scripts/fetch-icu-data.sh) $(RULEDIR)/icu",
+    cmd = "node $(location scripts/fetch-icu-data.mjs) $(RULEDIR)/icu",
 )
 
 pkg_tar(

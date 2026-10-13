@@ -389,6 +389,9 @@ importers:
       typescript-eslint:
         specifier: 8.70.0
         version: 8.70.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)
+      unzipper:
+        specifier: 0.12.5
+        version: 0.12.5
       vite:
         specifier: 8.3.0
         version: 8.3.0(@types/node@22.20.4)(esbuild@0.28.1)(jiti@2.6.1)(sass@1.104.1)(terser@5.46.2)(tsx@4.23.1)(yaml@2.9.0)

@@ -99,7 +99,7 @@ jobs:
       # the ICU data has to sit next to the executables: everything uploaded below then shares
       # dist-pkg as the artifact root, which keeps the artifact and the release assets flat
       - name: Fetch ICU data
-        run: sh scripts/fetch-icu-data.sh package/dist-pkg
+        run: node scripts/fetch-icu-data.mjs package/dist-pkg
 
       - name: Verify executables work with ICU data
         working-directory: package
