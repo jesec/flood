@@ -1,6 +1,6 @@
 import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
-import fastifyRateLimit from '@fastify/rate-limit';
+import fastifyRateLimit, {normalizeIP} from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import swagger from '@fastify/swagger';
 import type {FastifyError, FastifyInstance} from 'fastify';
@@ -83,6 +83,7 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
   if (!config.disableRateLimit) {
     await fastify.register(fastifyRateLimit, {
       global: false,
+      keyGenerator: (request) => normalizeIP(request.ip || 'local'),
     });
   }
 
