@@ -157,6 +157,25 @@ const apiRoutes = async (fastify: FastifyInstance) => {
       },
     );
 
+    protectedRoutes.delete(
+      '/history/totals',
+      {
+        schema: {
+          summary: 'Reset transfer totals',
+          description: 'Reset the accumulated download/upload totals shown in the transfer summary.',
+          tags: ['Transfers'],
+          security: [{User: []}],
+          response: {
+            200: z.void(),
+          },
+        },
+      },
+      async (request) => {
+        const authedContext = getRequiredAuthContext(request);
+        await authedContext.services.historyService.resetTransferTotals();
+      },
+    );
+
     typedProtectedRoutes.get(
       '/notifications',
       {

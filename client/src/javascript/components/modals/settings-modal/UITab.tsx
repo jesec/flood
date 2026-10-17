@@ -1,7 +1,8 @@
 import {FC, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Form, FormRow, Select, SelectItem, Radio} from '@client/ui';
+import {Button, Form, FormRow, Select, SelectItem, Radio} from '@client/ui';
+import FloodActions from '@client/actions/FloodActions';
 import Languages from '@client/constants/Languages';
 import SettingStore from '@client/stores/SettingStore';
 
@@ -103,6 +104,14 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
       </ModalFormSectionHeader>
       <FormRow>
         <MiscUISettingsList onSettingsChange={onSettingsChange} />
+      </FormRow>
+      <ModalFormSectionHeader>
+        <Trans id="settings.ui.transfer.totals" />
+      </ModalFormSectionHeader>
+      <FormRow>
+        <Button type="button" onClick={() => FloodActions.resetTransferTotals()}>
+          <Trans id="settings.ui.transfer.totals.reset" />
+        </Button>
       </FormRow>
     </Form>
   );

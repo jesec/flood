@@ -75,6 +75,16 @@ const FloodActions = {
     );
   },
 
+  resetTransferTotals: () =>
+    axios.delete(`${baseURI}api/history/totals`).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
+
   closeActivityStream() {
     if (activityStreamEventSource == null) {
       return;
