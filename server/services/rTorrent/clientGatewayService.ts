@@ -33,7 +33,7 @@ import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import {cleanupEmptyDirectories, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {cleanupEmptyDirectories, isAllowedPath, removeDirectoryIfEmpty, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import * as geoip from '../geoip';
@@ -527,7 +527,13 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
             }
           }
 
-          await cleanupEmptyDirectories(sourceDirectory);
+          if (isMultiFile[index]) {
+            // multi-file torrents own the directory, so everything left empty inside it can be cleaned up
+            await cleanupEmptyDirectories(sourceDirectory);
+          } else {
+            // single-file torrents do not own the directory, so only remove it if the move left it empty
+            await removeDirectoryIfEmpty(sourceDirectory);
+          }
         }),
       );
     }
