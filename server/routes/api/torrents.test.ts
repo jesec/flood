@@ -432,6 +432,10 @@ describe('POST /api/torrents/move', () => {
   const destDirectory = path.join(tempDirectory, 'moved');
 
   it('Moves torrent', async () => {
+    // moving a single-file torrent must not touch unrelated directories inside its base directory
+    const unrelatedDirectory = path.join(tempDirectory, 'single', 'unrelated-empty');
+    fs.mkdirSync(unrelatedDirectory, {recursive: true});
+
     const moveTorrentsOptions: MoveTorrentsOptions = {
       hashes: [createdTorrentHash],
       destination: destDirectory,
@@ -451,6 +455,7 @@ describe('POST /api/torrents/move', () => {
     await new Promise((r) => setTimeout(r, 1000 * 2));
 
     expect(fs.existsSync(path.join(destDirectory, 'dummy'))).toBe(true);
+    expect(fs.existsSync(unrelatedDirectory)).toBe(true);
   });
 
   it('GET /api/torrents to verify torrent is moved', async () => {
