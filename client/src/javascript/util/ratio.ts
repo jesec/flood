@@ -26,9 +26,8 @@ export const getRatioLevel = (ratio: number): RatioLevel | null => {
   return 'great';
 };
 
-// A low ratio is expected while a torrent is still downloading, so only completed torrents are colored.
-export const getRatioClassName = (ratio: number, isComplete: boolean): string | undefined => {
-  const level = isComplete ? getRatioLevel(ratio) : null;
+export const getRatioClassName = (ratio: number): string | undefined => {
+  const level = getRatioLevel(ratio);
 
   return level == null ? undefined : `ratio ratio--${level}`;
 };

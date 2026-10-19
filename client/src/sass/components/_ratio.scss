@@ -5,6 +5,8 @@
 $ratio--levels: poor, low, even, good, great;
 
 .ratio {
+  font-weight: 600;
+
   @each $level in $ratio--levels {
     &--#{$level} {
       @include themes.theme('color', 'ratio--#{$level}');
@@ -27,7 +29,7 @@ $ratio--levels: poor, low, even, good, great;
   // Mute ratio colors for stopped torrents, like the rest of the row.
   &--is-stopped {
     .ratio {
-      opacity: 0.6;
+      opacity: 0.75;
     }
   }
 

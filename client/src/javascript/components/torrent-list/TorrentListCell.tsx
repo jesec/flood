@@ -93,15 +93,11 @@ const PeerCell: FC<{peersConnected: number; totalPeers: number}> = observer(
   },
 );
 
-const RatioCell: FC<{ratio: number; isComplete: boolean}> = observer(
-  ({ratio, isComplete}: {ratio: number; isComplete: boolean}) => {
-    const {i18n} = useLingui();
+const RatioCell: FC<{ratio: number}> = observer(({ratio}: {ratio: number}) => {
+  const {i18n} = useLingui();
 
-    return (
-      <span className={getRatioClassName(ratio, isComplete)}>{i18n.number(ratio, {maximumFractionDigits: 2})}</span>
-    );
-  },
-);
+  return <span className={getRatioClassName(ratio)}>{i18n.number(ratio, {maximumFractionDigits: 2})}</span>;
+});
 
 const TagsCell: FC<{tags: string[]}> = observer(({tags}: {tags: string[]}) => (
   <ul className="torrent__tags tag">
@@ -144,7 +140,7 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
       case 'sizeBytes':
         return <Size value={torrent[column]} />;
       case 'ratio':
-        return <RatioCell ratio={torrent[column]} isComplete={torrent.percentComplete >= 100} />;
+        return <RatioCell ratio={torrent[column]} />;
       case 'isPrivate':
         return <BooleanCell value={torrent[column]} />;
       case 'tags':

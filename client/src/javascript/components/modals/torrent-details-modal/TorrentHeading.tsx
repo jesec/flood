@@ -62,9 +62,7 @@ const TorrentHeading: FC = observer(() => {
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Ratio />
-            <span className={getRatioClassName(torrent.ratio, torrent.percentComplete >= 100)}>
-              {i18n.number(torrent.ratio)}
-            </span>
+            <span className={getRatioClassName(torrent.ratio)}>{i18n.number(torrent.ratio)}</span>
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Clock />
