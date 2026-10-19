@@ -6,6 +6,7 @@ import {Trans, useLingui} from '@lingui/react';
 
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
+import {getRatioClassName} from '@client/util/ratio';
 import {torrentStatusClasses, torrentStatusEffective} from '@client/util/torrentStatus';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
@@ -61,7 +62,9 @@ const TorrentHeading: FC = observer(() => {
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Ratio />
-            {i18n.number(torrent.ratio)}
+            <span className={getRatioClassName(torrent.ratio, torrent.percentComplete >= 100)}>
+              {i18n.number(torrent.ratio)}
+            </span>
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Clock />
