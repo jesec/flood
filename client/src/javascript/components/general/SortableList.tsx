@@ -12,6 +12,7 @@ interface SortableListProps {
   lockedIDs: Array<string>;
   items: string[];
   renderItem: (id: string, index: number) => ReactNode;
+  getItemClassName?: (id: string, index: number) => string | undefined;
   onMouseDown?: (event: MouseEvent) => void;
   onDrop?: (items: this['items']) => void;
 }
@@ -21,6 +22,7 @@ const SortableList: FC<SortableListProps> = ({
   items,
   lockedIDs,
   renderItem,
+  getItemClassName,
   onMouseDown,
   onDrop,
 }: SortableListProps) => {
@@ -71,7 +73,12 @@ const SortableList: FC<SortableListProps> = ({
           <ul className={classes}>
             {currentItems.map((id, index) => {
               return (
-                <SortableListItem id={id} disabled={lockedIDs.includes(id)} key={id}>
+                <SortableListItem
+                  id={id}
+                  disabled={lockedIDs.includes(id)}
+                  key={id}
+                  className={getItemClassName?.(id, index)}
+                >
                   {renderItem(id, index)}
                 </SortableListItem>
               );

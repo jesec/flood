@@ -34,8 +34,8 @@ $authentication--label--foreground: #3a5567;
 
       &__header {
         background: colors.$blue;
-        margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0 $authentication--form--padding *
-          -1;
+        margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0
+          $authentication--form--padding * -1;
         padding: $authentication--form--padding * 0.75 $authentication--form--padding;
 
         h1 {

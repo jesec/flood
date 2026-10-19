@@ -5,15 +5,16 @@ import './storybook-layout.css'; // Ensures proper layout hierarchy in Storybook
 
 // FloodActions is mocked via webpack alias but not used directly in preview
 import {i18n} from '@lingui/core';
-// Import language files with Lingui loader
-import {messages as enMessages} from '@lingui/loader!../client/src/javascript/i18n/strings/en.json?raw-lingui';
 import {I18nProvider} from '@lingui/react';
 import type {Preview} from '@storybook/react';
 import React, {useEffect} from 'react';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router';
+
+// Import language files with Lingui loader
+import {messages as enMessages} from '../client/src/javascript/i18n/strings/en.json?lingui';
 
 // Configure i18n with proper message format
-i18n.load('en', enMessages as Record<string, string[]>);
+i18n.load('en', enMessages);
 i18n.activate('en');
 
 const preview: Preview = {
@@ -103,7 +104,6 @@ const preview: Preview = {
           {value: 'light', title: 'Light'},
           {value: 'dark', title: 'Dark'},
         ],
-        showName: true,
       },
     },
   },

@@ -1,4 +1,5 @@
-import {FC, Suspense, useEffect, useState} from 'react';
+import classnames from 'classnames';
+import {FC, ReactNode, Suspense, useCallback, useEffect, useMemo, useState} from 'react';
 import {Trans} from '@lingui/react';
 import {useInterval} from 'react-use';
 
@@ -7,6 +8,8 @@ import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
+import sortPeers from '@client/util/sortPeers';
+import type {PeerSortBy, PeerSortProperty} from '@client/util/sortPeers';
 
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
@@ -15,10 +18,9 @@ import Size from '../../general/Size';
 
 const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
-  const [pollingDelay, setPollingDelay] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<PeerSortBy | null>(null);
 
-  const fetchPeers = () => {
-    setPollingDelay(null);
+  const fetchPeers = useCallback(() => {
     if (UIStore.activeModal?.id === 'torrent-details') {
       TorrentActions.fetchTorrentPeers(UIStore.activeModal?.hash).then((data) => {
         if (data != null) {
@@ -26,11 +28,41 @@ const TorrentPeers: FC = () => {
         }
       });
     }
-    setPollingDelay(ConfigStore.pollInterval);
+  }, []);
+
+  useEffect(() => fetchPeers(), [fetchPeers]);
+  useInterval(fetchPeers, ConfigStore.pollInterval);
+
+  const sortedPeers = useMemo(() => (sortBy == null ? peers : sortPeers(peers, sortBy)), [peers, sortBy]);
+
+  const handleSort = (property: PeerSortProperty) => {
+    setSortBy((current) => {
+      if (current?.property === property) {
+        return {property, direction: current.direction === 'asc' ? 'desc' : 'asc'};
+      }
+      return {property, direction: 'desc'};
+    });
   };
 
-  useEffect(() => fetchPeers(), []);
-  useInterval(() => fetchPeers(), pollingDelay);
+  const renderHeading = (property: PeerSortProperty, label: ReactNode) => {
+    const isSorted = sortBy?.property === property;
+    const classes = classnames(
+      'torrent-details__table__heading--secondary',
+      'torrent-details__table__heading--sortable',
+      {
+        'torrent-details__table__heading--is-sorted': isSorted,
+        [`torrent-details__table__heading--direction--${sortBy?.direction}`]: isSorted,
+      },
+    );
+
+    return (
+      <th aria-sort={isSorted ? (sortBy.direction === 'asc' ? 'ascending' : 'descending') : 'none'} scope="col">
+        <button className={classes} type="button" onClick={() => handleSort(property)}>
+          {label}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="torrent-details__section torrent-details__section--peers">
@@ -50,16 +82,16 @@ const TorrentPeers: FC = () => {
               <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
-            <th className="torrent-details__table__heading--secondary">DL</th>
-            <th className="torrent-details__table__heading--secondary">UL</th>
-            <th className="torrent-details__table__heading--secondary">%</th>
+            {renderHeading('downloadRate', 'DL')}
+            {renderHeading('uploadRate', 'UL')}
+            {renderHeading('completedPercent', '%')}
             <th className="torrent-details__table__heading--secondary">Client</th>
             <th className="torrent-details__table__heading--secondary">Enc</th>
             <th className="torrent-details__table__heading--secondary">In</th>
           </tr>
         </thead>
         <tbody>
-          {peers.map((peer) => {
+          {sortedPeers.map((peer) => {
             const {country: countryCode} = peer;
             const encryptedIcon = peer.isEncrypted ? <Lock /> : null;
             const incomingIcon = peer.isIncoming ? <CheckmarkThick /> : null;

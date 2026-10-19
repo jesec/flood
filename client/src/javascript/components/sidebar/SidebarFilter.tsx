@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {createRef, FC, ReactNode, KeyboardEvent, MouseEvent, RefObject, TouchEvent, useEffect, useState} from 'react';
+import {FC, ReactNode, KeyboardEvent, MouseEvent, RefObject, TouchEvent, useEffect, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
@@ -15,15 +15,25 @@ const focusStyle = css({
   },
 });
 
-const useRefTextOverflowed = (ref: RefObject<HTMLElement>) => {
+const useRefTextOverflowed = (ref: RefObject<HTMLElement | null>, content: string) => {
   const [overflowed, setOverflowed] = useState(false);
 
   useEffect(() => {
-    if (ref.current) {
-      const {current} = ref;
-      setOverflowed(current.scrollWidth > current.clientWidth);
-    }
-  }, [ref, ref?.current?.scrollWidth, ref?.current?.clientWidth]);
+    const element = ref.current;
+    if (element == null) return undefined;
+
+    const updateOverflowed = () => {
+      setOverflowed(element.scrollWidth > element.clientWidth);
+    };
+    const animationFrameId = window.requestAnimationFrame(updateOverflowed);
+    const resizeObserver = new ResizeObserver(updateOverflowed);
+    resizeObserver.observe(element);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      resizeObserver.disconnect();
+    };
+  }, [content, ref]);
 
   return overflowed;
 };
@@ -49,11 +59,8 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
   size,
   handleClick,
 }: SidebarFilterProps) => {
-  const nameSpanRef = createRef<HTMLSpanElement>();
-  const overflowed = useRefTextOverflowed(nameSpanRef);
-
+  const nameSpanRef = useRef<HTMLSpanElement>(null);
   const {i18n} = useLingui();
-
   const [expanded, setExpanded] = useState(false);
 
   const classNames = classnames('sidebar-filter__item', {
@@ -64,21 +71,26 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
     expanded: expanded,
   });
 
+  let isHidden = false;
   let name = _name;
   if (name === '') {
     name = i18n._('filter.all');
   } else if (name === 'untagged') {
     if (count === 0) {
-      return null;
+      isHidden = true;
     }
     name = i18n._('filter.untagged');
   }
 
-  if (slug === 'checking' || slug === 'error') {
+  if (slug === 'checking' || slug === 'moving' || slug === 'error') {
     if (count === 0) {
-      return null;
+      isHidden = true;
     }
   }
+
+  const overflowed = useRefTextOverflowed(nameSpanRef, name);
+
+  if (isHidden) return null;
 
   return (
     <li>

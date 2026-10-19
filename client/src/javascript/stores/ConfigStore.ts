@@ -20,7 +20,7 @@ const queryUserPreferDark = (): boolean | null => {
 };
 
 class ConfigStore {
-  baseURI = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/') + 1);
+  baseURI = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
   authMethod: AuthMethod = 'default';
   pollInterval = 2000;
 

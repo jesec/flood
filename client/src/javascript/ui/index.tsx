@@ -21,4 +21,5 @@ export {default as Radio} from './components/Radio';
 export {default as Select} from './components/Select';
 export {default as SelectItem} from './components/SelectItem';
 export {default as Textbox} from './components/Textbox';
+export {default as Transition, getTransitionClassName} from './components/Transition';
 export {default as ToggleInput} from './components/ToggleInput';

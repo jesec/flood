@@ -9,10 +9,11 @@ interface SortableListItemProps {
   children?: ReactNode;
   id: string;
   disabled?: boolean;
+  className?: string;
 }
 
 const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProps) => {
-  const {children, id, disabled} = props;
+  const {children, id, disabled, className} = props;
   const {attributes, setNodeRef, listeners, transform, transition, isDragging} = useSortable({id, disabled});
 
   const style = {
@@ -22,10 +23,14 @@ const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProp
 
   return (
     <div
-      className={classnames('sortable-list__item', {
-        'sortable-list__item--is-dragging': isDragging,
-        'sortable-list__item--is-locked': disabled,
-      })}
+      className={classnames(
+        'sortable-list__item',
+        {
+          'sortable-list__item--is-dragging': isDragging,
+          'sortable-list__item--is-locked': disabled,
+        },
+        className,
+      )}
       ref={setNodeRef}
       style={style}
       {...attributes}

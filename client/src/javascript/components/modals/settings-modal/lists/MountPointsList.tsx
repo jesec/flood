@@ -40,10 +40,13 @@ const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPoin
     })(),
   );
 
-  const diskItemVisiblity = diskItems.reduce((memo, {id, visible}) => {
-    memo[id] = visible;
-    return memo;
-  }, {} as Record<string, boolean>);
+  const diskItemVisiblity = diskItems.reduce(
+    (memo, {id, visible}) => {
+      memo[id] = visible;
+      return memo;
+    },
+    {} as Record<string, boolean>,
+  );
 
   return (
     <SortableList
@@ -51,7 +54,11 @@ const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPoin
       items={diskItems.map(({id}) => id)}
       lockedIDs={[]}
       onDrop={(items) => {
-        setDiskItems(items.map((id) => ({id, visible: diskItemVisiblity[id]})));
+        const newItems = items.map((id) => ({id, visible: diskItemVisiblity[id]}));
+        onSettingsChange({
+          mountPoints: newItems.filter((newItem) => newItem.visible).map((newItem) => newItem.id),
+        });
+        setDiskItems(newItems);
       }}
       renderItem={(id) => {
         const checkbox = (

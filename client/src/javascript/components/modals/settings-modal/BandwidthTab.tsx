@@ -1,4 +1,4 @@
-import {FC, FormEvent, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Trans} from '@lingui/react';
 
 import {Form, FormRow, Textbox} from '@client/ui';
@@ -39,7 +39,13 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
 
   return (
     <Form
-      onChange={({event, formData}: {event: Event | FormEvent<HTMLFormElement>; formData: Record<string, unknown>}) => {
+      onChange={({
+        event,
+        formData,
+      }: {
+        event: Event | React.SyntheticEvent<HTMLFormElement>;
+        formData: Record<string, unknown>;
+      }) => {
         const inputElement = event.target as HTMLInputElement;
 
         if (inputElement.name === 'dropdownPresetDownload' || inputElement.name === 'dropdownPresetUpload') {

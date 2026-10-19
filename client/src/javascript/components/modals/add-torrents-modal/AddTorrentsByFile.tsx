@@ -12,7 +12,7 @@ import FileDropzone from '../../general/form-elements/FileDropzone';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
 
-import type {ProcessedFiles} from '../../general/form-elements/FileDropzone';
+import type {ProcessedFiles} from '@client/util/processFiles';
 
 interface AddTorrentsByFileFormData {
   destination: string;
@@ -95,7 +95,7 @@ const AddTorrentsByFile: FC = () => {
           const tagsArray = tags != null ? tags.split(',').filter((tag) => tag.length > 0) : undefined;
 
           TorrentActions.addTorrentsByFiles({
-            files: filesData as [string, ...string[]],
+            files: filesData,
             destination,
             tags: tagsArray,
             isBasePath,

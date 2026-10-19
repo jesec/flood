@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, InputHTMLAttributes, MouseEvent, ReactNode, useRef} from 'react';
+import {FC, InputHTMLAttributes, JSX, MouseEvent, ReactNode, useRef} from 'react';
 
 import {dispatchChangeEvent} from './util/forms';
 import FormRowItem from './FormRowItem';

@@ -42,7 +42,7 @@ const onError = (err: Error) => {
 
 const closeTag = (elementName: string) => {
   let stackMark;
-  const tagValue = tmpData.join('');
+  const tagValue = (tmpData as string[]).join('');
   switch (elementName) {
     case 'boolean':
       dataStack.push(tagValue === '1');

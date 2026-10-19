@@ -1,4 +1,4 @@
-FROM docker.io/alpine as build
+FROM docker.io/alpine AS build
 
 WORKDIR /root
 
@@ -13,9 +13,22 @@ RUN if [[ `uname -m` == "aarch64" ]]; \
     fi
 RUN mv flood /root/sysroot/bin/flood
 
+# The executables embed a small-icu Node.js, which needs the ICU data for Intl.Segmenter
+RUN mkdir -p /root/sysroot/usr/share/icu \
+    && mv artifacts/icudt78l.dat artifacts/icudt78l.dat.LICENSE /root/sysroot/usr/share/icu/
 
-RUN apk --no-cache add tini-static coreutils
-RUN cp /bin/df /root/sysroot/bin/df
+
+ARG COREUTILS_VERSION=0.9.0
+ARG TARGETARCH
+RUN if [ "$TARGETARCH" = "arm64" ]; then COREUTILS_ARCH="aarch64"; else COREUTILS_ARCH="x86_64"; fi \
+    && wget -qO /tmp/coreutils.tar.gz \
+       "https://github.com/uutils/coreutils/releases/download/${COREUTILS_VERSION}/coreutils-${COREUTILS_VERSION}-${COREUTILS_ARCH}-unknown-linux-musl.tar.gz" \
+    && tar xzf /tmp/coreutils.tar.gz -C /tmp \
+    && mv /tmp/coreutils-${COREUTILS_VERSION}-${COREUTILS_ARCH}-unknown-linux-musl/coreutils /root/sysroot/bin/coreutils \
+    && ln -s coreutils /root/sysroot/bin/df \
+    && rm -rf /tmp/coreutils.tar.gz /tmp/coreutils-*
+
+RUN apk --no-cache add tini-static
 RUN cp /sbin/tini-static /root/sysroot/bin/tini
 
 RUN chmod 0555 /root/sysroot/bin/*
@@ -25,12 +38,14 @@ RUN mkdir -p /root/sysroot/home/download
 RUN chown 1001:1001 /root/sysroot/home/download
 
 # flood image
-FROM scratch as flood
+FROM scratch AS flood
+LABEL org.opencontainers.image.source="https://github.com/jesec/flood"
 
 COPY --from=build /root/sysroot /
 
 # Run as 1001:1001 user
 ENV HOME=/home/download
+ENV NODE_ICU_DATA=/usr/share/icu
 USER 1001:1001
 
 # Expose port 3000
@@ -40,12 +55,4 @@ EXPOSE 3000
 ENV FLOOD_OPTION_HOST="0.0.0.0"
 ENTRYPOINT ["/bin/tini", "--", "flood"]
 
-# rtorrent-flood image
-FROM docker.io/jesec/rtorrent:master as rtorrent
-FROM flood as rtorrent-flood
 
-# Install rTorrent
-COPY --from=rtorrent / /
-
-# Flood with managed rTorrent daemon
-ENV FLOOD_OPTION_RTORRENT="true"

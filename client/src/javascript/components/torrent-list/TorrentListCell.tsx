@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
-import {FC} from 'react';
+import {FC, JSX} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
@@ -27,8 +27,10 @@ import {
 import Duration from '@client/components/general/Duration';
 import ProgressBar from '@client/components/general/ProgressBar';
 import Size from '@client/components/general/Size';
+import {formatDate, formatNumber} from '@client/util/format';
 import {getRatioClassName} from '@client/util/ratio';
 import {torrentStatusEffective} from '@client/util/torrentStatus';
+import SettingStore from '@client/stores/SettingStore';
 import TorrentStore from '@client/stores/TorrentStore';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
@@ -67,7 +69,12 @@ const DateCell: FC<{date: number}> = observer(({date}: {date: number}) => {
     return null;
   }
 
-  return <span>{i18n.date(new Date(date * 1000))}</span>;
+  // -1 is the client gateways' "currently active" sentinel for dateActive
+  if (date === -1) {
+    return <span>{i18n._('torrents.details.general.date.active.now')}</span>;
+  }
+
+  return <span>{formatDate(i18n.locale, new Date(date * 1000))}</span>;
 });
 
 const ETACell: FC<{eta: number}> = observer(({eta}: {eta: number}) => (eta ? <Duration value={eta} /> : null));
@@ -80,13 +87,13 @@ const PeerCell: FC<{peersConnected: number; totalPeers: number}> = observer(
       <Trans
         id="torrent.list.peers"
         values={{
-          connected: i18n.number(peersConnected),
+          connected: formatNumber(i18n.locale, peersConnected),
           of: (
             <em className="unit">
               <Trans id="torrent.list.peers.of" />
             </em>
           ),
-          total: i18n.number(totalPeers),
+          total: formatNumber(i18n.locale, totalPeers),
         }}
       />
     );
@@ -96,7 +103,9 @@ const PeerCell: FC<{peersConnected: number; totalPeers: number}> = observer(
 const RatioCell: FC<{ratio: number}> = observer(({ratio}: {ratio: number}) => {
   const {i18n} = useLingui();
 
-  return <span className={getRatioClassName(ratio)}>{i18n.number(ratio, {maximumFractionDigits: 2})}</span>;
+  return (
+    <span className={getRatioClassName(ratio)}>{formatNumber(i18n.locale, ratio, {maximumFractionDigits: 2})}</span>
+  );
 });
 
 const TagsCell: FC<{tags: string[]}> = observer(({tags}: {tags: string[]}) => (
@@ -139,6 +148,8 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return <Size value={torrent[column]} />;
       case 'sizeBytes':
         return <Size value={torrent[column]} />;
+      case 'selectedSizeBytes':
+        return <Size value={torrent[column]} />;
       case 'ratio':
         return <RatioCell ratio={torrent[column]} />;
       case 'isPrivate':
@@ -156,8 +167,17 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
       case 'percentComplete':
         return (
           <ProgressBar
-            percent={computed(() => Math.ceil(torrent.percentComplete)).get()}
-            status={computed(() => torrentStatusEffective(torrent.status)).get()}
+            percent={computed(() => torrent.percentComplete).get()}
+            status={computed(() =>
+              torrentStatusEffective(torrent.status, {
+                trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled,
+              }),
+            ).get()}
+            showPercentLabel={computed(
+              () =>
+                SettingStore.floodSettings.torrentListViewSize === 'condensed' &&
+                SettingStore.floodSettings.torrentListShowProgressPercent,
+            ).get()}
           />
         );
       default:

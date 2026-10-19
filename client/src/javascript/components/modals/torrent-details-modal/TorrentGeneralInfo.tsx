@@ -6,6 +6,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import LinkedText from '../../general/LinkedText';
 import Size from '../../general/Size';
+import {formatDate, formatNumber} from '../../../util/format';
 import TorrentStore from '../../../stores/TorrentStore';
 import UIStore from '../../../stores/UIStore';
 
@@ -49,7 +50,7 @@ const TorrentGeneralInfo: FC = observer(() => {
             </td>
             <td className="torrent-details__detail__value">
               {torrent.dateAdded > 0
-                ? i18n.date(new Date(torrent.dateAdded * 1000), {
+                ? formatDate(i18n.locale, new Date(torrent.dateAdded * 1000), {
                     year: 'numeric',
                     month: 'long',
                     day: '2-digit',
@@ -84,7 +85,7 @@ const TorrentGeneralInfo: FC = observer(() => {
             </td>
             <td className="torrent-details__detail__value">
               {torrent.dateFinished > 0
-                ? i18n.date(new Date(torrent.dateFinished * 1000), {
+                ? formatDate(i18n.locale, new Date(torrent.dateFinished * 1000), {
                     year: 'numeric',
                     month: 'long',
                     day: '2-digit',
@@ -99,7 +100,7 @@ const TorrentGeneralInfo: FC = observer(() => {
               <Trans id="torrents.details.general.downloaded" />
             </td>
             <td className="torrent-details__detail__value">
-              {i18n.number(torrent.percentComplete)}
+              {formatNumber(i18n.locale, torrent.percentComplete)}
               <em className="unit">%</em>
             </td>
           </tr>
@@ -112,8 +113,8 @@ const TorrentGeneralInfo: FC = observer(() => {
                 id="torrents.details.general.connected"
                 values={{
                   connectedCount: torrent.peersConnected,
-                  connected: i18n.number(torrent.peersConnected),
-                  total: i18n.number(torrent.peersTotal),
+                  connected: formatNumber(i18n.locale, torrent.peersConnected),
+                  total: formatNumber(i18n.locale, torrent.peersTotal),
                 }}
               />
             </td>
@@ -127,8 +128,8 @@ const TorrentGeneralInfo: FC = observer(() => {
                 id="torrents.details.general.connected"
                 values={{
                   connectedCount: torrent.seedsConnected,
-                  connected: i18n.number(torrent.seedsConnected),
-                  total: i18n.number(torrent.seedsTotal),
+                  connected: formatNumber(i18n.locale, torrent.seedsConnected),
+                  total: formatNumber(i18n.locale, torrent.seedsTotal),
                 }}
               />
             </td>
@@ -147,7 +148,7 @@ const TorrentGeneralInfo: FC = observer(() => {
                   return i18n._('torrents.details.general.date.active.now');
                 }
 
-                return i18n.date(new Date(torrent.dateActive * 1000), {
+                return formatDate(i18n.locale, new Date(torrent.dateActive * 1000), {
                   year: 'numeric',
                   month: 'long',
                   day: '2-digit',
@@ -168,7 +169,7 @@ const TorrentGeneralInfo: FC = observer(() => {
             </td>
             <td className="torrent-details__detail__value">
               {torrent.dateCreated > 0
-                ? i18n.date(new Date(torrent.dateCreated * 1000), {
+                ? formatDate(i18n.locale, new Date(torrent.dateCreated * 1000), {
                     year: 'numeric',
                     month: 'long',
                     day: '2-digit',

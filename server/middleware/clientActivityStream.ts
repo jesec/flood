@@ -1,25 +1,18 @@
 import type {Operation} from 'fast-json-patch';
 import type {FastifyReply, FastifyRequest} from 'fastify';
-import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
+import type {EventMap} from 'typed-emitter';
 
 import type {TransferHistory} from '../../shared/types/TransferData';
-import {UnauthorizedError} from '../errors';
 import type {DiskUsageSummary} from '../models/DiskUsage';
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
-import {getAllServices} from '../services';
+import {getRequiredAuthContext} from './authenticate';
 
 export default async (req: FastifyRequest, reply: FastifyReply) => {
-  const {user} = req;
-
-  if (user == null) {
-    throw new UnauthorizedError();
-  }
+  const {services: serviceInstances} = getRequiredAuthContext(req);
 
   reply.sse.keepAlive();
-
-  const serviceInstances = getAllServices(user);
   const serverEvent = new ServerEvent(reply);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 

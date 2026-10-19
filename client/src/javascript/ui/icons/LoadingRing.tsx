@@ -2,13 +2,18 @@ import classnames from 'classnames';
 import {FC} from 'react';
 
 interface LoadingRingProps {
+  className?: string;
   size?: string;
 }
 
-const LoadingRing: FC<LoadingRingProps> = ({size = 'small'}: LoadingRingProps = {}) => {
-  const classes = classnames('icon icon--loading icon--loading--ring', {
-    'icon--small': size === 'small',
-  });
+const LoadingRing: FC<LoadingRingProps> = ({className, size = 'small'}: LoadingRingProps = {}) => {
+  const classes = classnames(
+    'icon icon--loading icon--loading--ring',
+    {
+      'icon--small': size === 'small',
+    },
+    className,
+  );
 
   return (
     <div className={classes}>

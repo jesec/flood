@@ -8,6 +8,8 @@ import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/
 import TorrentActions from '@client/actions/TorrentActions';
 import {getRatioClassName} from '@client/util/ratio';
 import {torrentStatusClasses, torrentStatusEffective} from '@client/util/torrentStatus';
+import {formatNumber} from '@client/util/format';
+import SettingStore from '@client/stores/SettingStore';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
 
@@ -40,6 +42,7 @@ const TorrentHeading: FC = observer(() => {
       upRate: torrent.upRate,
       downRate: torrent.downRate,
     },
+    {trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled},
     'torrent-details__header',
   );
 
@@ -62,7 +65,7 @@ const TorrentHeading: FC = observer(() => {
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Ratio />
-            <span className={getRatioClassName(torrent.ratio)}>{i18n.number(torrent.ratio)}</span>
+            <span className={getRatioClassName(torrent.ratio)}>{formatNumber(i18n.locale, torrent.ratio)}</span>
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Clock />
@@ -122,7 +125,11 @@ const TorrentHeading: FC = observer(() => {
       </div>
       <ProgressBar
         percent={computed(() => Math.ceil(torrent.percentComplete)).get()}
-        status={computed(() => torrentStatusEffective(torrent.status)).get()}
+        status={computed(() =>
+          torrentStatusEffective(torrent.status, {
+            trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled,
+          }),
+        ).get()}
       />
     </div>
   );

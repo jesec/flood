@@ -39,10 +39,10 @@ const value = (value: XMLRPCValue): string => {
     value = value.toString('base64');
   } else {
     type = 'struct';
-    value = members(value);
+    value = members(value as {[key: string]: XMLRPCValue});
   }
 
-  return `<value><${type}>${value}</${type}></value>`;
+  return `<value><${type}>${value as string}</${type}></value>`;
 };
 
 const data = (values: XMLRPCValue[]) => {

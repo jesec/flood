@@ -101,6 +101,23 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.custom=addtime',
     transformValue: numberTransformer,
   },
+  selectedSizeData: {
+    methodCall: 'd.custom=flood.selected_size',
+    transformValue: (value: unknown): {selectedSize: number; lastUpdateAt: number} => {
+      if (typeof value !== 'string' || value === '') {
+        return {selectedSize: 0, lastUpdateAt: 0};
+      }
+      try {
+        const parsed = JSON.parse(value);
+        return {
+          selectedSize: typeof parsed.selected_size === 'number' ? parsed.selected_size : 0,
+          lastUpdateAt: typeof parsed.last_update_at === 'number' ? parsed.last_update_at : 0,
+        };
+      } catch {
+        return {selectedSize: 0, lastUpdateAt: 0};
+      }
+    },
+  },
   dateCreated: {
     methodCall: 'd.creation_date=',
     transformValue: numberTransformer,
@@ -139,7 +156,7 @@ const torrentListMethodCallConfigs = {
             return trackers;
           }
 
-          trackers.push(tracker.substr(1));
+          trackers.push(tracker.substring(1));
 
           return trackers;
         }, []),
@@ -156,7 +173,7 @@ const torrentListMethodCallConfigs = {
       if (typeof value !== 'string') {
         return 0;
       }
-      return Number(value.substr(0, value.indexOf('|||')));
+      return Number(value.substring(0, value.indexOf('|||')));
     },
   },
   peersConnected: {
@@ -169,7 +186,7 @@ const torrentListMethodCallConfigs = {
       if (typeof value !== 'string') {
         return 0;
       }
-      return Number(value.substr(0, value.indexOf('|||')));
+      return Number(value.substring(0, value.indexOf('|||')));
     },
   },
 } as const;

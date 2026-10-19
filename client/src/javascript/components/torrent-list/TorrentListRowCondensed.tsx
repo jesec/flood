@@ -14,7 +14,7 @@ interface TorrentListRowCondensedProps {
   handleRightClick: (hash: string, event: MouseEvent) => void;
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
-  handleKeyPress: (event: KeyboardEvent) => void;
+  handleKeyDown: (event: KeyboardEvent) => void;
   'data-testid'?: string;
   'data-torrent-status'?: string;
   'data-torrent-name'?: string;
@@ -34,7 +34,7 @@ const TorrentListRowCondensed = observer(
         handleRightClick,
         handleTouchStart,
         handleTouchEnd,
-        handleKeyPress,
+        handleKeyDown,
         ...dataAttributes
       }: TorrentListRowCondensedProps,
       ref,
@@ -75,7 +75,7 @@ const TorrentListRowCondensed = observer(
           onDoubleClick={() => handleDoubleClick(hash)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           ref={ref}
           {...dataAttributes}
         >

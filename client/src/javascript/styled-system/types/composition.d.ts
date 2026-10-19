@@ -1,13 +1,13 @@
 /* eslint-disable */
-import type {CompositionStyleObject} from './system-types';
+import type {  CompositionStyleObject  } from './system-types';
 
 interface Token<T> {
-  value: T;
-  description?: string;
+  value: T
+  description?: string
 }
 
 interface Recursive<T> {
-  [key: string]: Recursive<T> | T;
+  [key: string]: Recursive<T> | T
 }
 
 /* -----------------------------------------------------------------------------
@@ -15,6 +15,8 @@ interface Recursive<T> {
  * -----------------------------------------------------------------------------*/
 
 type TextStyleProperty =
+  | 'color'
+  | 'direction'
   | 'font'
   | 'fontFamily'
   | 'fontFeatureSettings'
@@ -35,6 +37,7 @@ type TextStyleProperty =
   | 'fontVariantPosition'
   | 'fontVariationSettings'
   | 'fontWeight'
+  | 'hangingPunctuation'
   | 'hypens'
   | 'hyphenateCharacter'
   | 'hyphenateLimitChars'
@@ -43,11 +46,20 @@ type TextStyleProperty =
   | 'lineHeight'
   | 'quotes'
   | 'overflowWrap'
+  | 'tabSize'
+  | 'textAlign'
+  | 'textAlignLast'
+  | 'textBox'
+  | 'textBoxEdge'
+  | 'textBoxTrim'
   | 'textCombineUpright'
   | 'textDecoration'
   | 'textDecorationColor'
   | 'textDecorationLine'
+  | 'textDecorationSkip'
+  | 'textDecorationSkipBox'
   | 'textDecorationSkipInk'
+  | 'textDecorationSkipInset'
   | 'textDecorationStyle'
   | 'textDecorationThickness'
   | 'textEmphasis'
@@ -60,58 +72,117 @@ type TextStyleProperty =
   | 'textOverflow'
   | 'textRendering'
   | 'textShadow'
+  | 'textStroke'
+  | 'textStrokeColor'
+  | 'textStrokeWidth'
   | 'textTransform'
   | 'textUnderlineOffset'
   | 'textUnderlinePosition'
   | 'textWrap'
   | 'textWrapMode'
   | 'textWrapStyle'
+  | 'unicodeBidi'
   | 'verticalAlign'
   | 'whiteSpace'
   | 'wordBreak'
-  | 'wordSpacing';
+  | 'wordSpacing'
+  | 'writingMode'
 
-export type TextStyle = CompositionStyleObject<TextStyleProperty>;
+export type TextStyle = CompositionStyleObject<TextStyleProperty>
 
-export type TextStyles = Recursive<Token<TextStyle>>;
+export type TextStyles = Recursive<Token<TextStyle>>
 
 /* -----------------------------------------------------------------------------
  * Layer styles
  * -----------------------------------------------------------------------------*/
 
-type Placement =
-  | 'Top'
-  | 'Right'
-  | 'Bottom'
-  | 'Left'
-  | 'Inline'
-  | 'Block'
-  | 'InlineStart'
-  | 'InlineEnd'
-  | 'BlockStart'
-  | 'BlockEnd';
+type LogicalPlacement = 'Inline' | 'Block' | 'InlineStart' | 'InlineEnd' | 'BlockStart' | 'BlockEnd'
+
+type PhysicalPlacement = 'Top' | 'Right' | 'Bottom' | 'Left'
+
+type Placement = PhysicalPlacement | LogicalPlacement
 
 type Radius =
   | `Top${'Right' | 'Left'}`
   | `Bottom${'Right' | 'Left'}`
   | `Start${'Start' | 'End'}`
-  | `End${'Start' | 'End'}`;
+  | `End${'Start' | 'End'}`
 
 type LayerStyleProperty =
+  | 'aspectRatio'
   | 'background'
   | 'backgroundColor'
   | 'backgroundImage'
-  | 'borderRadius'
   | 'border'
-  | 'borderWidth'
   | 'borderColor'
+  | 'borderImage'
+  | 'borderImageOutset'
+  | 'borderImageRepeat'
+  | 'borderImageSlice'
+  | 'borderImageSource'
+  | 'borderImageWidth'
+  | 'borderRadius'
   | 'borderStyle'
+  | 'borderWidth'
+  | `border${Placement}`
+  | `border${Placement}Color`
+  | `border${Placement}Style`
+  | `border${Placement}Width`
+  | 'borderRadius'
+  | `border${Radius}Radius`
   | 'boxShadow'
+  | 'boxShadowColor'
+  | 'clipPath'
+  | 'color'
+  | 'contain'
+  | 'content'
+  | 'contentVisibility'
+  | 'cursor'
+  | 'display'
   | 'filter'
   | 'backdropFilter'
-  | 'transform'
-  | 'color'
+  | 'height'
+  | 'width'
+  | 'minHeight'
+  | 'minWidth'
+  | 'maxHeight'
+  | 'maxWidth'
+  | `margin${Placement}`
+  | 'inset'
+  | `inset${LogicalPlacement}`
+  | Lowercase<PhysicalPlacement>
+  | 'isolation'
+  | 'mask'
+  | 'maskClip'
+  | 'maskComposite'
+  | 'maskImage'
+  | 'maskMode'
+  | 'maskOrigin'
+  | 'maskPosition'
+  | 'maskRepeat'
+  | 'maskSize'
+  | 'mixBlendMode'
+  | 'objectFit'
+  | 'objectPosition'
   | 'opacity'
+  | 'outline'
+  | 'outlineColor'
+  | 'outlineOffset'
+  | 'outlineStyle'
+  | 'outlineWidth'
+  | 'overflow'
+  | 'overflowX'
+  | 'overflowY'
+  | 'padding'
+  | `padding${Placement}`
+  | 'pointerEvents'
+  | 'position'
+  | 'resize'
+  | 'transform'
+  | 'transition'
+  | 'visibility'
+  | 'willChange'
+  | 'zIndex'
   | 'backgroundBlendMode'
   | 'backgroundAttachment'
   | 'backgroundClip'
@@ -119,18 +190,10 @@ type LayerStyleProperty =
   | 'backgroundPosition'
   | 'backgroundRepeat'
   | 'backgroundSize'
-  | `border${Placement}`
-  | `border${Placement}Width`
-  | 'borderRadius'
-  | `border${Radius}Radius`
-  | `border${Placement}Color`
-  | `border${Placement}Style`
-  | 'padding'
-  | `padding${Placement}`;
 
-export type LayerStyle = CompositionStyleObject<LayerStyleProperty>;
+export type LayerStyle = CompositionStyleObject<LayerStyleProperty>
 
-export type LayerStyles = Recursive<Token<LayerStyle>>;
+export type LayerStyles = Recursive<Token<LayerStyle>>
 
 /* -----------------------------------------------------------------------------
  * Motion styles
@@ -151,14 +214,14 @@ type AnimationStyleProperty =
   | 'animationRangeStart'
   | 'animationRangeEnd'
   | 'animationTimeline'
-  | 'transformOrigin';
+  | 'transformOrigin'
 
-export type AnimationStyle = CompositionStyleObject<AnimationStyleProperty>;
+export type AnimationStyle = CompositionStyleObject<AnimationStyleProperty>
 
-export type AnimationStyles = Recursive<Token<AnimationStyle>>;
+export type AnimationStyles = Recursive<Token<AnimationStyle>>
 
 export interface CompositionStyles {
-  textStyles: TextStyles;
-  layerStyles: LayerStyles;
-  animationStyles: AnimationStyles;
+  textStyles: TextStyles
+  layerStyles: LayerStyles
+  animationStyles: AnimationStyles
 }

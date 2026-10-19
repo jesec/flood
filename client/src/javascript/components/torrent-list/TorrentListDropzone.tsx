@@ -1,28 +1,14 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useEffect} from 'react';
 import {useDropzone} from 'react-dropzone';
 
 import UIStore from '@client/stores/UIStore';
-
-import type {ProcessedFiles} from '@client/components/general/form-elements/FileDropzone';
+import processFiles from '@client/util/processFiles';
 
 const handleFileDrop = (files: Array<File>) => {
-  const processedFiles: ProcessedFiles = [];
-
-  files.forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      if (e.target?.result != null && typeof e.target.result === 'string') {
-        processedFiles.push({
-          name: file.name,
-          data: e.target.result.split('base64,')[1],
-        });
-      }
-
-      if (processedFiles.length === files.length && processedFiles[0] != null) {
-        UIStore.setActiveModal({id: 'add-torrents', tab: 'by-file', files: processedFiles});
-      }
-    };
-    reader.readAsDataURL(file);
+  void processFiles(files).then((processedFiles) => {
+    if (processedFiles.length > 0) {
+      UIStore.setActiveModal({id: 'add-torrents', tab: 'by-file', files: processedFiles});
+    }
   });
 };
 
@@ -32,6 +18,17 @@ const TorrentListDropzone: FC<{children: ReactNode}> = ({children}: {children: R
     noClick: true,
     noKeyboard: true,
   });
+
+  // When opened as the OS handler for a .torrent file, launchQueue buffers the launch until
+  // a consumer registers, so a cold launch onto the login screen is still delivered once this
+  // mounts post-auth.
+  useEffect(() => {
+    window.launchQueue?.setConsumer(({files}) => {
+      if (files != null && files.length > 0) {
+        void Promise.all(files.map((handle) => handle.getFile())).then(handleFileDrop);
+      }
+    });
+  }, []);
 
   return (
     <div

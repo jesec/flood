@@ -1,69 +1,93 @@
-import type {UserInDatabase} from '@shared/schema/Auth';
+import {clientSettingsSchema, setClientSettingsSchema} from '@shared/schema/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
+import {boolean, strictObject, z} from 'zod';
 
+import {getRequiredAuthContext} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
-import type {ServiceInstances} from '../../services';
 
 const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownSpeed', 'throttleGlobalUpSpeed'];
 
-type AuthedRequest<T extends RouteGenericInterface = RouteGenericInterface> = FastifyRequest<T> & {
-  services: ServiceInstances;
-  user: UserInDatabase;
-};
-
 const clientRoutes = async (fastify: FastifyInstance) => {
-  fastify.get('/connection-test', async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest;
+  const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
 
-    try {
-      await authedReq.services.clientGatewayService.testGateway();
-      reply.status(200).send({isConnected: true});
-    } catch {
-      reply.status(500).send({isConnected: false});
-    }
-  });
+  typedFastify.get(
+    '/connection-test',
+    {
+      schema: {
+        summary: 'Test client connection',
+        description: 'Check torrent client connectivity.',
+        tags: ['Client'],
+        security: [{User: []}],
+        response: {
+          200: strictObject({
+            isConnected: boolean(),
+          }),
+        },
+      },
+    },
+    async (req): Promise<{isConnected: boolean}> => {
+      const authedContext = getRequiredAuthContext(req);
+      await authedContext.services.clientGatewayService.testGateway();
+      return {isConnected: true};
+    },
+  );
 
-  fastify.get('/settings', async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest;
-
-    try {
-      const settings = await authedReq.services.clientGatewayService.getClientSettings();
-      reply.status(200).send(settings);
-    } catch (error) {
-      const {code, message} = error as {code?: string; message?: string};
-      reply.status(500).send({code, message});
-    }
-  });
+  typedFastify.get(
+    '/settings',
+    {
+      schema: {
+        summary: 'Get client settings',
+        description: 'Fetch current torrent client settings.',
+        tags: ['Client'],
+        security: [{User: []}],
+        response: {
+          200: clientSettingsSchema,
+        },
+      },
+    },
+    async (req): Promise<ClientSettings> => {
+      const authedContext = getRequiredAuthContext(req);
+      return authedContext.services.clientGatewayService.getClientSettings();
+    },
+  );
 
   const enforceAdminForSensitiveSettings = async (
     req: FastifyRequest<{Body: SetClientSettingsOptions}>,
     reply: FastifyReply,
   ) => {
-    const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
+    getRequiredAuthContext(req);
     if (
-      Object.keys(authedReq.body ?? {}).some((key) => {
+      Object.keys(req.body ?? {}).some((key) => {
         return !SAFE_CLIENT_SETTINGS.includes(key as keyof ClientSettings);
       })
     ) {
-      await requireAdmin(authedReq, reply);
+      await requireAdmin(req, reply);
     }
   };
 
-  fastify.patch<{
-    Body: SetClientSettingsOptions;
-  }>('/settings', {preHandler: enforceAdminForSensitiveSettings}, async (req, reply: FastifyReply): Promise<void> => {
-    const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
-
-    try {
-      const response = await authedReq.services.clientGatewayService.setClientSettings(authedReq.body);
-      reply.status(200).send(response);
-    } catch (error) {
-      const {code, message} = error as {code?: string; message?: string};
-      reply.status(500).send({code, message});
-    }
-  });
+  typedFastify.patch(
+    '/settings',
+    {
+      preHandler: enforceAdminForSensitiveSettings,
+      schema: {
+        summary: 'Update client settings',
+        description: 'Update torrent client settings.',
+        tags: ['Client'],
+        security: [{User: []}],
+        body: setClientSettingsSchema,
+        response: {
+          200: z.void(),
+        },
+      },
+    },
+    async (req: FastifyRequest<{Body: SetClientSettingsOptions}>) => {
+      const authedContext = getRequiredAuthContext(req);
+      return authedContext.services.clientGatewayService.setClientSettings(req.body);
+    },
+  );
 };
 
 export default clientRoutes;

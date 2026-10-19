@@ -18,6 +18,7 @@ export interface FloodSettings {
     visible: boolean;
   }>;
   torrentListViewSize: 'condensed' | 'expanded';
+  torrentListShowProgressPercent: boolean;
   speedLimits: {
     download: Array<number>;
     upload: Array<number>;
@@ -43,6 +44,14 @@ export interface FloodSettings {
 
   // Display upload and download speed in page title
   UIPageTitleSpeedEnabled: boolean;
+
+  // Sidebar filter visibility
+  UISidebarFilterLocation: boolean;
+  UISidebarFilterTracker: boolean;
+  UISidebarFilterTag: boolean;
+
+  // Show/hide the tracker warning status level
+  UITrackerWarningEnabled: boolean;
 }
 
 export type FloodSetting = keyof FloodSettings;

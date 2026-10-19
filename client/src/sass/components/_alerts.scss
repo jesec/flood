@@ -23,20 +23,20 @@ $alert--foreground: #8fa2b2;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
 
-    &-exit {
+    &--pre-exit {
       opacity: 1;
-
-      &-active {
-        opacity: 0;
-      }
     }
 
-    &-enter {
+    &--exiting {
       opacity: 0;
+    }
 
-      &-active {
-        opacity: 1;
-      }
+    &--pre-enter {
+      opacity: 0;
+    }
+
+    &--entering {
+      opacity: 1;
     }
   }
 }

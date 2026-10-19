@@ -6,6 +6,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -30,14 +31,24 @@ import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import * as geoip from '../geoip';
 import ClientRequestManager from './clientRequestManager';
 import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/TransmissionTorrentsMethods';
 import torrentPropertiesUtil from './util/torrentPropertiesUtil';
 
-class TransmissionClientGatewayService extends ClientGatewayService {
-  clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);
+class TransmissionClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  clientRequestManager: ClientRequestManager;
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static create(user: UserInDatabase): TransmissionClientGatewayService {
+    const clientRequestManager = new ClientRequestManager(user.client as TransmissionConnectionSettings);
+    return new TransmissionClientGatewayService(user, clientRequestManager);
+  }
 
   async addTorrentsByFile({
     files,
@@ -66,7 +77,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     }
 
     if (tags.length > 0) {
-      await this.setTorrentsTags({hashes: addedTorrents as [string, ...string[]], tags});
+      await this.setTorrentsTags({hashes: addedTorrents, tags});
     }
 
     if (isCompleted) {
@@ -115,13 +126,13 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     }
 
     if (result[0] && tags.length > 0) {
-      await this.setTorrentsTags({hashes: result as [string, ...string[]], tags});
+      await this.setTorrentsTags({hashes: result, tags});
     }
 
     if (files[0]) {
       result.push(
         ...(await this.addTorrentsByFile({
-          files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+          files: files.map((file) => file.toString('base64')),
           destination,
           tags,
           isBasePath,
@@ -370,6 +381,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
         'peersSendingToUs',
         'status',
         'totalSize',
+        'sizeWhenDone',
         'trackers',
         'labels',
         'activityDate',
@@ -417,6 +429,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
                 seedsConnected: torrent.peersSendingToUs,
                 seedsTotal: torrent.peersSendingToUs,
                 sizeBytes: torrent.totalSize,
+                selectedSizeBytes: torrent.sizeWhenDone,
                 status,
                 tags: torrent.labels || [],
                 trackerURIs,

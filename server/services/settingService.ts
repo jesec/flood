@@ -64,7 +64,7 @@ class SettingService extends BaseService<SettingServiceEvents> {
           const property = key as keyof FloodSettings;
           const value = changedSettings[property];
 
-          await this.db.updateAsync<SettingRecord>({id: property}, {$set: {data: value}}, {upsert: true});
+          await this.db.updateAsync({id: property}, {$set: {data: value}}, {upsert: true});
 
           Object.assign(savedSettings, {
             [property]: value,

@@ -4,6 +4,8 @@ import React, {Children, cloneElement, forwardRef, ReactElement} from 'react';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
 
+import type {FormElementAddonProps} from './FormElementAddon';
+
 import type {FormRowItemProps} from './FormRowItem';
 
 type TextboxProps = Pick<
@@ -42,7 +44,7 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
   ) => {
     let addonCount = 0;
     const childElements = Children.map(children, (child) => {
-      const childAsElement = child as ReactElement;
+      const childAsElement = child as ReactElement<FormElementAddonProps>;
       if (childAsElement && childAsElement.type === FormElementAddon) {
         addonCount += 1;
         return cloneElement(childAsElement, {

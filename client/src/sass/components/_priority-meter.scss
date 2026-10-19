@@ -39,7 +39,9 @@ $priority-meter--bar--level-3--background: colors.$red;
   &:after {
     height: 100%;
     top: 0;
-    transition: background 0.25s, left 0.25s;
+    transition:
+      background 0.25s,
+      left 0.25s;
     width: 2px;
   }
 

@@ -1,12 +1,15 @@
-import fastify from 'fastify';
+import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
 
-const app = fastify({disableRequestLogging: true, logger: false});
-let request: supertest.SuperTest<supertest.Test>;
+vi.useRealTimers();
+
+const app = fastify({logController: new LogController({disableRequestLogging: true}), logger: false});
+let request: supertest.Agent;
 
 beforeAll(async () => {
   await constructRoutes(app);
@@ -28,60 +31,67 @@ const settings: Partial<FloodSettings> = {
 };
 
 describe('PATCH /api/settings', () => {
-  it('Adds settings', (done) => {
-    request
+  it('Adds settings', async () => {
+    const res = await request
       .patch('/api/settings')
       .send(settings)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toStrictEqual(settings);
-
-        done();
-      });
+    expect(res.body).toStrictEqual({...settings});
   });
 });
 
 describe('GET /api/settings', () => {
-  it('Gets all settings', (done) => {
-    request
+  it('Gets all settings', async () => {
+    const res = await request
       .get('/api/settings')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toMatchObject(settings);
-
-        done();
-      });
+    expect(res.body).toMatchObject(settings);
   });
 });
 
 describe('GET /api/settings/{property}', () => {
   Object.keys(settings).forEach((setting) => {
-    it(`Gets property ${setting}`, (done) => {
-      request
+    it(`Gets property ${setting}`, async () => {
+      const res = await request
         .get(`/api/settings/${setting}`)
         .send()
         .set('Cookie', [authToken])
         .set('Accept', 'application/json')
         .expect(200)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          if (err) return done(err);
+        .expect('Content-Type', /json/);
 
-          expect(settings).toMatchObject(res.body);
+      expect(settings).toMatchObject(res.body);
+    });
+  });
+});
 
-          done();
-        });
+describe('GET /openapi.json', () => {
+  it('Returns OpenAPI spec', async () => {
+    const res = await request.get('/openapi.json').send().expect(200).expect('Content-Type', /json/);
+
+    expect(res.body).toMatchObject({
+      openapi: '3.0.3',
+      info: {title: 'Flood API'},
+    });
+  });
+});
+
+describe('GET /api/openapi.json', () => {
+  it('Returns OpenAPI spec', async () => {
+    const res = await request.get('/api/openapi.json').send().expect(200).expect('Content-Type', /json/);
+
+    expect(res.body).toMatchObject({
+      openapi: '3.0.3',
+      info: {title: 'Flood API'},
     });
   });
 });

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# The executable bundles a small-icu Node.js, whose Intl.Segmenter needs the ICU data installed next to it.
+: "${NODE_ICU_DATA:=/usr/lib/flood}"
+export NODE_ICU_DATA
+
+exec /usr/lib/flood/flood "$@"

@@ -1,7 +1,10 @@
 import {UserInDatabase} from '@shared/schema/Auth';
 import {LocationTreeNode} from '@shared/types/Taxonomy';
+import {describe, expect, it, vi} from 'vitest';
 
 import TaxonomyService from '../../server/services/taxonomyService';
+
+vi.useRealTimers();
 
 type LocationRecord = {[key: string]: LocationRecord | null};
 const toTreeNodes = (locations: LocationRecord, separator = '/', basePath = '') =>

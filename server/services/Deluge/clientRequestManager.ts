@@ -50,7 +50,7 @@ class ClientRequestManager {
         const [, reject] = this.requestQueue[request_id as number] ?? [];
 
         delete this.requestQueue[request_id as number];
-        reject?.(new Error(`${exception_type}: ${exception_msg}`));
+        reject?.(new Error(`${JSON.stringify(exception_type)}: ${JSON.stringify(exception_msg)}`));
 
         return;
       }
@@ -116,7 +116,7 @@ class ClientRequestManager {
 
       const handleError = (e: Error) => {
         tlsSocket.destroy();
-        this.rpcWithAuth = this.rpc = Promise.reject();
+        this.rpcWithAuth = this.rpc = Promise.reject(new Error('Connection failed', {cause: e}));
         reject(e);
       };
 

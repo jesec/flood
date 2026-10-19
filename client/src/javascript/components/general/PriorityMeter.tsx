@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode, useCallback, useEffect, useState} from 'react';
 import {useLingui} from '@lingui/react';
 import {css} from '@client/styled-system/css';
 
@@ -11,7 +11,7 @@ interface PriorityMeterProps {
   priorityType: keyof typeof PriorityLevels;
   showLabel?: boolean;
   clickHandled?: boolean;
-  changePriorityFuncRef?: React.MutableRefObject<() => number>;
+  changePriorityFuncRef?: React.RefObject<() => number>;
   onChange: (id: this['id'], level: this['level']) => void;
 }
 
@@ -28,7 +28,7 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   const {i18n} = useLingui();
   const [priorityLevel, setPriorityLevel] = useState<number>(level);
 
-  const changePriority = () => {
+  const changePriority = useCallback(() => {
     let newLevel = priorityLevel;
 
     if (newLevel >= maxLevel) {
@@ -41,11 +41,13 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
     onChange(id, newLevel);
 
     return newLevel;
-  };
+  }, [id, maxLevel, onChange, priorityLevel]);
 
-  if (changePriorityFuncRef != null) {
-    changePriorityFuncRef.current = changePriority;
-  }
+  useEffect(() => {
+    if (changePriorityFuncRef != null) {
+      changePriorityFuncRef.current = changePriority;
+    }
+  }, [changePriority, changePriorityFuncRef]);
 
   let labelElement: ReactNode;
   if (showLabel) {

@@ -1,4 +1,4 @@
-import {FC, ReactText, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans} from '@lingui/react';
 
@@ -26,7 +26,7 @@ import ClientConnectionSettingsForm from './connection-settings/ClientConnection
 const ClientConnectionInterruption: FC = observer(() => {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
-  const [selection, setSelection] = useState<ReactText>('retry');
+  const [selection, setSelection] = useState<string | number>('retry');
   const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
 
   return (

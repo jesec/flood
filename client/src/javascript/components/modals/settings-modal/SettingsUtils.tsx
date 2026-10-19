@@ -1,4 +1,4 @@
-import {FormEvent} from 'react';
+import React from 'react';
 
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 
@@ -9,13 +9,15 @@ export const getChangedClientSetting = <T extends ClientSetting>(
   property: T,
 ): ClientSettings[T] | undefined => {
   if (changedClientSettings[property] != null) {
-    return changedClientSettings[property] as ClientSettings[T];
+    return changedClientSettings[property];
   }
 
   return SettingStore.clientSettings?.[property];
 };
 
-export const handleClientSettingChange = (event: FormEvent<HTMLFormElement> | Event): Partial<ClientSettings> => {
+export const handleClientSettingChange = (
+  event: React.SyntheticEvent<HTMLFormElement> | Event,
+): Partial<ClientSettings> => {
   const inputElement = event.target as HTMLInputElement;
   const property = inputElement.name as ClientSetting;
   const {value, type, checked} = inputElement;

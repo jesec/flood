@@ -3,6 +3,7 @@
 
 @use '../config/border-radius.scss';
 @use '../config/spacing.scss';
+@use '../util/box-shadows';
 
 $panel--spacing--horizontal--medium: spacing.$spacing--x-large;
 $panel--spacing--vertical--medium: spacing.$spacing--medium;
@@ -14,7 +15,7 @@ $panel--spacing--vertical--large: spacing.$spacing--xx-large;
   @include themes.theme('background', 'panel--background');
   @include themes.theme('border', 'panel--border');
   border-radius: border-radius.$border-radius--medium;
-  box-shadow: panel--box-shadow(colors.$grey--lighter);
+  box-shadow: box-shadows.panel--box-shadow(colors.$grey--lighter);
   @include themes.theme('color', 'panel--foreground');
   overflow: hidden;
 

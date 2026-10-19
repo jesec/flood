@@ -9,8 +9,8 @@ on:
       - master
 
 jobs:
-  test-backend-real:
-    runs-on: ubuntu-22.04
+  test-backend-matrix:
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -18,18 +18,26 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
-      - run: sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable
-      - run: sudo add-apt-repository -y ppa:transmissionbt/ppa
-      - run: sudo apt-get install -y qbittorrent-nox transmission-daemon
+      - name: Install qbittorrent-nox
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo userdocs/qbittorrent-nox-static release-5.2.0_v2.0.12 --pattern 'x86_64-qbittorrent-nox' --dir /tmp
+          mv /tmp/x86_64-qbittorrent-nox /usr/local/bin/qbittorrent-nox
+          chmod +x /usr/local/bin/qbittorrent-nox
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y transmission-daemon
 
       - run: |
           wget https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb
@@ -37,14 +45,20 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test || pnpm run test || pnpm run test
+        env:
+          FLOOD_OPTION_ASSETS: 'false'
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v7
         if: matrix.node == '24'
 
   test-backend:
     # so we do not need to update GitHub repo config
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs:
-      - test-backend-real
+      - test-backend-matrix
+    if: always()
     steps:
-      - run: echo pass
+      - run: |
+          if [[ "${{ needs.test-backend-matrix.result }}" != "success" ]]; then
+            exit 1
+          fi

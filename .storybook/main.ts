@@ -1,187 +1,82 @@
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-import type {StorybookConfig} from '@storybook/react-webpack5';
-import webpack from 'webpack';
+import {lingui} from '@lingui/vite-plugin';
+import type {StorybookConfig} from '@storybook/react-vite';
+
+const storybookDir = path.dirname(fileURLToPath(import.meta.url));
+
+// Mock action modules that should be replaced in Storybook
+const MOCKED_ACTION_MODULES = [
+  'FloodActions',
+  'TorrentActions',
+  'SettingActions',
+  'AuthActions',
+  'ClientActions',
+  'FeedActions',
+] as const;
+
+const mockDir = path.resolve(storybookDir, './mocks');
+const realActionsDir = path.resolve(storybookDir, '../client/src/javascript/actions');
 
 const config: StorybookConfig = {
   stories: ['../client/src/javascript/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: ['@storybook/addon-onboarding', '@storybook/addon-webpack5-compiler-babel'],
+  addons: ['@storybook/addon-onboarding'],
   framework: {
-    name: '@storybook/react-webpack5',
+    name: '@storybook/react-vite',
     options: {},
   },
-  swc: () => ({
-    jsc: {
-      transform: {
-        react: {
-          runtime: 'automatic',
+  viteFinal: async (config) => {
+    const {mergeConfig} = await import('vite');
+
+    return mergeConfig(config, {
+      plugins: [
+        lingui(),
+        {
+          name: 'storybook-mock-action-modules',
+          enforce: 'pre',
+          resolveId(id: string, _importer: string | undefined) {
+            // Intercept @client/actions/* imports.
+            // vite-tsconfig-paths (from the Storybook framework) runs earlier
+            // and resolves @client aliases to absolute paths, so our hook
+            // must match both the alias form AND already-resolved paths.
+            const cleanId = id.split('?')[0];
+            for (const moduleName of MOCKED_ACTION_MODULES) {
+              const aliasPath = `@client/actions/${moduleName}`;
+              const realPath = path.resolve(realActionsDir, `${moduleName}.ts`);
+              const realPathNoExt = realPath.replace(/\.ts$/, '');
+
+              if (cleanId === aliasPath || cleanId === realPath || cleanId === realPathNoExt) {
+                return path.resolve(mockDir, `${moduleName}.ts`);
+              }
+            }
+            return undefined;
+          },
+        },
+      ],
+      resolve: {
+        alias: [
+          // Action module mocks — must come before the general @client alias
+          {find: '@client/actions/FloodActions', replacement: path.resolve(mockDir, 'FloodActions.ts')},
+          {find: '@client/actions/TorrentActions', replacement: path.resolve(mockDir, 'TorrentActions.ts')},
+          {find: '@client/actions/SettingActions', replacement: path.resolve(mockDir, 'SettingActions.ts')},
+          {find: '@client/actions/AuthActions', replacement: path.resolve(mockDir, 'AuthActions.ts')},
+          {find: '@client/actions/ClientActions', replacement: path.resolve(mockDir, 'ClientActions.ts')},
+          {find: '@client/actions/FeedActions', replacement: path.resolve(mockDir, 'FeedActions.ts')},
+          // General aliases
+          {find: '@client/storybook-mocks', replacement: path.resolve(mockDir)},
+          {find: '@client', replacement: path.resolve(storybookDir, '../client/src/javascript')},
+          {find: '@shared', replacement: path.resolve(storybookDir, '../shared')},
+        ],
+      },
+      css: {
+        preprocessorOptions: {
+          scss: {
+            silenceDeprecations: ['mixed-decls'],
+          },
         },
       },
-    },
-  }),
-  webpackFinal: async (config) => {
-    // Use NormalModuleReplacementPlugin to forcefully replace action imports with mocks
-    config.plugins = config.plugins || [];
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/FloodActions$/,
-        path.resolve(__dirname, './mocks/FloodActions.ts'),
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/TorrentActions$/,
-        path.resolve(__dirname, './mocks/TorrentActions.ts'),
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/SettingActions$/,
-        path.resolve(__dirname, './mocks/SettingActions.ts'),
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/AuthActions$/,
-        path.resolve(__dirname, './mocks/AuthActions.ts'),
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/ClientActions$/,
-        path.resolve(__dirname, './mocks/ClientActions.ts'),
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /@client\/actions\/FeedActions$/,
-        path.resolve(__dirname, './mocks/FeedActions.ts'),
-      ),
-    );
-
-    // Add path aliases
-    config.resolve = config.resolve || {};
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      // General aliases
-      '@client': path.resolve(__dirname, '../client/src/javascript'),
-      '@shared': path.resolve(__dirname, '../shared'),
-    };
-
-    // Add TypeScript support
-    config.resolve.extensions = config.resolve.extensions || [];
-    if (!config.resolve.extensions.includes('.ts')) {
-      config.resolve.extensions.push('.ts', '.tsx');
-    }
-
-    // Handle SASS files
-    config.module = config.module || {};
-    config.module.rules = config.module.rules || [];
-
-    // Add TypeScript/Babel loader for tsx files
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', ['@babel/preset-react', {runtime: 'automatic'}], '@babel/preset-typescript'],
-          },
-        },
-      ],
     });
-
-    // Add Lingui loader for i18n
-    config.module.rules.push({
-      test: /\.json$/,
-      resourceQuery: /raw-lingui/,
-      type: 'javascript/auto',
-      loader: '@lingui/loader',
-    });
-
-    // Find and update existing CSS rules
-    const cssRuleIndex = config.module.rules.findIndex((rule) => {
-      if (typeof rule === 'object' && rule !== null && 'test' in rule) {
-        return rule.test?.toString().includes('css');
-      }
-      return false;
-    });
-
-    if (cssRuleIndex !== -1) {
-      // Replace existing CSS rule with PostCSS support for Panda CSS
-      config.module.rules[cssRuleIndex] = {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              postcssOptions: {
-                config: path.resolve(__dirname, '../postcss.config.cjs'),
-              },
-            },
-          },
-        ],
-      };
-    }
-
-    // Add SASS support - handle both regular and module SASS files
-    config.module.rules.push({
-      test: /\.s[ac]ss$/,
-      exclude: /\.module\.s[ac]ss$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 3, // Changed to 3 for postcss
-            modules: false,
-          },
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-            postcssOptions: {
-              config: path.resolve(__dirname, '../postcss.config.cjs'),
-            },
-          },
-        },
-        'sass-loader',
-      ],
-    });
-
-    // Add SASS modules support - MUST match production webpack config!
-    config.module.rules.push({
-      test: /\.module\.s[ac]ss$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 3, // Changed to 3 for postcss
-            sourceMap: true,
-            modules: {
-              mode: 'local', // local for CSS modules
-              localIdentName: '[name]_[local]__[hash:base64:5]', // Match production pattern
-              exportLocalsConvention: 'camelCase',
-            },
-          },
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-          },
-        },
-        {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-          },
-        },
-      ],
-    });
-
-    return config;
   },
 };
 

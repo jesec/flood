@@ -3,15 +3,7 @@ export const dispatchEvent = (
   element: HTMLInputElement,
   options = {bubbles: true, cancelable: true},
 ): void => {
-  let event;
-
-  if (typeof Event === 'function') {
-    event = new Event(eventID, options);
-  } else {
-    event = document.createEvent('Event');
-    event.initEvent(eventID, options.bubbles, options.cancelable);
-  }
-
+  const event = new Event(eventID, options);
   element.dispatchEvent(event);
 };
 

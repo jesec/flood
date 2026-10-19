@@ -1,0 +1,76 @@
+name: build-debian
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    outputs:
+      version: ${{ steps.parse_version.outputs.VERSION }}
+
+    env:
+      USE_BAZEL_VERSION: '8.x'
+
+    strategy:
+      matrix:
+        node: ['22']
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - run: pnpm install
+      - run: pnpm run build
+
+      - name: Set up QEMU
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install --reinstall -y qemu-user-static
+
+      - name: Install Bazel
+        run: |
+          sudo wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 -O /usr/local/bin/bazel
+          sudo chmod +x /usr/local/bin/bazel
+
+      - name: Copy flood-bin distribution files
+        run: cp -rf distribution/debian/flood-bin/* .
+
+      - name: Parse version
+        id: parse_version
+        run: echo "VERSION=$(jq .version package.json -r)" >> "$GITHUB_OUTPUT"
+
+      - name: Update BUILD
+        run: |
+          sed -i 's/replace-with-your-name <to-be-determined@tbd>/Jesse Chan <jc@linux.com>/' ./BUILD
+          sed -i "s/version-to-be-replaced/${{ steps.parse_version.outputs.VERSION }}/" ./BUILD
+
+      - name: Package .deb
+        run: |
+          mkdir ~/.pkg-cache
+          PATH="$PWD/node_modules/.bin:$PATH" bazel build flood-deb-arm64 flood-deb-x64 --sandbox_writable_path=$(printf ~/.pkg-cache)
+          cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
+          cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
+
+      - name: Verify the installed .deb renders its help
+        run: |
+          sudo dpkg -i flood-linux-x64.deb
+          flood --help > /dev/null
+
+      - name: Upload Debian artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: flood-debian
+          path: |
+            flood-linux-arm64.deb
+            flood-linux-x64.deb
+          if-no-files-found: error

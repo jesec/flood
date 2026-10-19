@@ -8,6 +8,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -35,7 +36,7 @@ import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
 import {isApiVersionAtLeast} from './util/apiVersionCheck';
@@ -45,12 +46,57 @@ import {
   getTorrentTrackerTypeFromURL,
 } from './util/torrentPropertiesUtil';
 
-class QBittorrentClientGatewayService extends ClientGatewayService {
-  private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
+class QBittorrentClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  private clientRequestManager: ClientRequestManager;
   private cachedProperties: Record<
     string,
-    Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'>
+    Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'> & {
+      trackerMessage: string;
+      trackerMessageFetchedAt: number;
+    }
   > = {};
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static create(user: UserInDatabase): QBittorrentClientGatewayService {
+    const clientRequestManager = new ClientRequestManager(user.client as QBittorrentConnectionSettings);
+    return new QBittorrentClientGatewayService(user, clientRequestManager);
+  }
+
+  private async fetchProperties(hash: string, includeProperties: boolean): Promise<void> {
+    const properties = includeProperties
+      ? await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined)
+      : undefined;
+    const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
+
+    if (trackers == null || !Array.isArray(trackers)) {
+      return;
+    }
+
+    if (includeProperties && properties == null) {
+      return;
+    }
+
+    const realTrackers = trackers.filter((t) => t.tier >= 0);
+
+    if (includeProperties) {
+      this.cachedProperties[hash] = {
+        comment: properties!.comment,
+        dateCreated: properties!.creation_date,
+        isPrivate: trackers[0]?.msg.includes('is private'),
+        trackerMessage: realTrackers.find((t) => t.msg.length > 0)?.msg ?? '',
+        trackerURIs: getDomainsFromURLs(realTrackers.map((tracker) => tracker.url)),
+        trackerMessageFetchedAt: Date.now(),
+      };
+    } else {
+      this.cachedProperties[hash].trackerMessage = realTrackers.find((t) => t.msg.length > 0)?.msg ?? '';
+      this.cachedProperties[hash].trackerURIs = getDomainsFromURLs(realTrackers.map((tracker) => tracker.url));
+      this.cachedProperties[hash].trackerMessageFetchedAt = Date.now();
+    }
+  }
 
   async addTorrentsByFile({
     files,
@@ -70,7 +116,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           try {
             const fileBuffer = Buffer.from(file, 'base64');
 
-            const {infoHash} = parseTorrent(fileBuffer);
+            const {infoHash} = await parseTorrent(fileBuffer);
             fileBuffers.push(fileBuffer);
 
             return infoHash;
@@ -121,21 +167,24 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     }
 
     const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
-    await this.clientRequestManager
-      .torrentsAddURLs(urls, {
-        savepath: destination,
-        tags: tags.join(','),
-        [method]: !start,
-        root_folder: !isBasePath,
-        contentLayout: isBasePath ? 'NoSubfolder' : undefined,
-        sequentialDownload: isSequential,
-        skip_checking: isCompleted,
-      })
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    if (urls[0]) {
+      await this.clientRequestManager
+        .torrentsAddURLs(urls, {
+          savepath: destination,
+          tags: tags.join(','),
+          [method]: !start,
+          root_folder: !isBasePath,
+          contentLayout: isBasePath ? 'NoSubfolder' : undefined,
+          sequentialDownload: isSequential,
+          skip_checking: isCompleted,
+        })
+        .then(this.processClientRequestSuccess, this.processClientRequestError);
+    }
 
     if (files[0]) {
       return this.addTorrentsByFile({
-        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')),
         destination,
         tags,
         isBasePath,
@@ -357,23 +406,13 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         this.emit('PROCESS_TORRENT_LIST_START');
 
         // qBittorrent can not handle requests in a highly concurrent way.
-        for await (const {hash} of infos) {
-          if (this.cachedProperties[hash] == null) {
-            const properties = await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined);
-            const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
+        const TRACKER_MESSAGE_TTL = 60 * 60 * 1000; // 1 hour
 
-            if (properties != null && trackers != null && Array.isArray(trackers)) {
-              this.cachedProperties[hash] = {
-                comment: properties?.comment,
-                dateCreated: properties?.creation_date,
-                isPrivate: trackers[0]?.msg.includes('is private'),
-                trackerURIs: getDomainsFromURLs(
-                  trackers
-                    .map((tracker) => tracker.url)
-                    .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
-                ),
-              };
-            }
+        for (const {hash} of infos) {
+          if (this.cachedProperties[hash] == null) {
+            await this.fetchProperties(hash, true);
+          } else if (Date.now() - this.cachedProperties[hash].trackerMessageFetchedAt > TRACKER_MESSAGE_TTL) {
+            await this.fetchProperties(hash, false);
           }
         }
 
@@ -385,25 +424,30 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 comment = '',
                 dateCreated = 0,
                 isPrivate = false,
+                trackerMessage = '',
                 trackerURIs = [],
               } = this.cachedProperties[info.hash] || {};
 
+              const isSeeding = info.state.endsWith('UP');
+              const isTransferring = info.dlspeed > 0 || info.upspeed > 0;
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
                 comment: comment,
-                dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
+                dateActive: isTransferring ? -1 : info.last_activity,
                 dateAdded: info.added_on,
                 dateCreated,
                 dateFinished: info.completion_on,
                 directory: info.save_path,
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
-                eta: info.dlspeed === 0 || info.eta >= 8640000 ? -1 : info.eta,
+                // Seeding states have ETA until seeding goal (ratio/time); show it when valid.
+                // For non-seeding states, hide ETA when dlspeed is 0 to avoid showing stale values.
+                eta: info.eta >= 8640000 || (!isSeeding && info.dlspeed === 0) ? -1 : info.eta,
                 hash: info.hash.toUpperCase(),
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,
-                message: '', // in tracker method
+                message: trackerMessage,
                 name: info.name,
                 peersConnected: info.num_leechs,
                 peersTotal: info.num_incomplete,
@@ -412,8 +456,9 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 ratio: info.ratio,
                 seedsConnected: info.num_seeds,
                 seedsTotal: info.num_complete,
-                sizeBytes: info.size,
-                status: getTorrentStatusFromState(info.state),
+                sizeBytes: info.total_size,
+                selectedSizeBytes: info.size,
+                status: getTorrentStatusFromState(info.state, trackerMessage, isTransferring),
                 tags: info.tags === '' ? [] : info.tags.split(',').map((tag) => tag.trim()),
                 trackerURIs,
                 upRate: info.upspeed,

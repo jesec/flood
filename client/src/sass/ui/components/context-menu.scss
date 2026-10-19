@@ -4,6 +4,7 @@
 @use '../config/spacing.scss';
 @use '../config/speed.scss';
 @use '../config/variables.scss';
+@use '../util/box-shadows';
 
 .context-menu {
   font-size: font-size.$font-size--small;
@@ -13,7 +14,7 @@
   position: absolute;
   top: 0;
 
-  &--enter {
+  &--pre-enter {
     .context-menu {
       &__items {
         opacity: 0;
@@ -24,34 +25,34 @@
         }
       }
     }
-
-    &--active {
-      .context-menu {
-        &__items {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    }
   }
 
-  &--exit {
+  &--entering {
     .context-menu {
       &__items {
         opacity: 1;
         transform: translateY(0);
       }
     }
+  }
 
-    &--active {
-      .context-menu {
-        &__items {
-          opacity: 0;
-          transform: translateY(20px * -1);
+  &--pre-exit {
+    .context-menu {
+      &__items {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
 
-          &--is-up {
-            transform: translateY(20px);
-          }
+  &--exiting {
+    .context-menu {
+      &__items {
+        opacity: 0;
+        transform: translateY(20px * -1);
+
+        &--is-up {
+          transform: translateY(20px);
         }
       }
     }
@@ -60,13 +61,17 @@
   &__items {
     background: colors.$white;
     border-radius: variables.$form--element--border-radius;
-    box-shadow: form--element--box-shadow(colors.$darkest-grey, 0.05, 0.1), 0 0 0 1px rgba(colors.$darkest-grey, 0.1);
+    box-shadow:
+      box-shadows.form--element--box-shadow(colors.$darkest-grey, 0.05, 0.1),
+      0 0 0 1px rgba(colors.$darkest-grey, 0.1);
     max-width: 200px;
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
     transform-origin: 50% -5px;
-    transition: opacity speed.$speed--xx-fast, transform speed.$speed--xx-fast;
+    transition:
+      opacity speed.$speed--xx-fast,
+      transform speed.$speed--xx-fast;
     z-index: 101;
 
     &,

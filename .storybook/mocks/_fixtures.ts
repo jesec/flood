@@ -143,12 +143,13 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
     message: '',
     peersConnected: 12,
     peersTotal: 50,
-    percentComplete: Math.round(percentComplete * 100) / 100,
+    percentComplete: Math.floor(percentComplete * 100) / 100,
     priority: TorrentPriority.NORMAL,
     ratio: Math.round(ratio * 1000) / 1000,
     seedsConnected: 5,
     seedsTotal: 20,
     sizeBytes: Math.floor(sizeBytes),
+    selectedSizeBytes: Math.floor(sizeBytes),
     tags: [],
     trackerURIs: [MOCK_TRACKERS[trackerIndex]],
     upRate: 512 * SPEED.KB_PER_SEC,
@@ -357,6 +358,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     property: 'dateAdded',
   },
   torrentListViewSize: 'expanded',
+  torrentListShowProgressPercent: true,
   torrentListColumns: [
     {id: 'name', visible: true},
     {id: 'percentComplete', visible: true},
@@ -365,6 +367,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     {id: 'eta', visible: true},
     {id: 'ratio', visible: true},
     {id: 'sizeBytes', visible: true},
+    {id: 'selectedSizeBytes', visible: false},
     {id: 'tags', visible: true},
   ],
   torrentListColumnWidths: {
@@ -375,6 +378,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     eta: 100,
     ratio: 80,
     sizeBytes: 100,
+    selectedSizeBytes: 100,
     tags: 120,
     dateActive: 100,
     dateAdded: 100,
@@ -423,6 +427,10 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
   },
   deleteTorrentData: false,
   UIPageTitleSpeedEnabled: false,
+  UISidebarFilterLocation: true,
+  UISidebarFilterTracker: true,
+  UISidebarFilterTag: true,
+  UITrackerWarningEnabled: true,
 };
 
 /**
@@ -718,6 +726,7 @@ export function createNewTorrentTemplate(
     seedsConnected: start ? 2 : 0,
     seedsTotal: 10,
     sizeBytes: options?.sizeBytes ?? 5 * SIZE.GB,
+    selectedSizeBytes: options?.sizeBytes ?? 5 * SIZE.GB,
     tags: options?.tags ?? [],
     trackerURIs: ['http://tracker.example.com:6969/announce'],
     upRate: 0,

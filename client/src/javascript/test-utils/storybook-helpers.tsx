@@ -114,12 +114,6 @@ export class StoryErrorBoundary extends React.Component<
  * Cleanup function for story teardown
  */
 export function cleanupStory() {
-  // Clear any timers
-  jest.clearAllTimers();
-
-  // Clear all mocks
-  jest.clearAllMocks();
-
   // Reset document body
   document.body.innerHTML = '';
 

@@ -4,8 +4,9 @@ import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
 import type {Rule} from '../../shared/types/Feed';
 import {cdata as matchCDATA} from '../../shared/util/regEx';
 
-interface PendingDownloadItems
-  extends Required<Pick<AddTorrentByURLOptions, 'urls' | 'destination' | 'tags' | 'start'>> {
+interface PendingDownloadItems extends Required<
+  Pick<AddTorrentByURLOptions, 'urls' | 'destination' | 'tags' | 'start'>
+> {
   matchTitle: string;
   ruleID: string;
   ruleLabel: string;
@@ -71,7 +72,7 @@ export const getFeedItemsMatchingRules = (
 
         if (!isAlreadyDownloaded && torrentUrls[0] != null) {
           matchedItems.push({
-            urls: torrentUrls as [string, ...string[]],
+            urls: torrentUrls,
             tags: rule.tags,
             matchTitle: feedItem.title as string,
             ruleID: rule._id,

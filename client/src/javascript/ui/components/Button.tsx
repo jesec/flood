@@ -7,6 +7,8 @@ import FadeIn from './FadeIn';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
 
+import type {FormElementAddonProps} from './FormElementAddon';
+
 export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick' | 'onChange'> & {
   children: ReactNode;
 
@@ -46,7 +48,7 @@ const Button: FC<ButtonProps> = ({
   const childNodes: Array<ReactElement> = [];
 
   Children.toArray(children).forEach((child) => {
-    const childAsElement = child as ReactElement;
+    const childAsElement = child as ReactElement<FormElementAddonProps>;
 
     if (childAsElement.type === FormElementAddon) {
       addonNodes.push(

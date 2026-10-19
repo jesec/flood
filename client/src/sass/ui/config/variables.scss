@@ -5,6 +5,7 @@
 
 @use './border-radius.scss';
 @use './spacing.scss';
+@use '../util/box-shadows';
 
 // Forms
 $form--element--border-radius: border-radius.$border-radius--medium;
@@ -26,7 +27,7 @@ $select--button--padding-right: $select--indicator--width + spacing.$spacing--x-
 $input--background: colors.$white;
 $input--border: colors.$grey--lighter;
 $input--border--hover: colors.$medium-grey;
-$form--element--box-shadow: form--element--box-shadow(colors.$grey--lighter);
+$form--element--box-shadow: box-shadows.form--element--box-shadow(colors.$grey--lighter);
 $input--foreground: colors.$grey;
 $input--foreground--hover: colors.$grey--hard;
 $input--foreground--placeholder: rgba(colors.$medium-grey, 0.5);
@@ -36,7 +37,7 @@ $input--foreground--placeholder--hover: rgba(colors.$grey--light, 0.6);
 $input--inverse--background: colors.$darkest-grey--hard;
 $input--inverse--border: colors.$darkest-grey--darker;
 $input--inverse--border--hover: color.adjust(colors.$darkest-grey--darker, $lightness: -5%);
-$form--element--inverse--box-shadow: form--element--box-shadow(colors.$darkest-grey--hard);
+$form--element--inverse--box-shadow: box-shadows.form--element--box-shadow(colors.$darkest-grey--hard);
 $input--inverse--foreground: colors.$grey;
 $input--inverse--foreground--hover: colors.$grey--lighter;
 $input--inverse--foreground--active: colors.$blue--lighter;

@@ -5,31 +5,26 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 import truncateTo from './numberUtils';
 
 export const getTorrentETAFromProperties = (
-  processingTorrentProperties: Record<string, unknown>,
+  selectedSizeBytes: number,
+  downRate: number,
+  bytesDone: number,
 ): TorrentProperties['eta'] => {
-  const {downRate, bytesDone, sizeBytes} = processingTorrentProperties;
-
-  if (typeof downRate !== 'number' || typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
-    return -1;
-  }
-
-  if (downRate > 0) {
-    return (sizeBytes - bytesDone) / downRate;
+  if (downRate > 0 && selectedSizeBytes > 0) {
+    return (selectedSizeBytes - bytesDone) / downRate;
   }
 
   return -1;
 };
 
 export const getTorrentPercentCompleteFromProperties = (
-  processingTorrentProperties: Record<string, unknown>,
+  selectedSizeBytes: number,
+  bytesDone: number,
 ): TorrentProperties['percentComplete'] => {
-  const {bytesDone, sizeBytes} = processingTorrentProperties;
-
-  if (typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
+  if (!selectedSizeBytes) {
     return 0;
   }
 
-  const percentComplete = (bytesDone / sizeBytes) * 100;
+  const percentComplete = (bytesDone / selectedSizeBytes) * 100;
 
   if (percentComplete > 0 && percentComplete < 10) {
     return Number(truncateTo(percentComplete, 2));
@@ -93,6 +88,8 @@ export const encodeTags = (tags: TorrentProperties['tags']): string => {
     .join(',');
 };
 
+const SEQUENTIAL_SET_METHOD = 'd.down.sequential.set';
+
 export const getAddTorrentPropertiesCalls = ({
   destination,
   isBasePath,
@@ -113,7 +110,7 @@ export const getAddTorrentPropertiesCalls = ({
   }
 
   if (isSequential) {
-    result.push(`d.down.sequential.set=1`);
+    result.push(`${SEQUENTIAL_SET_METHOD}=1`);
   }
 
   if (isInitialSeeding) {

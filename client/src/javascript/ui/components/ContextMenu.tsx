@@ -1,8 +1,8 @@
-import CSSTransition from 'react-transition-group/CSSTransition';
 import classnames from 'classnames';
 import {CSSProperties, forwardRef, MouseEvent, ReactNode, RefObject} from 'react';
 
 import Overlay from './Overlay';
+import Transition from './Transition';
 
 import type {OverlayProps} from './Overlay';
 
@@ -17,7 +17,7 @@ interface ContextMenuProps {
     x: number;
     y: number;
   };
-  triggerRef?: RefObject<Element>;
+  triggerRef?: RefObject<Element | null>;
   matchTriggerWidth?: boolean;
   padding?: boolean;
   scrolling?: boolean;
@@ -110,33 +110,22 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     });
 
     return (
-      <CSSTransition
-        classNames={{
-          enter: 'context-menu--enter',
-          enterActive: 'context-menu--enter--active',
-          exit: 'context-menu--exit',
-          exitActive: 'context-menu--exit--active',
-          appear: 'context-menu--appear',
-          appearActive: 'context-menu--appear--active',
-        }}
-        in={isIn}
-        mountOnEnter
-        unmountOnExit
-        timeout={250}
-      >
-        <div className="context-menu" onClick={onClick} role="none">
-          <Overlay
-            additionalClassNames="context-menu__overlay"
-            onClick={onOverlayClick}
-            onContextMenu={onOverlayRightClick}
-            isTransparent
-            {...overlayProps}
-          />
-          <div className={classes} ref={ref} style={dropdownStyle}>
-            {children}
+      <Transition classNamePrefix="context-menu" in={isIn} mountOnEnter unmountOnExit timeout={250}>
+        {(transitionClassName) => (
+          <div className={classnames('context-menu', transitionClassName)} onClick={onClick} role="none">
+            <Overlay
+              additionalClassNames="context-menu__overlay"
+              onClick={onOverlayClick}
+              onContextMenu={onOverlayRightClick}
+              isTransparent
+              {...overlayProps}
+            />
+            <div className={classes} ref={ref} style={dropdownStyle}>
+              {children}
+            </div>
           </div>
-        </div>
-      </CSSTransition>
+        )}
+      </Transition>
     );
   },
 );

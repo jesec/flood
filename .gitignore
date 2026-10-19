@@ -74,8 +74,6 @@ cypress/screenshots
 taskfile.yaml
 
 ## Panda
-styled-system
-styled-system-studio
 
 # Playwright
 .playwright-mcp
@@ -84,3 +82,9 @@ styled-system-studio
 css-snapshots/
 *storybook.log
 storybook-static
+
+# Local scratch
+tmp/
+package-lock.json
+
+.codex

@@ -1,5 +1,5 @@
 export interface MethodCallConfig {
-  readonly methodCall: string;
+  readonly methodCall: string | readonly string[];
   readonly transformValue: (value: unknown) => string | boolean | number | string[] | Record<string, unknown>;
 }
 
@@ -28,8 +28,17 @@ export const numberTransformer = (value: unknown): number => {
   return Number(value);
 };
 
-export const getMethodCalls = (configs: MethodCallConfigs) => {
-  return Object.values(configs).map((config) => config.methodCall);
+export const getMethodCalls = (configs: MethodCallConfigs, methodList?: string[]): string[] => {
+  return Object.values(configs).map((config) => {
+    const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
+    if (methodList && methodList.length > 0) {
+      for (const method of methods) {
+        if (methodList.includes(method.split('=')[0])) return method;
+      }
+      return 'false=';
+    }
+    return methods[0];
+  });
 };
 
 export const processMethodCallResponse = async <T extends MethodCallConfigs, P extends keyof T>(

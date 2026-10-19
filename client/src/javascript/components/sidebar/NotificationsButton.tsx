@@ -4,6 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import FloodActions from '@client/actions/FloodActions';
+import {formatDate} from '@client/util/format';
 import {ChevronLeft, ChevronRight, LoadingIndicatorDots, Notification as NotificationIcon} from '@client/ui/icons';
 import NotificationStore from '@client/stores/NotificationStore';
 
@@ -75,7 +76,7 @@ const NotificationItem: FC<NotificationItemProps> = ({notification}: Notificatio
         <span className="notification__category">{i18n._(`${notification.id}.heading`)}</span>
         {' — '}
         <span className="notification__timestamp">
-          {i18n.date(new Date(notification.ts), {
+          {formatDate(i18n.locale, new Date(notification.ts), {
             year: 'numeric',
             month: 'long',
             day: '2-digit',

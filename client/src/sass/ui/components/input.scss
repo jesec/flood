@@ -5,6 +5,7 @@
 @use '../config/spacing.scss';
 @use '../config/speed.scss';
 @use '../config/variables.scss';
+@use '../util/box-shadows';
 
 .input {
   background: variables.$input--background;
@@ -31,7 +32,7 @@
     background-color: colors.$blue--soft;
     color: color.adjust(colors.$blue--darker, $saturation: -25%);
     border-color: colors.$blue;
-    box-shadow: form--element--box-shadow--active(colors.$blue);
+    box-shadow: box-shadows.form--element--box-shadow--active(colors.$blue);
 
     &::placeholder {
       color: rgba(colors.$blue--light, 0.5);
@@ -62,7 +63,7 @@
       background-color: rgba(colors.$blue--soft, 0.15);
       color: variables.$input--inverse--foreground--active;
       border-color: colors.$blue;
-      box-shadow: form--element--box-shadow--active(colors.$blue);
+      box-shadow: box-shadows.form--element--box-shadow--active(colors.$blue);
 
       &::placeholder {
         color: variables.$input--inverse--foreground--placeholder--active;
@@ -123,11 +124,11 @@
     .toggle-input {
       &__indicator {
         border-color: colors.$blue;
-        box-shadow: form--element--box-shadow--active(colors.$blue);
+        box-shadow: box-shadows.form--element--box-shadow--active(colors.$blue);
 
         .inverse & {
           border-color: colors.$blue;
-          box-shadow: form--element--box-shadow--active(colors.$blue);
+          box-shadow: box-shadows.form--element--box-shadow--active(colors.$blue);
         }
 
         &,

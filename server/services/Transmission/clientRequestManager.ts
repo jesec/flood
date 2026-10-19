@@ -306,9 +306,12 @@ class ClientRequestManager {
     this.authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
 
     this.updateSessionID().catch(() => undefined);
-    setInterval(() => {
-      this.updateSessionID().catch(() => undefined);
-    }, 1000 * 60 * 60 * 8);
+    setInterval(
+      () => {
+        this.updateSessionID().catch(() => undefined);
+      },
+      1000 * 60 * 60 * 8,
+    );
   }
 }
 

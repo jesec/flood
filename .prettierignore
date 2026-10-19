@@ -7,10 +7,11 @@ coverage/
 pnpm-lock.yaml
 
 ## Panda
-styled-system
-styled-system-studio
+client/src/javascript/styled-system/
 
 # Storybook
 css-snapshots/
 *storybook.log
 storybook-static
+.codex
+

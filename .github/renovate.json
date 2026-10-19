@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "pin",
+  "rebaseWhen": "conflicted",
+  "osvVulnerabilityAlerts": true,
+  "separateMultipleMajor": true,
+  "homeassistant-manifest": {
+    "enabled": false
+  },
+  "packageRules": [
+    {
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    },
+    {
+      "description": "Group all non-major npm/pnpm dependencies into one PR",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "npm non-major dependencies"
+    },
+    {
+      "description": "Group all non-major Docker updates into one PR",
+      "matchManagers": ["dockerfile", "docker-compose", "devcontainer"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "docker non-major updates"
+    },
+    {
+      "description": "Group all non-major GitHub Actions updates into one PR",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "github-actions non-major updates"
+    },
+    {
+      "description": "Group all non-major Bazel updates into one PR",
+      "matchManagers": ["bazel", "bazel-module"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "bazel non-major updates"
+    },
+    {
+      "description": "@yao-pkg/pkg decides the Node.js and ICU version of the prebuilt binaries, so its updates deserve a PR of their own rather than the grouped one",
+      "matchDepNames": ["@yao-pkg/pkg"],
+      "groupName": "@yao-pkg/pkg"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {compute, getTranslationString} from '../../util/size';
+import {formatNumber} from '../../util/format';
 import SettingStore from '../../stores/SettingStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
@@ -17,8 +18,8 @@ const WindowTitle: FC = observer(() => {
     const down = compute(summary.downRate);
     const up = compute(summary.upRate);
 
-    const formattedDownSpeed = i18n.number(down.value);
-    const formattedUpSpeed = i18n.number(up.value);
+    const formattedDownSpeed = formatNumber(i18n.locale, down.value);
+    const formattedUpSpeed = formatNumber(i18n.locale, up.value);
 
     const translatedDownUnit = i18n._('unit.speed', {
       baseUnit: i18n._(getTranslationString(down.unit)),

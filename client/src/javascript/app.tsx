@@ -1,8 +1,7 @@
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router';
 import {createRoot} from 'react-dom/client';
 import {FC, lazy, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Route, Routes} from 'react-router';
 import {useMedia} from 'react-use';
 
 import AppWrapper from './components/AppWrapper';
@@ -16,9 +15,9 @@ import stringUtil from '@shared/util/stringUtil';
 import '../sass/style.scss';
 import '../sass/panda.css';
 
-const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
-const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));
-const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));
+const Login = lazy(() => import('./routes/Login'));
+const Overview = lazy(() => import('./routes/Overview'));
+const Register = lazy(() => import('./routes/Register'));
 
 const FloodApp: FC = observer(() => {
   useEffect(() => {

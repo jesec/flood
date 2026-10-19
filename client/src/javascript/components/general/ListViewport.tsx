@@ -1,86 +1,113 @@
-import {ComponentProps, FC, forwardRef, RefCallback, UIEvent, useEffect, useRef} from 'react';
-import {FixedSizeList} from 'react-window';
+import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
+import {reaction} from 'mobx';
+import {List} from 'react-window';
 import {observer} from 'mobx-react-lite';
-import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
-import {useWindowSize} from 'react-use';
+import {OverlayScrollbars} from 'overlayscrollbars';
 
 import ConfigStore from '@client/stores/ConfigStore';
 
-import type {OverlayScrollbarsComponentRef} from 'overlayscrollbars-react';
-import type {FixedSizeListProps, ListChildComponentProps} from 'react-window';
+import type {ListImperativeAPI, RowComponentProps} from 'react-window';
 
-const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
-  const {children, onScroll} = props;
-  const osRef = useRef<OverlayScrollbarsComponentRef>(null);
+interface ListViewportProps {
+  className?: string;
+  rowCount: number;
+  rowComponent: (props: RowComponentProps) => React.ReactElement | null;
+  rowHeight: number;
+  listRef?: React.Ref<ListImperativeAPI>;
+  onScroll?: (scrollLeft: number) => void;
+}
 
-  useEffect(() => {
-    const scrollbarRef = osRef.current;
+const ListViewport = forwardRef<ListImperativeAPI, ListViewportProps>((props: ListViewportProps, ref) => {
+  const {className, rowCount, rowComponent, rowHeight, listRef, onScroll} = props;
+  const hostElementRef = useRef<HTMLDivElement>(null);
+  const [listElement, setListElement] = useState<HTMLDivElement | null>(null);
 
-    if (scrollbarRef == null) {
-      return () => {
-        // do nothing.
-      };
-    }
+  const mergedRef = useCallback(
+    (instance: ListImperativeAPI | null) => {
+      setListElement(instance?.element ?? null);
 
-    const viewport = scrollbarRef.osInstance()?.elements().viewport as HTMLDivElement;
-
-    const refCallback = ref as RefCallback<HTMLDivElement>;
-    refCallback(viewport);
-
-    if (onScroll) {
-      viewport.addEventListener('scroll', (e) => onScroll(e as unknown as UIEvent<HTMLDivElement>), {
-        passive: true,
-      });
-    }
-
-    return () => {
-      if (onScroll) {
-        viewport.removeEventListener('scroll', (e) => onScroll(e as unknown as UIEvent<HTMLDivElement>));
+      // Forward to listRef prop
+      if (typeof listRef === 'function') {
+        listRef(instance);
+      } else if (listRef != null) {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
+        (listRef as React.MutableRefObject<ListImperativeAPI | null>).current = instance;
       }
-    };
-  }, [onScroll, ref]);
 
-  return (
-    <OverlayScrollbarsComponent
-      {...props}
-      options={{
+      // Forward to forwarded ref
+      if (typeof ref === 'function') {
+        ref(instance);
+      } else if (ref != null) {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
+        (ref as React.MutableRefObject<ListImperativeAPI | null>).current = instance;
+      }
+    },
+    [listRef, ref],
+  );
+
+  // react-window exposes its DOM element after the initial ref callback.
+  useEffect(() => {
+    const hostElement = hostElementRef.current;
+    if (hostElement == null || listElement == null) return;
+
+    const osInstance = OverlayScrollbars(
+      {
+        target: hostElement,
+        elements: {
+          viewport: listElement,
+        },
+      },
+      {
         scrollbars: {
           autoHide: 'leave',
           clickScroll: true,
           theme: `os-theme-${ConfigStore.isPreferDark ? 'light' : 'dark'}`,
         },
-      }}
-      ref={osRef}
-    >
-      {children}
-    </OverlayScrollbarsComponent>
-  );
-});
+      },
+    );
 
-interface ListViewportProps
-  extends Pick<FixedSizeListProps, 'className' | 'itemCount' | 'itemKey' | 'itemSize' | 'outerRef'> {
-  itemRenderer: FC<ListChildComponentProps>;
-}
+    const dispose = reaction(
+      () => ConfigStore.isPreferDark,
+      (isDark) => {
+        osInstance.options({
+          scrollbars: {
+            theme: `os-theme-${isDark ? 'light' : 'dark'}`,
+          },
+        });
+      },
+    );
 
-const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
-  const {className, itemCount, itemKey, itemRenderer, itemSize, outerRef} = props;
-  const {height: windowHeight} = useWindowSize();
+    return () => {
+      dispose();
+      osInstance.destroy();
+    };
+  }, [listElement]);
+
+  // The list element is the horizontal scroll container. Report its scroll
+  // position so callers can keep related elements (e.g. the table heading) in sync.
+  useEffect(() => {
+    if (listElement == null || onScroll == null) return;
+
+    const handleScroll = () => onScroll(listElement.scrollLeft);
+    listElement.addEventListener('scroll', handleScroll, {passive: true});
+
+    return () => {
+      listElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [listElement, onScroll]);
 
   return (
-    <FixedSizeList
-      className={className}
-      height={Math.max(itemSize * 30, windowHeight)}
-      itemCount={itemCount}
-      itemKey={itemKey}
-      itemSize={itemSize}
-      width="100%"
-      outerElementType={ConfigStore.isSmallScreen ? undefined : Overflow} // Don't use custom scrollbar on smaller screens
-      ref={ref}
-      overscanCount={30}
-      outerRef={outerRef}
-    >
-      {itemRenderer}
-    </FixedSizeList>
+    <div className={className} ref={hostElementRef} style={{flex: '1 1 auto', minHeight: 0, width: '100%'}}>
+      <List
+        defaultHeight={Math.max(rowHeight * 30, 600)}
+        rowCount={rowCount}
+        rowHeight={rowHeight}
+        listRef={mergedRef}
+        overscanCount={30}
+        rowComponent={rowComponent}
+        rowProps={{}}
+      />
+    </div>
   );
 });
 

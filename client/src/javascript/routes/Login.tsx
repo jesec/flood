@@ -1,10 +1,10 @@
 import {FC} from 'react';
 
-import ApplicationView from '@client/components/layout/ApplicationView';
+import ApplicationView, {ApplicationViewModifier} from '@client/components/layout/ApplicationView';
 import AuthForm from '@client/components/auth/AuthForm';
 
 const LoginView: FC = () => (
-  <ApplicationView modifier="auth-form">
+  <ApplicationView modifier={ApplicationViewModifier.AuthForm}>
     <AuthForm mode="login" />
   </ApplicationView>
 );

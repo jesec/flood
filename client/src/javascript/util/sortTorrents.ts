@@ -5,8 +5,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 type SortRule = {
   [direction in FloodSettings['sortTorrents']['direction']]:
-    | keyof TorrentProperties
-    | ((p: TorrentProperties) => unknown);
+    keyof TorrentProperties | ((p: TorrentProperties) => unknown);
 };
 
 function sortTorrents(
@@ -31,6 +30,17 @@ function sortTorrents(
             return Infinity;
           }
           return p.eta;
+        },
+      } as SortRule);
+      break;
+    case 'dateActive':
+      sortRules.push({
+        [sortBy.direction]: (p: TorrentProperties) => {
+          // -1 means currently active, i.e. more recent than any timestamp
+          if (p.dateActive === -1) {
+            return Infinity;
+          }
+          return p.dateActive;
         },
       } as SortRule);
       break;

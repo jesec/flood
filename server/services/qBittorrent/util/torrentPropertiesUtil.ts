@@ -25,7 +25,20 @@ export const getTorrentTrackerTypeFromURL = (url: string): TorrentTracker['type'
   return TorrentTrackerType.DHT;
 };
 
-export const getTorrentStatusFromState = (state: QBittorrentTorrentState): TorrentProperties['status'] => {
+/**
+ * qBittorrent resolves `isForced()` before it tests the payload rate
+ * (`TorrentImpl::updateState`), so a force-started torrent is reported as
+ * `forcedUP`/`forcedDL` whether or not it is transferring - the rate-bearing
+ * `uploading`/`stalledUP` and `downloading`/`stalledDL` states are unreachable
+ * for it. Those two states therefore cannot imply activity on their own, and
+ * `isTransferring` is used instead, matching how the rTorrent backend derives
+ * `active`/`inactive` from the observed rates.
+ */
+export const getTorrentStatusFromState = (
+  state: QBittorrentTorrentState,
+  trackerMessage = '',
+  isTransferring = false,
+): TorrentProperties['status'] => {
   const statuses: TorrentProperties['status'] = [];
 
   switch (state) {
@@ -48,9 +61,13 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
       break;
     case 'queuedUP':
     case 'stalledUP':
-    case 'forcedUP':
       statuses.push('complete');
       statuses.push('inactive');
+      statuses.push('seeding');
+      break;
+    case 'forcedUP':
+      statuses.push('complete');
+      statuses.push(isTransferring ? 'active' : 'inactive');
       statuses.push('seeding');
       break;
     case 'checkingUP':
@@ -64,8 +81,11 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
     case 'metaDL':
     case 'forcedMetaDL':
     case 'downloading':
-    case 'forcedDL':
       statuses.push('active');
+      statuses.push('downloading');
+      break;
+    case 'forcedDL':
+      statuses.push(isTransferring ? 'active' : 'inactive');
       statuses.push('downloading');
       break;
     case 'pausedDL':
@@ -83,12 +103,18 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
       statuses.push('checking');
       break;
     case 'moving':
+      statuses.push('moving');
+      break;
     case 'checkingResumeData':
     case 'unknown':
       statuses.push('checking');
       break;
     default:
       break;
+  }
+
+  if (trackerMessage.length > 0) {
+    statuses.push('warning');
   }
 
   return statuses;

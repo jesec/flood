@@ -1,4 +1,3 @@
-import babelParser from '@babel/eslint-parser';
 import js from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import nodePlugin from 'eslint-plugin-n';
@@ -33,6 +32,14 @@ export default [
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
   })),
+
+  // Type-aware rules for TypeScript files
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-deprecated': 'warn',
+    },
+  },
 
   // Prettier config (disables conflicting rules)
   prettierConfig,
@@ -74,21 +81,22 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
       '@typescript-eslint/no-explicit-any': 'off', // Allow any for now
       '@typescript-eslint/no-non-null-assertion': 'off', // Allow ! operator
+      '@typescript-eslint/require-await': 'off', // Too many false positives with Fastify plugins
+
+      // TODO: Enable these rules and fix violations
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
     },
   },
 
   // JavaScript files override
   {
     files: ['**/*.js', '**/*.jsx'],
-    languageOptions: {
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          babelrc: true,
-        },
-      },
-    },
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/no-require-imports': 'off',
@@ -181,15 +189,25 @@ export default [
       '**/*.spec.js',
       '**/*.spec.ts',
       '**/*.spec.tsx',
-      '**/.jest/*.js',
+      '**/.vitest/**/*.{js,ts}',
     ],
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ...globals.vitest,
       },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+    },
+  },
+
+  // Storybook files
+  {
+    files: ['**/*.stories.ts', '**/*.stories.tsx'],
+    rules: {
+      '@typescript-eslint/no-base-to-string': 'off',
     },
   },
 ];

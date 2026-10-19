@@ -2,3 +2,8 @@ th {
   font-weight: inherit;
   text-align: left;
 }
+
+// Restore `color: inherit` removed in ress v5 (previously inherited by default)
+button {
+  color: inherit;
+}

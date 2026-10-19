@@ -1,11 +1,12 @@
 # Use node alpine docker image
-FROM docker.io/node:22-alpine
+FROM docker.io/node:24.18.1-alpine
+LABEL org.opencontainers.image.source="https://github.com/jesec/flood"
 
-ARG PACKAGE=flood
-ARG VERSION=latest
+ARG PACKAGE_TARBALL=artifacts/flood.tgz
 
-# Get specified version from npm
-RUN npm i -g "${PACKAGE}"@"${VERSION}" &&\
+# Install the provided package tarball from the build artifact
+COPY ${PACKAGE_TARBALL} /tmp/flood.tgz
+RUN npm i -g /tmp/flood.tgz &&\
     node --version &&\
     npm ls --global &&\
     npm cache clean --force
@@ -26,5 +27,5 @@ USER download
 EXPOSE 3000
 
 # Flood
-ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENV FLOOD_OPTION_HOST="::"
 ENTRYPOINT ["/sbin/tini", "--", "flood"]

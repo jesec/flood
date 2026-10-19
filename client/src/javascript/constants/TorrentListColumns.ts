@@ -10,6 +10,7 @@ const TorrentListColumns = {
   ratio: 'torrents.properties.ratio',
   seeds: 'torrents.properties.seeds',
   sizeBytes: 'torrents.properties.size',
+  selectedSizeBytes: 'torrents.properties.selected.size',
   tags: 'torrents.properties.tags',
   upRate: 'torrents.properties.upload.speed',
   upTotal: 'torrents.properties.upload.total',

@@ -3,6 +3,7 @@
 
 @use '../tools/variables';
 @use '../tools/colors';
+@use '../tools/themes';
 
 @use '../ui/config/spacing.scss';
 
@@ -165,6 +166,41 @@ $torrent-details--tags--foreground: #1a2028;
     width: 100%;
 
     &__heading {
+      &--sortable {
+        background: none;
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        padding: 0;
+        text-align: left;
+        user-select: none;
+        white-space: nowrap;
+
+        &:focus-visible,
+        &:hover {
+          @include themes.theme('color', 'table--heading--color--hover');
+        }
+
+        &:after {
+          border-left: 4px solid transparent;
+          border-right: 4px solid transparent;
+          border-top: 5px solid currentColor;
+          content: '';
+          display: inline-block;
+          margin-left: math.div(variables.$spacing-unit * 1, 10);
+          opacity: 0;
+          transition:
+            opacity 0.2s,
+            transform 0.2s;
+        }
+
+        &:hover:after {
+          opacity: 0.5;
+        }
+      }
+
       &--primary {
         color: $torrent-details--directory-tree--parent-directory--foreground;
         font-size: 1.125em;
@@ -180,6 +216,24 @@ $torrent-details--tags--foreground: #1a2028;
       &--tertiary {
         color: $torrent-details--detail--heading--foreground;
         font-weight: 700;
+      }
+
+      &--is-sorted {
+        @include themes.theme('color', 'table--heading--color--active');
+        font-weight: 700;
+
+        &:focus-visible,
+        &:hover {
+          @include themes.theme('color', 'table--heading--color--active--hover');
+        }
+
+        &:after {
+          opacity: 0.5;
+        }
+      }
+
+      &--direction--asc:after {
+        transform: rotate(180deg);
       }
     }
   }
@@ -201,7 +255,10 @@ $torrent-details--tags--foreground: #1a2028;
         &__node {
           color: $directory-tree--foreground;
           position: relative;
-          transition: background 0.25s, border 0.25s, color 0.25s;
+          transition:
+            background 0.25s,
+            border 0.25s,
+            color 0.25s;
 
           &--group {
             &:after {

@@ -4,7 +4,7 @@ import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useSta
 import {observer} from 'mobx-react-lite';
 import {useLongPress} from 'react-use';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {defaultFloodSettings} from '@shared/schema/FloodSettings';
 
 import SettingStore from '@client/stores/SettingStore';
 import {torrentStatusClasses} from '@client/util/torrentStatus';
@@ -53,7 +53,7 @@ const displayTorrentDetails = (hash: string) => UIStore.setActiveModal({id: 'tor
 const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
   TorrentStore.setSelectedTorrents({hash, event});
 
-const onKeyPress = (hash: string, e: KeyboardEvent) => {
+const onKeyDown = (hash: string, e: KeyboardEvent) => {
   if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {
     e.preventDefault();
     if (TorrentStore.selectedTorrents.includes(hash)) {
@@ -84,6 +84,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
   const {status, upRate, downRate} = TorrentStore.torrents?.[hash] || {};
   const torrentClasses = torrentStatusClasses(
     {status, upRate, downRate},
+    {trackerWarningEnabled: SettingStore.floodSettings.UITrackerWarningEnabled},
     classnames({
       'torrent--is-selected': isSelected,
       'torrent--is-condensed': isCondensed,
@@ -134,7 +135,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
-        handleKeyPress={(e) => onKeyPress(hash, e)}
+        handleKeyDown={(e) => onKeyDown(hash, e)}
         data-testid={torrentTestId}
         data-torrent-status={torrentStatus}
         data-torrent-name={torrent?.name}
@@ -155,7 +156,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
-      handleKeyPress={(e) => onKeyPress(hash, e)}
+      handleKeyDown={(e) => onKeyDown(hash, e)}
       data-testid={torrentTestId}
       data-torrent-status={torrentStatus}
       data-torrent-name={torrent?.name}

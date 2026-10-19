@@ -1,4 +1,4 @@
-import {FC, ReactNode, ReactNodeArray} from 'react';
+import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 import {css} from '@client/styled-system/css';
@@ -43,7 +43,7 @@ const DiskUsage: FC = observer(() => {
     {},
   );
 
-  const diskNodes: ReactNodeArray = mountPoints
+  const diskNodes: ReactNode[] = mountPoints
     .filter((target) => target in diskMap)
     .map((target) => diskMap[target])
     .map((d) => (

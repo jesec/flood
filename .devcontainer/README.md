@@ -36,7 +36,7 @@ The dev container image is automatically built and published to GitHub Container
 
 - **OS:** Ubuntu 22.04 LTS (jammy)
 - **Node.js:** v22.x (matches CI and production targets)
-- **Package Manager:** pnpm 9.7.0
+- **Package Manager:** pnpm 11.5.2
 - **Shell:** zsh with Oh My Zsh
 
 ### Development Tools
@@ -60,7 +60,7 @@ The dev container image is automatically built and published to GitHub Container
 - **`devcontainer.json`**: Main dev container configuration
 
   - Features: docker-outside-of-docker, git, common-utils (zsh/oh-my-zsh)
-  - Port forwarding: 3000 (Flood server), 4200 (webpack dev server), 6006 (Storybook)
+  - Port forwarding: 3000 (Flood server), 4200 (Vite dev server), 6006 (Storybook)
   - Volume mounts: `.docker`, `.ssh`, `.npmrc`, etc. (for credential sharing)
   - Cache: Pulls `ghcr.io/jesec/flood/devcontainer:latest` as build cache
 
@@ -77,8 +77,6 @@ The dev container image is automatically built and published to GitHub Container
 # Backend tests (spawns real torrent clients)
 pnpm run test
 
-# Frontend tests
-pnpm run test:client
 
 # Storybook tests
 pnpm run test-storybook

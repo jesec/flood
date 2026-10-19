@@ -1,10 +1,20 @@
 import classnames from 'classnames';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Button, Checkbox, Form, FormHandle, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormHandle,
+  FormError,
+  FormRowItem,
+  FormRow,
+  LoadingRing,
+  Textbox,
+  Transition,
+} from '@client/ui';
 import {Close} from '@client/ui/icons';
 import AuthActions from '@client/actions/AuthActions';
 import AuthStore from '@client/stores/AuthStore';
@@ -112,15 +122,19 @@ const AuthTab: FC = observer(() => {
       <FormRow>
         <FormRowItem>
           <ul className={interactiveListClasses}>
-            <TransitionGroup>
-              {isLoading && (
-                <CSSTransition classNames="interactive-list__loading-indicator" timeout={{enter: 250, exit: 250}}>
-                  <div className="interactive-list__loading-indicator" key="loading-indicator">
-                    <LoadingRing />
-                  </div>
-                </CSSTransition>
+            <Transition
+              classNamePrefix="interactive-list__loading-indicator"
+              in={isLoading}
+              mountOnEnter
+              timeout={{enter: 250, exit: 250}}
+              unmountOnExit
+            >
+              {(transitionClassName) => (
+                <div className={classnames('interactive-list__loading-indicator', transitionClassName)}>
+                  <LoadingRing />
+                </div>
               )}
-            </TransitionGroup>
+            </Transition>
             {AuthStore.users
               .slice()
               .sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username))

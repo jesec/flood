@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useCallback, useImperativeHandle, forwardRef, FormEvent} from 'react';
+import React, {useRef, useEffect, useCallback, useImperativeHandle, forwardRef} from 'react';
 
 import {getDataFromForm, resetFormData} from './util/forms';
 
@@ -9,14 +9,14 @@ interface FormProps {
     event,
     formData,
   }: {
-    event: Event | FormEvent<HTMLFormElement>;
+    event: Event | React.SyntheticEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => void;
   onSubmit?: ({
     event,
     formData,
   }: {
-    event: Event | FormEvent<HTMLFormElement>;
+    event: Event | React.SyntheticEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => void;
 }
@@ -31,7 +31,7 @@ const Form = forwardRef<FormHandle, FormProps>(({children, className, onChange, 
 
   // Handle custom flood-form-change event
   const handleFormChange = useCallback(
-    (event: Event | FormEvent<HTMLFormElement>) => {
+    (event: Event | React.SyntheticEvent<HTMLFormElement>) => {
       if (formRef.current && onChange) {
         const formData = getDataFromForm(formRef.current);
         onChange({event, formData});
@@ -42,7 +42,7 @@ const Form = forwardRef<FormHandle, FormProps>(({children, className, onChange, 
 
   // Handle form submit
   const handleFormSubmit = useCallback(
-    (event: Event | FormEvent<HTMLFormElement>) => {
+    (event: Event | React.SyntheticEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       if (onSubmit) {

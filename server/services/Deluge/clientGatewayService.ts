@@ -7,6 +7,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -31,13 +32,23 @@ import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
 import {getTorrentStatusFromStatuses} from './util/torrentPropertiesUtil';
 
-class DelugeClientGatewayService extends ClientGatewayService {
-  private clientRequestManager = new ClientRequestManager(this.user.client as DelugeConnectionSettings);
+class DelugeClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  private clientRequestManager: ClientRequestManager;
+
+  constructor(user: UserInDatabase, clientRequestManager: ClientRequestManager) {
+    super(user);
+    this.clientRequestManager = clientRequestManager;
+  }
+
+  static create(user: UserInDatabase): DelugeClientGatewayService {
+    const clientRequestManager = new ClientRequestManager(user.client as DelugeConnectionSettings);
+    return new DelugeClientGatewayService(user, clientRequestManager);
+  }
 
   async addTorrentsByFile({
     files,
@@ -62,7 +73,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
 
     if (isCompleted) {
       // Deluge does not provide function to add completed torrents
-      for await (const hash of result) {
+      for (const hash of result) {
         await this.checkTorrents({hashes: [hash]});
       }
     }
@@ -109,7 +120,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
     if (files[0]) {
       result.push(
         ...(await this.addTorrentsByFile({
-          files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+          files: files.map((file) => file.toString('base64')),
           destination,
           tags,
           isBasePath,
@@ -346,6 +357,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
                 seedsConnected: status.num_seeds,
                 seedsTotal: status.total_seeds < 0 ? 0 : status.total_seeds,
                 sizeBytes: status.total_size,
+                selectedSizeBytes: status.total_size,
                 status: getTorrentStatusFromStatuses(status),
                 tags: [],
                 trackerURIs: [status.tracker_host],

@@ -7,6 +7,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
@@ -24,6 +25,7 @@ import type {
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentContent} from '@shared/types/TorrentContent';
+import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
@@ -31,9 +33,9 @@ import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {cleanupEmptyDirectories, isAllowedPath, removeDirectoryIfEmpty, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
-import ClientGatewayService from '../clientGatewayService';
+import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import * as geoip from '../geoip';
 import ClientRequestManager from './clientRequestManager';
 import {
@@ -45,7 +47,7 @@ import {
   transferSummaryMethodCallConfigs,
 } from './constants/methodCallConfigs';
 import type {RPCError} from './types/RPCError';
-import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import type {MethodCallConfig, MethodCallConfigs, MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {
   encodeTags,
@@ -55,12 +57,132 @@ import {
   getTorrentStatusFromProperties,
 } from './util/torrentPropertiesUtil';
 
-class RTorrentClientGatewayService extends ClientGatewayService {
-  clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
-  availableMethodCalls = this.fetchAvailableMethodCalls();
+type AvailableMethodCalls = {
+  methodList: string[];
+  clientSetting: MethodCallConfigs;
+  torrentContent: string[];
+  torrentList: string[];
+  torrentPeer: string[];
+  torrentTracker: string[];
+  transferSummary: MethodCallConfigs;
+};
+
+const EMPTY_METHOD_CALLS: AvailableMethodCalls = {
+  methodList: [],
+  clientSetting: {},
+  torrentContent: [],
+  torrentList: [],
+  torrentPeer: [],
+  torrentTracker: [],
+  transferSummary: {},
+};
+
+/**
+ * Filter configs by available methods, resolving alternative method names
+ * to the single method that is actually available on this rTorrent instance.
+ */
+const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string[]): MethodCallConfigs => {
+  const resolved: Record<string, MethodCallConfig> = {};
+  // Sort keys so that Object.values(configs) (methodCalls) and
+  // Object.keys(configs) (processMethodCallResponse) stay in sync.
+  for (const key of Object.keys(configs).sort()) {
+    const config = configs[key];
+    const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
+    const availableMethod = methodList.length > 0 ? methods.find((m) => methodList.includes(m)) : methods[0];
+    if (availableMethod) {
+      resolved[key] = {methodCall: availableMethod, transformValue: config.transformValue};
+    }
+  }
+  return resolved;
+};
+
+async function fetchAvailableMethodCalls(
+  clientRequestManager: ClientRequestManager,
+  fallback = false,
+): Promise<AvailableMethodCalls> {
+  let methodList: Array<string> = [];
+
+  clientRequestManager.isJSONCapable = true;
+  methodList = await clientRequestManager.methodCall('system.listMethods', []).catch((e: RPCError) => {
+    if (e.isRPCError || e.name == 'SyntaxError') {
+      clientRequestManager.isJSONCapable = false;
+    } else if (!fallback) {
+      throw e;
+    }
+  });
+
+  if (!clientRequestManager.isJSONCapable) {
+    methodList = await clientRequestManager.methodCall('system.listMethods', []).catch((e) => {
+      if (!fallback) {
+        throw e;
+      }
+    });
+  }
+
+  const getAvailableMethodCalls =
+    methodList?.length > 0
+      ? (methodCalls: Array<string>) => {
+          return methodCalls.map((method) => (methodList.includes(method.split('=')[0]) ? method : 'false='));
+        }
+      : (methodCalls: Array<string>) => methodCalls;
+
+  // Resolve clientSetting and transferSummary configs at startup: pick the
+  // available method from alternatives and drop unavailable entries entirely.
+  // This way getClientSettings/fetchTransferSummary can use the configs directly
+  // with system.multicall, without worrying about 'false=' sentinels.
+  return {
+    methodList,
+    clientSetting: resolveMethodCallConfigs(clientSettingMethodCallConfigs, methodList),
+    torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
+    torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
+    torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
+    torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
+    transferSummary: resolveMethodCallConfigs(transferSummaryMethodCallConfigs, methodList),
+  };
+}
+
+class RTorrentClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
+  clientRequestManager: ClientRequestManager;
+  availableMethodCalls: AvailableMethodCalls;
+
+  constructor(user: UserInDatabase, availableMethodCalls: AvailableMethodCalls) {
+    super(user);
+    this.clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    this.availableMethodCalls = availableMethodCalls;
+  }
+
+  static async create(user: UserInDatabase): Promise<RTorrentClientGatewayService> {
+    const clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    let availableMethodCalls = await fetchAvailableMethodCalls(clientRequestManager).catch(() => null);
+    if (availableMethodCalls == null) {
+      availableMethodCalls = EMPTY_METHOD_CALLS;
+    }
+    return new RTorrentClientGatewayService(user, availableMethodCalls);
+  }
+
+  // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
+  // even though the equivalent XML-RPC call succeeds. rakshasa/rtorrent#1596
+  private async fetchTorrentListResponses() {
+    const methodCalls = ['', 'main'].concat(this.availableMethodCalls.torrentList);
+
+    try {
+      return await this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    } catch (error) {
+      if (!this.clientRequestManager.isJSONCapable || (error as RPCError)?.code !== -32700) {
+        throw error;
+      }
+
+      this.clientRequestManager.isJSONCapable = false;
+      return this.clientRequestManager
+        .methodCall('d.multicall2', methodCalls)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    }
+  }
 
   async getPreferredMethod(methods: string[]): Promise<string> {
-    const {methodList} = await this.availableMethodCalls;
+    const {methodList} = this.availableMethodCalls;
 
     const matchedMethod = methods.find((method) => methodList.includes(method));
 
@@ -174,6 +296,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     const result: string[] = [];
 
+    const additionalCalls = getAddTorrentPropertiesCalls({
+      destination,
+      isBasePath,
+      isSequential,
+      isInitialSeeding,
+      tags,
+    });
+
     if (urls[0]) {
       const methodName = await this.getPreferredMethod(
         start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
@@ -183,11 +313,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [
           urls.map((url) => ({
             methodName,
-            params: [
-              '',
-              url,
-              ...getAddTorrentPropertiesCalls({destination, isBasePath, isSequential, isInitialSeeding, tags}),
-            ],
+            params: ['', url, ...additionalCalls],
           })),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
@@ -199,7 +325,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     if (files[0]) {
       await this.addTorrentsByFile({
-        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')),
         destination,
         tags,
         isBasePath,
@@ -236,7 +362,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
     return this.clientRequestManager
-      .methodCall('f.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentContent))
+      .methodCall('f.multicall', [hash, ''].concat(this.availableMethodCalls.torrentContent))
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
@@ -257,9 +383,47 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
+  /**
+   * Get the total size of files selected for download.
+   * Uses rTorrent's custom attribute cache, refreshing hourly if stale.
+   */
+  async getSelectedSize(hash: string, cached: {selectedSize: number; lastUpdateAt: number}): Promise<number> {
+    const nowSec = Math.floor(Date.now() / 1000);
+    const CACHE_TTL = 3600; // 1 hour
+
+    // Return cached value if fresh
+    if (cached.lastUpdateAt > 0 && nowSec - cached.lastUpdateAt <= CACHE_TTL) {
+      return cached.selectedSize;
+    }
+
+    // Cache is stale or missing — fetch file list and recalculate
+    let selectedSize = cached.selectedSize;
+    try {
+      const contents = await this.getTorrentContents(hash);
+      selectedSize = contents.reduce(
+        (sum, file) => (file.priority !== TorrentContentPriority.DO_NOT_DOWNLOAD ? sum + file.sizeBytes : sum),
+        0,
+      );
+    } catch {
+      return cached.selectedSize;
+    }
+
+    // Write cache (best-effort, failure does not affect the returned value)
+    try {
+      const data = JSON.stringify({last_update_at: nowSec, selected_size: selectedSize});
+      await this.clientRequestManager
+        .methodCall('d.custom.set', [hash, 'flood.selected_size', data])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    } catch {
+      // Silently ignore cache write failures
+    }
+
+    return selectedSize;
+  }
+
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
     return this.clientRequestManager
-      .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
+      .methodCall('p.multicall', [hash, ''].concat(this.availableMethodCalls.torrentPeer))
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
@@ -280,7 +444,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
     return this.clientRequestManager
-      .methodCall('t.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentTracker))
+      .methodCall('t.multicall', [hash, ''].concat(this.availableMethodCalls.torrentTracker))
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
@@ -337,12 +501,38 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             ? path.resolve(isBasePath ? destination : path.join(destination, name))
             : path.resolve(destination);
 
-          if (sourceDirectory !== destDirectory) {
-            if (isMultiFile[index]) {
-              await move(sourceDirectory, destDirectory, {overwrite: true});
-            } else {
-              await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
+          if (sourceDirectory === destDirectory) {
+            return;
+          }
+
+          const contents = await this.getTorrentContents(hash);
+
+          for (const content of contents) {
+            const sourcePath = sanitizePath(path.resolve(sourceDirectory, content.path));
+
+            if (!fs.existsSync(sourcePath) || !isAllowedPath(sourcePath)) {
+              continue;
             }
+
+            const destPath = sanitizePath(path.resolve(destDirectory, content.path));
+
+            if (!isAllowedPath(destPath)) {
+              continue;
+            }
+
+            await fs.promises.mkdir(path.dirname(destPath), {recursive: true});
+
+            if (sourcePath !== destPath) {
+              await move(sourcePath, destPath, {overwrite: true});
+            }
+          }
+
+          if (isMultiFile[index]) {
+            // multi-file torrents own the directory, so everything left empty inside it can be cleaned up
+            await cleanupEmptyDirectories(sourceDirectory);
+          } else {
+            // single-file torrents do not own the directory, so only remove it if the move left it empty
+            await removeDirectoryIfEmpty(sourceDirectory);
           }
         }),
       );
@@ -442,12 +632,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     // Delete contents of torrents
-    for await (const contentPath of contentPaths) {
+    for (const contentPath of contentPaths) {
       await fs.promises.unlink(contentPath).catch(() => undefined);
     }
 
     // Try to remove empty directories
-    for await (const directoryPath of directoryPaths) {
+    for (const directoryPath of directoryPaths) {
       await fs.promises.rmdir(directoryPath).catch(() => undefined);
     }
   }
@@ -498,6 +688,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
+    const {methodList} = this.availableMethodCalls;
+
+    if (!methodList.includes('d.down.sequential.set')) {
+      throw new Error('d.down.sequential.set is not supported by this rTorrent instance');
+    }
+
     const methodCalls: MultiMethodCalls = hashes.map((hash) => ({
       methodName: 'd.down.sequential.set',
       params: [hash, isSequential ? '1' : '0'],
@@ -594,8 +790,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-      .then(() => {
-        // returns nothing.
+      .then(async () => {
+        // Force refresh the cached selected size after priority changes
+        await this.getSelectedSize(hash, {selectedSize: 0, lastUpdateAt: 0});
       });
   }
 
@@ -646,9 +843,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
-    return this.clientRequestManager
-      .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+    return this.fetchTorrentListResponses()
       .then((responses: string[][]) => {
         this.emit('PROCESS_TORRENT_LIST_START');
         return Promise.all(
@@ -660,6 +855,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             processedResponses.map(async (response) => {
+              const selectedSizeBytes = await this.getSelectedSize(response.hash, response.selectedSizeData);
+              // Fall back to full torrent size when selected size is unavailable (cold cache + fetch error)
+              const effectiveSizeBytes = selectedSizeBytes || response.sizeBytes;
+
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
                 comment: response.comment,
@@ -670,7 +869,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 directory: response.directory,
                 downRate: response.downRate,
                 downTotal: response.downTotal,
-                eta: getTorrentETAFromProperties(response),
+                eta: getTorrentETAFromProperties(effectiveSizeBytes, response.downRate, response.bytesDone),
                 hash: response.hash,
                 isPrivate: response.isPrivate,
                 isInitialSeeding: response.isInitialSeeding,
@@ -679,12 +878,13 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 name: response.name,
                 peersConnected: response.peersConnected,
                 peersTotal: response.peersTotal,
-                percentComplete: getTorrentPercentCompleteFromProperties(response),
+                percentComplete: getTorrentPercentCompleteFromProperties(effectiveSizeBytes, response.bytesDone),
                 priority: response.priority,
                 ratio: response.ratio,
                 seedsConnected: response.seedsConnected,
                 seedsTotal: response.seedsTotal,
                 sizeBytes: response.sizeBytes,
+                selectedSizeBytes: effectiveSizeBytes,
                 status: getTorrentStatusFromProperties(response),
                 tags: response.tags,
                 trackerURIs: response.trackerURIs,
@@ -712,18 +912,23 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
-    const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).transferSummary.map((methodCall) => {
-      return {
-        methodName: methodCall,
+    const configs = this.availableMethodCalls.transferSummary;
+    const methodCalls: MultiMethodCalls = Object.keys(configs)
+      .sort()
+      .map((key) => ({
+        methodName: configs[key].methodCall as string,
         params: [''],
-      };
-    });
+      }));
+
+    if (methodCalls.length === 0) {
+      return {} as TransferSummary;
+    }
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
-        return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
+        return processMethodCallResponse(response, configs as typeof transferSummaryMethodCallConfigs);
       });
   }
 
@@ -735,23 +940,29 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async getClientSettings(): Promise<ClientSettings> {
-    const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).clientSetting.map((methodCall) => {
-      return {
-        methodName: methodCall,
+    const configs = this.availableMethodCalls.clientSetting;
+    const methodCalls: MultiMethodCalls = Object.keys(configs)
+      .sort()
+      .map((key) => ({
+        methodName: configs[key].methodCall as string,
         params: [''],
-      };
-    });
+      }));
+
+    if (methodCalls.length === 0) {
+      return {} as ClientSettings;
+    }
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
-        return processMethodCallResponse(response, clientSettingMethodCallConfigs);
+        return processMethodCallResponse(response, configs as typeof clientSettingMethodCallConfigs);
       });
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
     const configs = clientSettingMethodCallConfigs;
+    const {methodList} = this.availableMethodCalls;
     const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
       const property = key as keyof SetClientSettingsOptions;
       let methodName = '';
@@ -766,13 +977,29 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           methodName = 'dht.mode.set';
           param = (param as ClientSettings[typeof property]) ? 'auto' : 'disable';
           break;
-        case 'piecesMemoryMax':
-          methodName = `${configs[property].methodCall}.set`;
+        case 'piecesMemoryMax': {
+          const pieceMethods = Array.isArray(configs[property].methodCall)
+            ? configs[property].methodCall
+            : [configs[property].methodCall];
+          methodName = `${pieceMethods[0]}.set`;
           param = (param as ClientSettings[typeof property]) * 1024 * 1024;
           break;
-        default:
-          methodName = `${configs[property].methodCall}.set`;
+        }
+        default: {
+          const methods = Array.isArray(configs[property].methodCall)
+            ? configs[property].methodCall
+            : [configs[property].methodCall];
+          methodName = `${methods[0]}.set`;
+          if (methodList?.length > 0) {
+            for (const method of methods) {
+              if (methodList.includes(`${method}.set`)) {
+                methodName = `${method}.set`;
+                break;
+              }
+            }
+          }
           break;
+        }
       }
 
       if (typeof param === 'boolean') {
@@ -781,7 +1008,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
       accumulator.push({
         methodName,
-        params: ['', `${param}`],
+        params: ['', Array.isArray(param) ? param.join(',') : String(param)],
       });
 
       return accumulator;
@@ -796,59 +1023,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async testGateway(): Promise<void> {
-    const availableMethodCalls = await this.fetchAvailableMethodCalls();
-    this.availableMethodCalls = Promise.resolve(availableMethodCalls);
-  }
-
-  async fetchAvailableMethodCalls(fallback = false): Promise<{
-    methodList: string[];
-    clientSetting: string[];
-    torrentContent: string[];
-    torrentList: string[];
-    torrentPeer: string[];
-    torrentTracker: string[];
-    transferSummary: string[];
-  }> {
-    let methodList: Array<string> = [];
-    const listMethods = () => {
-      return this.clientRequestManager
-        .methodCall('system.listMethods', [])
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
-    };
-
-    this.clientRequestManager.isJSONCapable = true;
-    methodList = await listMethods().catch((e: RPCError) => {
-      if (e.isRPCError || e.name == 'SyntaxError') {
-        this.clientRequestManager.isJSONCapable = false;
-      } else if (!fallback) {
-        throw e;
-      }
-    });
-
-    if (!this.clientRequestManager.isJSONCapable) {
-      methodList = await listMethods().catch((e) => {
-        if (!fallback) {
-          throw e;
-        }
-      });
-    }
-
-    const getAvailableMethodCalls =
-      methodList?.length > 0
-        ? (methodCalls: Array<string>) => {
-            return methodCalls.map((method) => (methodList.includes(method.split('=')[0]) ? method : 'false='));
-          }
-        : (methodCalls: Array<string>) => methodCalls;
-
-    return {
-      methodList,
-      clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
-      torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
-      torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
-      torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
-      torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
-      transferSummary: getAvailableMethodCalls(getMethodCalls(transferSummaryMethodCallConfigs)),
-    };
+    this.availableMethodCalls = this.processClientRequestSuccess(
+      await fetchAvailableMethodCalls(this.clientRequestManager).catch(this.processRTorrentRequestError),
+    );
   }
 
   processRTorrentRequestError = (error: RPCError) => {

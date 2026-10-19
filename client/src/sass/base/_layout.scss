@@ -11,6 +11,12 @@ body {
   width: 100%;
 }
 
+// iOS Safari 26+ blurs the top edge of the page unless a fixed box spans the viewport there.
+#app {
+  inset: 0;
+  position: fixed;
+}
+
 #app,
 .application,
 .application__view {
@@ -31,12 +37,25 @@ body {
 
     &--sidebar-alternative-state {
       .application__sidebar {
-        display: none;
+        flex: 0 0 0;
+        min-width: 0;
+        max-width: 0;
+        width: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
       }
 
       @media (max-width: 720px) {
         .application__sidebar {
           display: flex;
+          flex: 1;
+          min-width: 240px;
+          max-width: 250px;
+          width: auto;
+          overflow: visible;
+          opacity: 1;
+          pointer-events: auto;
           transform: translateX(120px);
           z-index: unset;
         }
