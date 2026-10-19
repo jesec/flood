@@ -135,6 +135,11 @@ $themes: (
     sidebar-filter--count--foreground--active: color.adjust(colors.$darkest-grey--hard, $lightness: -5%),
     sidebar-filter--count--background: color.adjust(colors.$darkest-grey--hard, $lightness: 20%),
     sidebar-filter--count--background--active: colors.$blue,
+    ratio--poor: #e03131,
+    ratio--low: #e8590c,
+    ratio--even: #5c940d,
+    ratio--good: #2f9e44,
+    ratio--great: #1e7b34,
   ),
   dark: (
     action--foreground: colors-dark.$md-grey-500,
@@ -246,5 +251,10 @@ $themes: (
     sidebar-filter--count--foreground--active: color.adjust(colors.$darkest-grey--hard, $lightness: -5%),
     sidebar-filter--count--background: colors-dark.$md-surface-dark-e06,
     sidebar-filter--count--background--active: colors.$blue,
+    ratio--poor: #ff6b6b,
+    ratio--low: #ffa94d,
+    ratio--even: #c0eb75,
+    ratio--good: #69db7c,
+    ratio--great: #2fbf4f,
   ),
 );

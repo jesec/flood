@@ -28,6 +28,7 @@ import Duration from '@client/components/general/Duration';
 import ProgressBar from '@client/components/general/ProgressBar';
 import Size from '@client/components/general/Size';
 import {formatDate, formatNumber} from '@client/util/format';
+import {getRatioClassName} from '@client/util/ratio';
 import {torrentStatusEffective} from '@client/util/torrentStatus';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentStore from '@client/stores/TorrentStore';
@@ -102,7 +103,9 @@ const PeerCell: FC<{peersConnected: number; totalPeers: number}> = observer(
 const RatioCell: FC<{ratio: number}> = observer(({ratio}: {ratio: number}) => {
   const {i18n} = useLingui();
 
-  return <span>{formatNumber(i18n.locale, ratio, {maximumFractionDigits: 2})}</span>;
+  return (
+    <span className={getRatioClassName(ratio)}>{formatNumber(i18n.locale, ratio, {maximumFractionDigits: 2})}</span>
+  );
 });
 
 const TagsCell: FC<{tags: string[]}> = observer(({tags}: {tags: string[]}) => (
