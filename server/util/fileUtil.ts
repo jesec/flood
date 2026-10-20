@@ -84,6 +84,23 @@ export async function existAsync(path: string): Promise<boolean> {
   return true;
 }
 
+export async function removeDirectoryIfEmpty(directory: string): Promise<boolean> {
+  if (!isAllowedPath(directory)) {
+    return false;
+  }
+
+  try {
+    if ((await fsp.readdir(directory)).length > 0) {
+      return false;
+    }
+
+    await fsp.rmdir(directory);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function cleanupEmptyDirectories(directory: string): Promise<boolean> {
   if (!isAllowedPath(directory)) {
     return false;
