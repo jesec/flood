@@ -59,6 +59,7 @@ const SettingsModal: FC = observer(() => {
       content: ResourcesTab,
       props: {
         onClientSettingsChange: handleClientSettingsChange,
+        onSettingsChange: handleFloodSettingsChange,
       },
       label: i18n._('settings.tabs.resources'),
     },
