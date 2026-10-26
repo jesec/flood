@@ -49,7 +49,8 @@ const getTorrentStatus = (
     }
   }
 
-  if (haveValid === totalSize) {
+  // a magnet link has a total size of 0 until Transmission gets its metadata
+  if (totalSize > 0 && haveValid === totalSize) {
     statuses.push('complete');
   }
 
