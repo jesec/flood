@@ -417,6 +417,8 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     media: '/downloads/media',
     software: '/downloads/software',
   },
+  autoTags: [],
+  autoTagWithUsername: false,
   mountPoints: ['/downloads', '/mnt/data', '/media'],
   startTorrentsOnLoad: true,
   UITorrentsAddTab: 'by-url',
