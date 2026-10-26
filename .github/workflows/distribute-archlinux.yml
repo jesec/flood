@@ -3,7 +3,7 @@ name: Distribute for Arch Linux
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ['Release']
+    workflows: ['Publish Packages']
     types:
       - completed
 
