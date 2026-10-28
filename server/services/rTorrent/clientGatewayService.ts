@@ -145,9 +145,13 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
   clientRequestManager: ClientRequestManager;
   availableMethodCalls: AvailableMethodCalls;
 
-  constructor(user: UserInDatabase, availableMethodCalls: AvailableMethodCalls) {
+  constructor(
+    user: UserInDatabase,
+    clientRequestManager: ClientRequestManager,
+    availableMethodCalls: AvailableMethodCalls,
+  ) {
     super(user);
-    this.clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    this.clientRequestManager = clientRequestManager;
     this.availableMethodCalls = availableMethodCalls;
   }
 
@@ -157,7 +161,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     if (availableMethodCalls == null) {
       availableMethodCalls = EMPTY_METHOD_CALLS;
     }
-    return new RTorrentClientGatewayService(user, availableMethodCalls);
+    return new RTorrentClientGatewayService(user, clientRequestManager, availableMethodCalls);
   }
 
   // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
