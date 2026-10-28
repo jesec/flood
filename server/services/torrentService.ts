@@ -2,8 +2,11 @@ import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent'
 import jsonpatch, {Operation} from 'fast-json-patch';
 
 import config from '../../config';
+import {createLogger} from '../util/logger';
 import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 import BaseService from './BaseService';
+
+const logger = createLogger('torrent-service');
 
 type TorrentServiceEvents = {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
@@ -17,6 +20,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   pollInterval = config.torrentClientPollIntervalIdle;
   pollTimeout: NodeJS.Timeout | null = null;
   torrentListSummary: TorrentListSummary = {id: Date.now(), torrents: {}};
+  lastFetchErrorMessage: string | null = null;
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
@@ -88,8 +92,15 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     return this.torrentListSummary;
   }
 
-  handleFetchTorrentListError = () => {
+  handleFetchTorrentListError = (error?: unknown) => {
     this.deferFetchTorrentList();
+
+    // polling retries every few seconds, so only log when the failure changes
+    const message = error instanceof Error ? error.message : String(error ?? 'client gateway unavailable');
+    if (message !== this.lastFetchErrorMessage) {
+      this.lastFetchErrorMessage = message;
+      logger.warn({err: error}, `Failed to fetch torrent list: ${message}`);
+    }
 
     this.emit('FETCH_TORRENT_LIST_ERROR');
     return null;
@@ -105,6 +116,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     }
 
     this.torrentListSummary = nextTorrentListSummary;
+    this.lastFetchErrorMessage = null;
 
     this.deferFetchTorrentList();
 
