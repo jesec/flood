@@ -171,8 +171,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1(vitest@5.0.1)
       '@yao-pkg/pkg':
-        specifier: 6.23.0
-        version: 6.23.0(supports-color@10.2.2)
+        specifier: 6.24.0
+        version: 6.24.0(supports-color@10.2.2)
       autoprefixer:
         specifier: 10.6.1
         version: 10.6.1(postcss@8.5.28)
@@ -3069,12 +3069,12 @@ packages:
   '@xobotyi/scrollbar-width@1.9.5':
     resolution: {integrity: sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==}
 
-  '@yao-pkg/pkg-fetch@3.6.6':
-    resolution: {integrity: sha512-Nu9ytHewcV6FuH4WvdpYZxz2XwiP2p30jlPBzbvwsS3OPYN7RRTyGrXhcmhS59O3AdXz/LW+4bozhV3alN+MEA==}
+  '@yao-pkg/pkg-fetch@3.6.7':
+    resolution: {integrity: sha512-uEeU5druVgHffruTAXzW6nf0wHfREWlCq5LBtQ4hCdLBDbwTteuym5NrxREur3EgNcqFRenEi6Rivwo723PkHg==}
     hasBin: true
 
-  '@yao-pkg/pkg@6.23.0':
-    resolution: {integrity: sha512-+d8iqRcmDxPpTE5fbSmsn1rShktIKvMcQGcFhwLdH15A4g2fBcRVLXppeQmu9fbF98bhYXjCOj6UTf3odXxWiA==}
+  '@yao-pkg/pkg@6.24.0':
+    resolution: {integrity: sha512-SMwFLic12noHLbqxhhQVClVX6YZlQtzwwez6dq7Xj64rXX6OFgZTTQbPgw4wgec5IoUN+6rCRKgyW/cnVPOwkA==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -10020,7 +10020,7 @@ snapshots:
 
   '@xobotyi/scrollbar-width@1.9.5': {}
 
-  '@yao-pkg/pkg-fetch@3.6.6':
+  '@yao-pkg/pkg-fetch@3.6.7':
     dependencies:
       picocolors: 1.1.1
       progress: 2.0.3
@@ -10033,14 +10033,14 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  '@yao-pkg/pkg@6.23.0(supports-color@10.2.2)':
+  '@yao-pkg/pkg@6.24.0(supports-color@10.2.2)':
     dependencies:
       '@babel/generator': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/traverse': 7.29.7(supports-color@10.2.2)
       '@babel/types': 7.29.7
       '@roberts_lando/vfs': 0.3.3
-      '@yao-pkg/pkg-fetch': 3.6.6
+      '@yao-pkg/pkg-fetch': 3.6.7
       esbuild: 0.28.1
       into-stream: 9.1.0
       multistream: 4.1.0
