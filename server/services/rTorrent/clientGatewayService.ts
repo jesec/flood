@@ -145,9 +145,13 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
   clientRequestManager: ClientRequestManager;
   availableMethodCalls: AvailableMethodCalls;
 
-  constructor(user: UserInDatabase, availableMethodCalls: AvailableMethodCalls) {
+  constructor(
+    user: UserInDatabase,
+    clientRequestManager: ClientRequestManager,
+    availableMethodCalls: AvailableMethodCalls,
+  ) {
     super(user);
-    this.clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    this.clientRequestManager = clientRequestManager;
     this.availableMethodCalls = availableMethodCalls;
   }
 
@@ -157,7 +161,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     if (availableMethodCalls == null) {
       availableMethodCalls = EMPTY_METHOD_CALLS;
     }
-    return new RTorrentClientGatewayService(user, availableMethodCalls);
+    return new RTorrentClientGatewayService(user, clientRequestManager, availableMethodCalls);
   }
 
   // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
@@ -177,7 +181,17 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
       this.clientRequestManager.isJSONCapable = false;
       return this.clientRequestManager
         .methodCall('d.multicall2', methodCalls)
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+        .catch((fallbackError: RPCError) => {
+          if (fallbackError?.code === -501) {
+            throw new Error(
+              `rTorrent rejected the JSON-RPC torrent list request (${(error as RPCError).message}) ` +
+                'and was built without XML-RPC support, so the fallback failed. ' +
+                'Rebuild rTorrent with --with-xmlrpc-tinyxml2 or --with-xmlrpc-c.',
+            );
+          }
+          throw fallbackError;
+        });
     }
   }
 
