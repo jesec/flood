@@ -1,11 +1,10 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 
-import {afterAll, vi} from 'vitest';
+import {inject, vi} from 'vitest';
 
-const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
+const temporaryRuntimeDirectory = path.join(inject('floodTestTemporaryRoot'), crypto.randomBytes(12).toString('hex'));
 
 fs.mkdirSync(temporaryRuntimeDirectory, {recursive: true});
 fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'db'), {recursive: true});
@@ -36,11 +35,3 @@ vi.mock('../../config', () => ({
   __esModule: true,
   default: config,
 }));
-
-afterAll(() => {
-  if (process.env.CI !== 'true') {
-    // TODO: This leads to test flakiness caused by ENOENT error
-    // NeDB provides no method to close database connection
-    fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
-  }
-});
