@@ -14,6 +14,7 @@ const baseTestConfig = {
   testTimeout: 60000,
   hookTimeout: 60000,
   fileParallelism: false,
+  globalSetup: 'server/.jest/globalSetup.js',
 };
 
 export default defineConfig({
