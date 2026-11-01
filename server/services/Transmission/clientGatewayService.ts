@@ -29,6 +29,7 @@ import type {TransferSummary} from '@shared/types/TransferData';
 import {TorrentPriority} from '../../../shared/types/Torrent';
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
+import {calculateTorrentHealth} from '../../../shared/util/torrentHealth';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
@@ -417,6 +418,7 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
                 upRate: torrent.rateUpload,
                 upTotal: torrent.uploadedEver,
                 eta: torrent.eta > 0 ? torrent.eta : -1,
+                health: calculateTorrentHealth(torrent.peersSendingToUs, torrent.peersSendingToUs),
                 isPrivate: torrent.isPrivate,
                 isInitialSeeding: false,
                 isSequential: false,
