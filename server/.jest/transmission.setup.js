@@ -1,12 +1,11 @@
 import {spawn} from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 
-import {afterAll, vi} from 'vitest';
+import {afterAll, inject, vi} from 'vitest';
 
-const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
+const temporaryRuntimeDirectory = path.join(inject('floodTestTemporaryRoot'), crypto.randomBytes(12).toString('hex'));
 
 const transmissionSession = path.join(temporaryRuntimeDirectory, 'transmission');
 const rpcPort = Math.floor(Math.random() * (65534 - 20000) + 20000);
@@ -74,10 +73,4 @@ afterAll(async () => {
     transmissionProcess.on('close', resolve);
     transmissionProcess.kill('SIGKILL');
   });
-
-  if (process.env.CI !== 'true') {
-    // TODO: This leads to test flakiness caused by ENOENT error
-    // NeDB provides no method to close database connection
-    fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
-  }
 });

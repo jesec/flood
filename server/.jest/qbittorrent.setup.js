@@ -1,12 +1,11 @@
 import {spawn} from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 
-import {afterAll, vi} from 'vitest';
+import {afterAll, inject, vi} from 'vitest';
 
-const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
+const temporaryRuntimeDirectory = path.join(inject('floodTestTemporaryRoot'), crypto.randomBytes(12).toString('hex'));
 
 fs.mkdirSync(temporaryRuntimeDirectory, {recursive: true});
 fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'db'), {recursive: true});
@@ -67,5 +66,4 @@ const qBittorrentDaemon = spawn(
 
 afterAll(() => {
   qBittorrentDaemon.kill('SIGKILL');
-  fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
 });
