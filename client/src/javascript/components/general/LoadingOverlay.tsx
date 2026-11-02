@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import {FC} from 'react';
 import {useLingui} from '@lingui/react';
 
+import {Button} from '@client/ui';
 import {CheckmarkThick} from '@client/ui/icons';
 
 import type {Dependencies} from '@client/stores/UIStore';
@@ -37,16 +38,30 @@ const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}:
   );
 };
 
+const LoadingLogoutButton: FC<{onLogout: () => void}> = ({onLogout}) => {
+  const {i18n} = useLingui();
+
+  return (
+    <div className="application__loading-recovery">
+      <Button priority="tertiary" onClick={onLogout}>
+        {i18n._('sidebar.button.log.out')}
+      </Button>
+    </div>
+  );
+};
+
 interface LoadingOverlayProps {
   className?: string;
   dependencies?: Dependencies;
+  onLogout?: () => void;
 }
 
-const LoadingOverlay: FC<LoadingOverlayProps> = ({className, dependencies}: LoadingOverlayProps) => {
+const LoadingOverlay: FC<LoadingOverlayProps> = ({className, dependencies, onLogout}: LoadingOverlayProps) => {
   return (
     <div className={classnames('application__loading-overlay', className)}>
       <LoadingIndicator inverse />
       {dependencies != null ? <LoadingDependencyList dependencies={dependencies} /> : null}
+      {onLogout != null ? <LoadingLogoutButton onLogout={onLogout} /> : null}
     </div>
   );
 };
