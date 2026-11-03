@@ -227,6 +227,8 @@
   "settings.ui.torrent.context.menu.items.show": "Show",
   "settings.ui.torrent.details.enabled": "Enabled",
   "settings.ui.torrent.details.tags.placement": "In the expanded view, tags work best at the end of the list.",
+  "settings.ui.transfer.totals": "Transfer Totals",
+  "settings.ui.transfer.totals.reset": "Reset downloaded and uploaded totals",
   "settings.ui.torrent.list": "Torrent List Display",
   "settings.ui.torrent.size": "Torrent Size",
   "settings.ui.torrent.size.condensed": "Condensed View",
