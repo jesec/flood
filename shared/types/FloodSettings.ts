@@ -36,6 +36,12 @@ export interface FloodSettings {
   // value of property '' is the default preferred destination
   torrentDestinations?: Record<string, string>;
 
+  // Tags automatically added to every torrent added by this user
+  autoTags: Array<string>;
+
+  // Automatically tag torrents added by this user with their username
+  autoTagWithUsername: boolean;
+
   // Tag selector preference
   UITagSelectorMode?: 'single' | 'multi';
 

@@ -6,6 +6,7 @@ import TorrentContextMenuActions, {
 } from '../../client/src/javascript/constants/TorrentContextMenuActions';
 import TorrentListColumns, {type TorrentListColumn} from '../../client/src/javascript/constants/TorrentListColumns';
 import type {FloodSettings} from '../types/FloodSettings';
+import {tagsSchema} from './api/tags';
 
 const languageKeys = Object.keys(Languages) as Array<Language>;
 const torrentListColumnKeys = Object.keys(TorrentListColumns) as Array<TorrentListColumn>;
@@ -31,6 +32,8 @@ export const floodSettingKeySchema = z.enum(
     deleteTorrentData: true,
     startTorrentsOnLoad: true,
     torrentDestinations: true,
+    autoTags: true,
+    autoTagWithUsername: true,
     UITagSelectorMode: true,
     UITorrentsAddTab: true,
     UIPageTitleSpeedEnabled: true,
@@ -167,6 +170,8 @@ export const floodSettingsSchema = z
     deleteTorrentData: z.boolean().default(true),
     startTorrentsOnLoad: z.boolean().default(true),
     torrentDestinations: z.record(z.string(), z.string()).optional(),
+    autoTags: tagsSchema.default([]),
+    autoTagWithUsername: z.boolean().default(false),
     UITagSelectorMode: z.enum(['single', 'multi']).optional(),
     UITorrentsAddTab: z.enum(['by-url', 'by-file', 'by-creation']).optional(),
     UIPageTitleSpeedEnabled: z.boolean().default(true),
