@@ -1,0 +1,42 @@
+@use 'sass:map';
+
+@use '../tools/themes';
+
+$ratio--levels: poor, low, even, good, great;
+
+.ratio {
+  font-weight: 600;
+
+  @each $level in $ratio--levels {
+    &--#{$level} {
+      @include themes.theme('color', 'ratio--#{$level}');
+    }
+  }
+}
+
+// The torrent details modal header is always dark, regardless of theme.
+.torrent-details__sub-heading {
+  .ratio {
+    @each $level in $ratio--levels {
+      &--#{$level} {
+        color: map.get(map.get(themes.$themes, 'dark'), 'ratio--#{$level}');
+      }
+    }
+  }
+}
+
+.torrent {
+  // Mute ratio colors for stopped torrents, like the rest of the row.
+  &--is-stopped {
+    .ratio {
+      opacity: 0.75;
+    }
+  }
+
+  // Selected rows have a colored background: fall back to the row's foreground for legibility.
+  &--is-selected {
+    .ratio {
+      color: inherit;
+    }
+  }
+}

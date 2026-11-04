@@ -6,6 +6,7 @@ import {Trans, useLingui} from '@lingui/react';
 
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
+import {getRatioClassName} from '@client/util/ratio';
 import {torrentStatusClasses, torrentStatusEffective} from '@client/util/torrentStatus';
 import {formatNumber} from '@client/util/format';
 import SettingStore from '@client/stores/SettingStore';
@@ -64,7 +65,7 @@ const TorrentHeading: FC = observer(() => {
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Ratio />
-            {formatNumber(i18n.locale, torrent.ratio)}
+            <span className={getRatioClassName(torrent.ratio)}>{formatNumber(i18n.locale, torrent.ratio)}</span>
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Clock />
