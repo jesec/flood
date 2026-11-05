@@ -84,8 +84,23 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
     type: 'number',
   })
   .option('rtsocket', {
-    conflicts: ['rthost', 'rtport'],
+    conflicts: ['rthost', 'rtport', 'rtgrpchost', 'rtgrpcport', 'rtgrpcsocket'],
     describe: "Path to rTorrent's SCGI unix socket",
+    type: 'string',
+  })
+  .option('rtgrpchost', {
+    conflicts: ['rtsocket', 'rtport', 'rtgrpcsocket'],
+    describe: 'Host of the rstorrent gRPC interface',
+    type: 'string',
+  })
+  .option('rtgrpcport', {
+    conflicts: ['rtsocket', 'rtgrpcsocket'],
+    describe: 'Port of the rstorrent gRPC interface',
+    type: 'number',
+  })
+  .option('rtgrpcsocket', {
+    conflicts: ['rthost', 'rtport', 'rtsocket', 'rtgrpchost', 'rtgrpcport'],
+    describe: 'Path to the rstorrent gRPC unix socket',
     type: 'string',
   })
   .option('qburl', {
@@ -129,6 +144,9 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
       'rthost',
       'rtport',
       'rtsocket',
+      'rtgrpchost',
+      'rtgrpcport',
+      'rtgrpcsocket',
       'qburl',
       'qbuser',
       'qbpass',
@@ -280,7 +298,23 @@ if (!argv.secret) {
 }
 
 let connectionSettings: Partial<ClientConnectionSettings> | undefined;
-if (argv.rtsocket != null || argv.rthost != null) {
+if (argv.rtgrpcsocket != null || argv.rtgrpchost != null || argv.rtgrpcport != null) {
+  connectionSettings =
+    argv.rtgrpcsocket != null
+      ? {
+          client: 'rstorrent',
+          type: 'grpcSocket',
+          version: 1,
+          socket: argv.rtgrpcsocket,
+        }
+      : {
+          client: 'rstorrent',
+          type: 'grpc',
+          version: 1,
+          host: argv.rtgrpchost ?? '127.0.0.1',
+          port: argv.rtgrpcport ?? 50051,
+        };
+} else if (argv.rtsocket != null || argv.rthost != null) {
   if (argv.rtsocket != null) {
     connectionSettings = {
       client: 'rTorrent',

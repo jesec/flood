@@ -1,0 +1,95 @@
+# Flood + rstorrent (gRPC) test stack.
+#
+# Runs rstorrent from ghcr.io/chmuri/rstorrent:latest and Flood from the working tree.
+# (Optionally build rstorrent from ../rstorrent by uncommenting the build block).
+#
+# Usage:
+#   docker compose -f docker-compose.rstorrent.yml up --build
+#   open http://localhost:3000  (auth is disabled; the config user is used)
+#
+# Both containers share the runtime volume, so Flood talks to rstorrent over
+# the Unix socket at /config/grpc.sock, and both see the same /downloads paths
+# (required for file operations).
+name: flood-rstorrent-grpc
+
+services:
+  rstorrent:
+    image: ghcr.io/chmuri/rstorrent:latest
+    # To build from local working tree instead of using the prebuilt image:
+    # build:
+    #   context: ../rstorrent
+    #   dockerfile: Dockerfile
+    # The image entrypoint creates /config and /session, then execs this command.
+    command:
+      - /usr/local/bin/rstorrent
+      - --daemon
+      - -n
+      - -d
+      - /downloads
+      - -s
+      - /session
+      - --grpc-socket
+      - /config/grpc.sock
+      - -o
+      - network.port_range.set=50000-50010
+      - -o
+      - dht.port.set=6881
+    volumes:
+      - downloads:/downloads
+      - rstorrent-session:/session
+      - runtime:/config
+    ports:
+      # BitTorrent peer traffic (optional, useful for manual swarm tests).
+      - '50000-50010:50000-50010'
+      - '6881:6881/udp'
+    healthcheck:
+      # The gRPC socket appears once the tonic server is bound.
+      test: ['CMD-SHELL', 'test -S /config/grpc.sock']
+      interval: 2s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+
+  flood:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # The Dockerfile's default (last) stage bundles rTorrent; use the plain
+      # Flood image instead.
+      target: flood
+    image: local/flood:rstorrent-grpc
+    # The image runs as the unprivileged "download" user, but it has to create
+    # its runtime directory inside the shared volume.
+    user: '0:0'
+    depends_on:
+      rstorrent:
+        condition: service_healthy
+    entrypoint:
+      - npm
+      - --prefix=/usr/src/app/
+      - run
+      - start
+      - --
+      - --host=0.0.0.0
+    command:
+      - --rtgrpcsocket=/config/grpc.sock
+      - --auth=none
+      - --port=3000
+      - --rundir=/config/flood
+      - --allowedpath=/downloads
+    volumes:
+      - downloads:/downloads
+      - runtime:/config
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/api/auth/verify >/dev/null 2>&1 || exit 1']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+volumes:
+  downloads:
+  rstorrent-session:
+  runtime:

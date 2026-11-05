@@ -57,32 +57,37 @@ const filterMountPoint = (mountpoint: string) => {
   return true;
 };
 
+const EXCLUDED_FS_TYPES = new Set(['devtmpfs', 'squashfs', 'tmpfs', 'overlay']);
+
+export const parseLinuxDfOutput = (stdout: string): Array<Disk> =>
+  stdout
+    .trim()
+    .split('\n')
+    .slice(1)
+    .map((disk) => disk.split(/\s+/))
+    .filter((disk) => disk.length >= 7)
+    .filter((disk) => !EXCLUDED_FS_TYPES.has(disk[1]))
+    .map(([_dev, _type, size, used, avail, _pcent, ...targetParts]) => {
+      return {
+        size: Number.parseInt(size, 10) * 1024,
+        used: Number.parseInt(used, 10) * 1024,
+        avail: Number.parseInt(avail, 10) * 1024,
+        target: targetParts.join(' '),
+      };
+    })
+    .filter((disk) => filterMountPoint(disk.target));
+
 const MAX_BUFFER_SIZE = 65536;
 export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => Promise<Array<Disk>>>> = {
   linux: (timeout) =>
     spawnAsync(
       'df',
-      ['--exclude-type=devtmpfs', '--exclude-type=squashfs', '--exclude-type=tmpfs', '--exclude-type=overlay'],
+      ['-Pk', '-T'],
       {
         timeout: timeout,
       },
       MAX_BUFFER_SIZE,
-    ).then((stdout) =>
-      stdout
-        .trim()
-        .split('\n')
-        .slice(1)
-        .map((disk) => disk.split(/\s+/))
-        .filter((disk) => filterMountPoint(disk[5]))
-        .map(([_dev, size, used, avail, _pcent, target]) => {
-          return {
-            size: Number.parseInt(size, 10) * 1024,
-            used: Number.parseInt(used, 10) * 1024,
-            avail: Number.parseInt(avail, 10) * 1024,
-            target,
-          };
-        }),
-    ),
+    ).then(parseLinuxDfOutput),
   freebsd: (timeout) =>
     spawnAsync(
       'df',

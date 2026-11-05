@@ -42,10 +42,25 @@ export default defineConfig({
         },
         test: {
           ...baseTestConfig,
+          name: 'unit',
+          include: [
+            'server/services/rTorrent/**/*.test.ts',
+            'server/services/rstorrent/**/*.test.ts',
+            'server/util/**/*.test.ts',
+            'shared/**/*.test.ts',
+          ],
+        },
+      }),
+      defineProject({
+        resolve: {
+          tsconfigPaths: true,
+        },
+        test: {
+          ...baseTestConfig,
           name: 'qbittorrent',
           setupFiles: ['server/.jest/qbittorrent.setup.js'],
           include: ['server/**/*.test.ts'],
-          exclude: ['server/routes/api/auth.test.ts'],
+          exclude: ['server/routes/api/auth.test.ts', 'server/services/rTorrent/**', 'server/services/rstorrent/**'],
         },
       }),
       defineProject({
@@ -57,7 +72,7 @@ export default defineConfig({
           name: 'rtorrent',
           setupFiles: ['server/.jest/rtorrent.setup.js'],
           include: ['server/**/*.test.ts'],
-          exclude: ['server/routes/api/auth.test.ts'],
+          exclude: ['server/routes/api/auth.test.ts', 'server/services/rTorrent/**', 'server/services/rstorrent/**'],
         },
       }),
       defineProject({
@@ -69,7 +84,7 @@ export default defineConfig({
           name: 'transmission',
           setupFiles: ['server/.jest/transmission.setup.js'],
           include: ['server/**/*.test.ts'],
-          exclude: ['server/routes/api/auth.test.ts'],
+          exclude: ['server/routes/api/auth.test.ts', 'server/services/rTorrent/**', 'server/services/rstorrent/**'],
         },
       }),
     ],

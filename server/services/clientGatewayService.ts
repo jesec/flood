@@ -35,6 +35,8 @@ type ClientGatewayServiceEvents = {
   PROCESS_TORRENT_LIST_START: () => void;
   PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
   PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
+  // Emitted by push-native clients (rstorrent) so the poller can refresh early.
+  PUSH_TORRENT_UPDATE: () => void;
 };
 
 export interface ClientGatewayService extends TypedEmitter<ClientGatewayServiceEvents> {

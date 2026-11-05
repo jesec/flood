@@ -1,0 +1,323 @@
+syntax = "proto3";
+
+package rtorrent.v1;
+
+// -----------------------------------------------------------------------------
+// Common & Dynamic Object Types
+// -----------------------------------------------------------------------------
+
+message Empty {}
+
+enum TorrentState {
+  TORRENT_STATE_UNSPECIFIED = 0;
+  TORRENT_STATE_STOPPED = 1;
+  TORRENT_STATE_DOWNLOADING = 2;
+  TORRENT_STATE_SEEDING = 3;
+  TORRENT_STATE_PAUSED = 4;
+  TORRENT_STATE_CHECKING = 5;
+  TORRENT_STATE_CLOSED = 6;
+  TORRENT_STATE_ERROR = 7;
+}
+
+message ObjectValue {
+  oneof kind {
+    bool null_value = 1;
+    int64 int_value = 2;
+    string string_value = 3;
+    bytes bytes_value = 4;
+    bool bool_value = 5;
+    ListValue list_value = 6;
+    MapValue map_value = 7;
+  }
+}
+
+message ListValue {
+  repeated ObjectValue values = 1;
+}
+
+message MapValue {
+  map<string, ObjectValue> fields = 1;
+}
+
+// -----------------------------------------------------------------------------
+// Torrent Service Messages
+// -----------------------------------------------------------------------------
+
+message TorrentSummary {
+  string hash = 1;
+  string name = 2;
+  int64 size_bytes = 3;
+  int64 completed_bytes = 4;
+  int64 up_rate_bytes_per_sec = 5;
+  int64 down_rate_bytes_per_sec = 6;
+  int64 up_total_bytes = 7;
+  int64 down_total_bytes = 8;
+  TorrentState state = 9;
+  string state_name = 10;
+  bool is_active = 11;
+  bool is_complete = 12;
+  bool is_hash_checking = 13;
+  uint32 priority = 14;
+  string directory = 15;
+  uint64 state_changed_timestamp = 16;
+  uint64 started_timestamp = 17;
+  uint64 finished_timestamp = 18;
+  string message = 19;
+}
+
+message FileInfo {
+  uint32 index = 1;
+  string path = 2;
+  int64 size_bytes = 3;
+  int64 completed_bytes = 4;
+  uint32 priority = 5; // 0 = don't download, 1 = normal, 2 = high
+}
+
+message TrackerInfo {
+  uint32 index = 1;
+  string url = 2;
+  bool is_enabled = 3;
+  uint32 group = 4;
+}
+
+message PeerInfo {
+  string address = 1;
+  int64 up_rate_bytes_per_sec = 2;
+  int64 down_rate_bytes_per_sec = 3;
+  string peer_id = 4;
+  bool is_encrypted = 5;
+}
+
+message TorrentDetails {
+  TorrentSummary summary = 1;
+  uint32 piece_length = 2;
+  uint32 num_pieces = 3;
+  repeated FileInfo files = 4;
+  repeated TrackerInfo trackers = 5;
+  repeated PeerInfo peers = 6;
+  string throttle_name = 7;
+  bool is_private = 8;
+  string connection_seed = 9;
+}
+
+message ListTorrentsRequest {
+  // Optional view filter, e.g. "main", "started", "stopped", "complete", "incomplete", "active"
+  string view = 1;
+  // Optional list of specific hashes to retrieve
+  repeated string hashes = 2;
+}
+
+message ListTorrentsResponse {
+  repeated TorrentSummary torrents = 1;
+}
+
+message GetTorrentRequest {
+  string hash = 1;
+}
+
+message AddTorrentRequest {
+  oneof source {
+    bytes torrent_file = 1;
+    string file_path = 2;
+    string url = 3;
+    string magnet_uri = 4;
+  }
+  string destination_directory = 5;
+  bool start_now = 6;
+  repeated string initial_commands = 7;
+}
+
+message AddTorrentResponse {
+  string hash = 1;
+  string name = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+enum TorrentAction {
+  TORRENT_ACTION_UNSPECIFIED = 0;
+  TORRENT_ACTION_START = 1;
+  TORRENT_ACTION_STOP = 2;
+  TORRENT_ACTION_PAUSE = 3;
+  TORRENT_ACTION_RESUME = 4;
+  TORRENT_ACTION_CLOSE = 5;
+  TORRENT_ACTION_CHECK_HASH = 6;
+}
+
+message ControlTorrentRequest {
+  string hash = 1;
+  TorrentAction action = 2;
+}
+
+message ControlTorrentResponse {
+  bool success = 1;
+  string hash = 2;
+  TorrentState current_state = 3;
+  string error_message = 4;
+}
+
+message RemoveTorrentRequest {
+  string hash = 1;
+  bool delete_data = 2;
+}
+
+message RemoveTorrentResponse {
+  bool success = 1;
+  string hash = 2;
+  string error_message = 3;
+}
+
+message SetTorrentPriorityRequest {
+  string hash = 1;
+  uint32 priority = 2; // 0 = off, 1 = low, 2 = normal, 3 = high
+}
+
+message SetPriorityResponse {
+  bool success = 1;
+  string error_message = 2;
+}
+
+message BulkControlTorrentsRequest {
+  repeated string hashes = 1;
+  TorrentAction action = 2;
+}
+
+message BulkControlTorrentsResponse {
+  repeated ControlTorrentResponse results = 1;
+  uint32 success_count = 2;
+  uint32 failure_count = 3;
+}
+
+message BulkRemoveTorrentsRequest {
+  repeated string hashes = 1;
+  bool delete_data = 2;
+}
+
+message BulkRemoveTorrentsResponse {
+  repeated RemoveTorrentResponse results = 1;
+  uint32 success_count = 2;
+  uint32 failure_count = 3;
+}
+
+message BulkSetTorrentPriorityRequest {
+  repeated string hashes = 1;
+  uint32 priority = 2;
+}
+
+message BulkSetPriorityResponse {
+  repeated SetPriorityResponse results = 1;
+  uint32 success_count = 2;
+  uint32 failure_count = 3;
+}
+
+message StreamEventsRequest {
+  // Optional filter for specific events (e.g. "event.download.finished")
+  repeated string event_filter = 1;
+}
+
+message TorrentEvent {
+  string event_name = 1;
+  string hash = 2;
+  TorrentSummary summary = 3;
+  uint64 timestamp = 4;
+}
+
+// -----------------------------------------------------------------------------
+// System Service Messages
+// -----------------------------------------------------------------------------
+
+message VersionResponse {
+  string version = 1;
+  string api_version = 2;
+  string build_target = 3;
+  uint64 uptime_seconds = 4;
+}
+
+message SessionStatsResponse {
+  int64 up_rate_bytes_per_sec = 1;
+  int64 down_rate_bytes_per_sec = 2;
+  int64 up_total_bytes = 3;
+  int64 down_total_bytes = 4;
+  uint32 active_torrents = 5;
+  uint32 total_torrents = 6;
+  uint32 listen_port = 7;
+  int64 throttle_up_limit = 8;
+  int64 throttle_down_limit = 9;
+  bool dht_active = 10;
+  uint32 dht_nodes = 11;
+  uint32 dht_torrents = 12;
+  uint32 dht_port = 13;
+}
+
+message StreamStatsRequest {
+  uint32 interval_ms = 1; // Default 1000ms
+}
+
+message ShutdownRequest {
+  bool force = 1;
+}
+
+message ShutdownResponse {
+  bool acknowledged = 1;
+  string message = 2;
+}
+
+// -----------------------------------------------------------------------------
+// Command Service Messages (Universal Bridge)
+// -----------------------------------------------------------------------------
+
+message CommandRequest {
+  string command = 1;
+  repeated ObjectValue args = 2;
+  // Optional target (hash for download-scoped commands)
+  string target_hash = 3;
+  bool trusted = 4;
+}
+
+message CommandResponse {
+  bool success = 1;
+  ObjectValue result = 2;
+  string error_message = 3;
+}
+
+message MulticallRequest {
+  repeated CommandRequest calls = 1;
+}
+
+message MulticallResponse {
+  repeated CommandResponse results = 1;
+}
+
+message ListCommandsResponse {
+  repeated string commands = 1;
+}
+
+// -----------------------------------------------------------------------------
+// Services
+// -----------------------------------------------------------------------------
+
+service TorrentService {
+  rpc ListTorrents(ListTorrentsRequest) returns (ListTorrentsResponse);
+  rpc GetTorrent(GetTorrentRequest) returns (TorrentDetails);
+  rpc AddTorrent(AddTorrentRequest) returns (AddTorrentResponse);
+  rpc ControlTorrent(ControlTorrentRequest) returns (ControlTorrentResponse);
+  rpc RemoveTorrent(RemoveTorrentRequest) returns (RemoveTorrentResponse);
+  rpc SetTorrentPriority(SetTorrentPriorityRequest) returns (SetPriorityResponse);
+  rpc BulkControlTorrents(BulkControlTorrentsRequest) returns (BulkControlTorrentsResponse);
+  rpc BulkRemoveTorrents(BulkRemoveTorrentsRequest) returns (BulkRemoveTorrentsResponse);
+  rpc BulkSetTorrentPriority(BulkSetTorrentPriorityRequest) returns (BulkSetPriorityResponse);
+  rpc StreamEvents(StreamEventsRequest) returns (stream TorrentEvent);
+}
+
+service SystemService {
+  rpc GetVersion(Empty) returns (VersionResponse);
+  rpc GetSessionStats(Empty) returns (SessionStatsResponse);
+  rpc StreamStats(StreamStatsRequest) returns (stream SessionStatsResponse);
+  rpc Shutdown(ShutdownRequest) returns (ShutdownResponse);
+}
+
+service CommandService {
+  rpc Execute(CommandRequest) returns (CommandResponse);
+  rpc Multicall(MulticallRequest) returns (MulticallResponse);
+  rpc ListCommands(Empty) returns (ListCommandsResponse);
+}

@@ -9,6 +9,12 @@ pnpm-lock.yaml
 ## Panda
 client/src/javascript/styled-system/
 
+# Vendored/generated gRPC protobuf artifacts
+server/services/rstorrent/proto/rstorrent.ts
+
+# Planning artifacts
+.plan/
+
 # Storybook
 css-snapshots/
 *storybook.log

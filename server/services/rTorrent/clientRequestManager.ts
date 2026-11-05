@@ -1,20 +1,18 @@
 import type {NetConnectOpts} from 'node:net';
 
-import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {RTorrentSCGIConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import PQueue from 'p-queue';
 
 import {sanitizePath} from '../../util/fileUtil';
-import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import type {MethodCallParameters, RTorrentMethodCallTransport} from './util/rTorrentMethodCallUtil';
 import {methodCallJSON, methodCallXML} from './util/scgiUtil';
 
-type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
-
-class ClientRequestManager {
+class ClientRequestManager implements RTorrentMethodCallTransport {
   queue: PQueue;
-  connectionSettings: RTorrentConnectionSettings;
+  connectionSettings: RTorrentSCGIConnectionSettings;
   isJSONCapable = false;
 
-  constructor(connectionSettings: RTorrentConnectionSettings) {
+  constructor(connectionSettings: RTorrentSCGIConnectionSettings) {
     if (connectionSettings.type === 'socket') {
       this.connectionSettings = {
         ...connectionSettings,

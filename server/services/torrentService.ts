@@ -5,6 +5,8 @@ import config from '../../config';
 import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 import BaseService from './BaseService';
 
+const PUSH_UPDATE_DEBOUNCE_MS = 250;
+
 type TorrentServiceEvents = {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
   FETCH_TORRENT_LIST_ERROR: () => void;
@@ -16,6 +18,7 @@ type TorrentServiceEvents = {
 class TorrentService extends BaseService<TorrentServiceEvents> {
   pollInterval = config.torrentClientPollIntervalIdle;
   pollTimeout: NodeJS.Timeout | null = null;
+  pushDebounceTimeout: NodeJS.Timeout | null = null;
   torrentListSummary: TorrentListSummary = {id: Date.now(), torrents: {}};
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
@@ -29,6 +32,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       const {clientGatewayService} = this.services;
 
       clientGatewayService.on('PROCESS_TORRENT', this.handleTorrentProcessed);
+      clientGatewayService.on('PUSH_TORRENT_UPDATE', this.handlePushTorrentUpdate);
 
       this.fetchTorrentList();
 
@@ -51,6 +55,22 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     };
   }
 
+  /**
+   * Push-native clients emit this when the daemon reports a lifecycle event;
+   * refresh the list immediately (debounced) instead of waiting for the next
+   * poll tick.
+   */
+  handlePushTorrentUpdate = () => {
+    if (this.pushDebounceTimeout != null) {
+      return;
+    }
+
+    this.pushDebounceTimeout = setTimeout(() => {
+      this.pushDebounceTimeout = null;
+      void this.fetchTorrentList();
+    }, PUSH_UPDATE_DEBOUNCE_MS);
+  };
+
   deferFetchTorrentList() {
     this.pollTimeout = setTimeout(this.fetchTorrentList, this.pollInterval);
   }
@@ -58,6 +78,10 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   destroy(drop: boolean) {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
+    }
+
+    if (this.pushDebounceTimeout != null) {
+      clearTimeout(this.pushDebounceTimeout);
     }
 
     return super.destroy(drop);

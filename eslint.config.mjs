@@ -21,6 +21,7 @@ export default [
       '**/*.d.ts',
       '**/styled-system/**',
       '**/storybook-static/**',
+      'server/services/rstorrent/proto/rstorrent.ts',
     ],
   },
 

@@ -8,7 +8,7 @@ import type {
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {UserInDatabase} from '@shared/schema/Auth';
-import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {RTorrentSCGIConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
@@ -47,8 +47,13 @@ import {
   transferSummaryMethodCallConfigs,
 } from './constants/methodCallConfigs';
 import type {RPCError} from './types/RPCError';
-import type {MethodCallConfig, MethodCallConfigs, MultiMethodCalls} from './util/rTorrentMethodCallUtil';
-import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
+import type {
+  MethodCallConfig,
+  MethodCallConfigs,
+  MultiMethodCalls,
+  RTorrentMethodCallTransport,
+} from './util/rTorrentMethodCallUtil';
+import {getMethodCalls, getMethodCommandName, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {
   encodeTags,
   getAddTorrentPropertiesCalls,
@@ -80,15 +85,23 @@ const EMPTY_METHOD_CALLS: AvailableMethodCalls = {
 /**
  * Filter configs by available methods, resolving alternative method names
  * to the single method that is actually available on this rTorrent instance.
+ *
+ * Method names are compared without the trailing `=` used by stringified
+ * getters (`d.hash=` -> `d.hash`): rtorrent implementations differ in which
+ * form `system.listMethods`/`ListCommands` reports.
  */
+const normalizeMethodName = (method: string): string => getMethodCommandName(method);
+
 const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string[]): MethodCallConfigs => {
   const resolved: Record<string, MethodCallConfig> = {};
+  const availableMethods = new Set(methodList.map(normalizeMethodName));
   // Sort keys so that Object.values(configs) (methodCalls) and
   // Object.keys(configs) (processMethodCallResponse) stay in sync.
   for (const key of Object.keys(configs).sort()) {
     const config = configs[key];
     const methods = Array.isArray(config.methodCall) ? config.methodCall : [config.methodCall];
-    const availableMethod = methodList.length > 0 ? methods.find((m) => methodList.includes(m)) : methods[0];
+    const availableMethod =
+      methodList.length > 0 ? methods.find((m) => availableMethods.has(normalizeMethodName(m))) : methods[0];
     if (availableMethod) {
       resolved[key] = {methodCall: availableMethod, transformValue: config.transformValue};
     }
@@ -96,8 +109,31 @@ const resolveMethodCallConfigs = (configs: MethodCallConfigs, methodList: string
   return resolved;
 };
 
+const buildAvailableMethodCalls = (methodList: string[]): AvailableMethodCalls => {
+  const getAvailableMethodCalls =
+    methodList?.length > 0
+      ? (methodCalls: Array<string>) => {
+          return methodCalls.map((method) => (methodList.includes(getMethodCommandName(method)) ? method : 'false='));
+        }
+      : (methodCalls: Array<string>) => methodCalls;
+
+  // Resolve clientSetting and transferSummary configs at startup: pick the
+  // available method from alternatives and drop unavailable entries entirely.
+  // This way getClientSettings/fetchTransferSummary can use the configs directly
+  // with system.multicall, without worrying about 'false=' sentinels.
+  return {
+    methodList,
+    clientSetting: resolveMethodCallConfigs(clientSettingMethodCallConfigs, methodList),
+    torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
+    torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
+    torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
+    torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
+    transferSummary: resolveMethodCallConfigs(transferSummaryMethodCallConfigs, methodList),
+  };
+};
+
 async function fetchAvailableMethodCalls(
-  clientRequestManager: ClientRequestManager,
+  clientRequestManager: RTorrentMethodCallTransport & {isJSONCapable?: boolean},
   fallback = false,
 ): Promise<AvailableMethodCalls> {
   let methodList: Array<string> = [];
@@ -119,45 +155,31 @@ async function fetchAvailableMethodCalls(
     });
   }
 
-  const getAvailableMethodCalls =
-    methodList?.length > 0
-      ? (methodCalls: Array<string>) => {
-          return methodCalls.map((method) => (methodList.includes(method.split('=')[0]) ? method : 'false='));
-        }
-      : (methodCalls: Array<string>) => methodCalls;
-
-  // Resolve clientSetting and transferSummary configs at startup: pick the
-  // available method from alternatives and drop unavailable entries entirely.
-  // This way getClientSettings/fetchTransferSummary can use the configs directly
-  // with system.multicall, without worrying about 'false=' sentinels.
-  return {
-    methodList,
-    clientSetting: resolveMethodCallConfigs(clientSettingMethodCallConfigs, methodList),
-    torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
-    torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
-    torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
-    torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
-    transferSummary: resolveMethodCallConfigs(transferSummaryMethodCallConfigs, methodList),
-  };
+  return buildAvailableMethodCalls(methodList ?? []);
 }
 
 class RTorrentClientGatewayService extends BaseClientGatewayService implements ClientGatewayService {
-  clientRequestManager: ClientRequestManager;
+  clientRequestManager: RTorrentMethodCallTransport & {isJSONCapable?: boolean};
   availableMethodCalls: AvailableMethodCalls;
 
-  constructor(user: UserInDatabase, availableMethodCalls: AvailableMethodCalls) {
+  constructor(
+    user: UserInDatabase,
+    availableMethodCalls: AvailableMethodCalls,
+    clientRequestManager?: RTorrentMethodCallTransport & {isJSONCapable?: boolean},
+  ) {
     super(user);
-    this.clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    this.clientRequestManager =
+      clientRequestManager ?? new ClientRequestManager(user.client as RTorrentSCGIConnectionSettings);
     this.availableMethodCalls = availableMethodCalls;
   }
 
   static async create(user: UserInDatabase): Promise<RTorrentClientGatewayService> {
-    const clientRequestManager = new ClientRequestManager(user.client as RTorrentConnectionSettings);
+    const clientRequestManager = new ClientRequestManager(user.client as RTorrentSCGIConnectionSettings);
     let availableMethodCalls = await fetchAvailableMethodCalls(clientRequestManager).catch(() => null);
     if (availableMethodCalls == null) {
       availableMethodCalls = EMPTY_METHOD_CALLS;
     }
-    return new RTorrentClientGatewayService(user, availableMethodCalls);
+    return new RTorrentClientGatewayService(user, availableMethodCalls, clientRequestManager);
   }
 
   // workaround: rTorrent instances might reject large d.multicall2 JSON-RPC requests
@@ -229,13 +251,10 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
       throw new Error();
     }
 
-    const additionalCalls = getAddTorrentPropertiesCalls({
-      destination,
-      isBasePath,
-      isSequential,
-      isInitialSeeding,
-      tags,
-    });
+    const addTorrentOptions = {destination, isBasePath, isSequential, isInitialSeeding, tags};
+
+    const buildAdditionalCalls = (file: string): string[] =>
+      this.getAddTorrentCalls(Buffer.from(file, 'base64'), addTorrentOptions).concat(this.getExtraAddTorrentCalls());
 
     const result: string[] = [];
 
@@ -252,7 +271,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
-                ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+                ...(await this.appendTorrentCommentCall(file, buildAdditionalCalls(file))),
               ],
             })),
           ),
@@ -265,7 +284,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
             .methodCall(start ? 'load.raw_start' : 'load.raw', [
               '',
               Buffer.from(file, 'base64'),
-              ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+              ...(await this.appendTorrentCommentCall(file, buildAdditionalCalls(file))),
             ])
             .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
         }),
@@ -855,7 +874,8 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
           {},
           ...(await Promise.all(
             processedResponses.map(async (response) => {
-              const selectedSizeBytes = await this.getSelectedSize(response.hash, response.selectedSizeData);
+              const hash = this.normalizeTorrentHash(response.hash);
+              const selectedSizeBytes = await this.getSelectedSize(hash, response.selectedSizeData);
               // Fall back to full torrent size when selected size is unavailable (cold cache + fetch error)
               const effectiveSizeBytes = selectedSizeBytes || response.sizeBytes;
 
@@ -870,7 +890,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
                 downRate: response.downRate,
                 downTotal: response.downTotal,
                 eta: getTorrentETAFromProperties(effectiveSizeBytes, response.downRate, response.bytesDone),
-                hash: response.hash,
+                hash,
                 isPrivate: response.isPrivate,
                 isInitialSeeding: response.isInitialSeeding,
                 isSequential: response.isSequential,
@@ -895,7 +915,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
               this.emit('PROCESS_TORRENT', torrentProperties);
 
               return {
-                [response.hash]: torrentProperties,
+                [hash]: torrentProperties,
               };
             }),
           )),
@@ -909,6 +929,35 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
         this.emit('PROCESS_TORRENT_LIST_END', torrentListSummary);
         return torrentListSummary;
       });
+  }
+
+  /**
+   * Per-file add commands. Clients whose storage layout differs from rTorrent's
+   * base-directory semantics can adjust the destination here.
+   */
+  protected getAddTorrentCalls(
+    _file: Buffer,
+    options: Required<
+      Pick<AddTorrentByFileOptions, 'destination' | 'isBasePath' | 'isSequential' | 'isInitialSeeding' | 'tags'>
+    >,
+  ): string[] {
+    return getAddTorrentPropertiesCalls(options);
+  }
+
+  /**
+   * Extra DSL commands appended to add-torrent requests. rTorrent checks
+   * existing data on load automatically; clients that do not must request it.
+   */
+  protected getExtraAddTorrentCalls(): string[] {
+    return [];
+  }
+
+  /**
+   * Legacy rTorrent returns uppercase info hashes; Flood keys torrents by the
+   * hash exactly as reported. Clients returning another case override this.
+   */
+  protected normalizeTorrentHash(hash: string): string {
+    return hash;
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
@@ -1037,4 +1086,6 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
   };
 }
 
+export {buildAvailableMethodCalls, EMPTY_METHOD_CALLS};
+export type {AvailableMethodCalls};
 export default RTorrentClientGatewayService;

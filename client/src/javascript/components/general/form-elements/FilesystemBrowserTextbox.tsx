@@ -34,12 +34,20 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     }: FilesystemBrowserTextboxProps,
     ref,
   ) => {
-    const [destination, setDestination] = useState<string>(
-      suggested ||
-        SettingStore.floodSettings.torrentDestinations?.[''] ||
-        SettingStore.clientSettings?.directoryDefault ||
-        '',
-    );
+    const [destination, setDestination] = useState<string>(() => {
+      const savedDestination = SettingStore.floodSettings.torrentDestinations?.[''];
+      const clientDefault = SettingStore.clientSettings?.directoryDefault;
+
+      // Prefer the last destination only when it is an absolute path; a stale
+      // relative value (e.g. './' saved before the client default was fixed)
+      // would otherwise be rejected by the server's allowed-path check.
+      return (
+        suggested ||
+        (savedDestination != null && savedDestination.startsWith('/') ? savedDestination : undefined) ||
+        clientDefault ||
+        ''
+      );
+    });
     const [isDirectoryListOpen, setIsDirectoryListOpen] = useState<boolean>(false);
 
     const formRowRef = useRef<HTMLDivElement>(null);

@@ -7,6 +7,7 @@ import HistoryService from './historyService';
 import NeptuneClientGatewayService from './Neptune/clientGatewayService';
 import NotificationService from './notificationService';
 import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
+import RstorrentClientGatewayService from './rstorrent/clientGatewayService';
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
@@ -35,6 +36,8 @@ const newClientGatewayService = async (user: UserInDatabase): Promise<ClientGate
       return QBittorrentClientGatewayService.create(user);
     case 'rTorrent':
       return RTorrentClientGatewayService.create(user);
+    case 'rstorrent':
+      return RstorrentClientGatewayService.create(user);
     case 'Transmission':
       return TransmissionClientGatewayService.create(user);
   }

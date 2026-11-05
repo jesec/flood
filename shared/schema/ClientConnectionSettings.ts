@@ -43,12 +43,43 @@ const rTorrentSocketConnectionSettingsSchema = strictObject({
 
 export type RTorrentSocketConnectionSettings = zodInfer<typeof rTorrentSocketConnectionSettingsSchema>;
 
+// rstorrent (rTorrent in Rust) exposes a native gRPC API (crates/rt-grpc).
+// It is a separate connector on purpose: contract, capabilities and transport
+// lifecycle differ from the SCGI/XML-RPC rTorrent client.
+const rstorrentGRPCTCPConnectionSettingsSchema = strictObject({
+  client: literal('rstorrent'),
+  type: literal('grpc'),
+  version: literal(1),
+  host: string(),
+  port: number(),
+});
+
+export type RstorrentGRPCTCPConnectionSettings = zodInfer<typeof rstorrentGRPCTCPConnectionSettingsSchema>;
+
+const rstorrentGRPCSocketConnectionSettingsSchema = strictObject({
+  client: literal('rstorrent'),
+  type: literal('grpcSocket'),
+  version: literal(1),
+  socket: string(),
+});
+
+export type RstorrentGRPCSocketConnectionSettings = zodInfer<typeof rstorrentGRPCSocketConnectionSettingsSchema>;
+
 const rTorrentConnectionSettingsSchema = union([
   rTorrentTCPConnectionSettingsSchema,
   rTorrentSocketConnectionSettingsSchema,
 ]);
 
 export type RTorrentConnectionSettings = zodInfer<typeof rTorrentConnectionSettingsSchema>;
+
+export type RTorrentSCGIConnectionSettings = RTorrentTCPConnectionSettings | RTorrentSocketConnectionSettings;
+
+const rstorrentConnectionSettingsSchema = union([
+  rstorrentGRPCTCPConnectionSettingsSchema,
+  rstorrentGRPCSocketConnectionSettingsSchema,
+]);
+
+export type RstorrentConnectionSettings = zodInfer<typeof rstorrentConnectionSettingsSchema>;
 
 const transmissionConnectionSettingsSchema = strictObject({
   client: literal('Transmission'),
@@ -76,6 +107,7 @@ export const clientConnectionSettingsSchema = union([
   neptuneConnectionSettingsSchema,
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
+  rstorrentConnectionSettingsSchema,
   transmissionConnectionSettingsSchema,
 ]);
 

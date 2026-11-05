@@ -6,6 +6,8 @@ allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
   esbuild: false
+  grpc-tools: true
+  protobufjs: true
   unrs-resolver: true
 minimumReleaseAgeStrict: false
 patchedDependencies:
