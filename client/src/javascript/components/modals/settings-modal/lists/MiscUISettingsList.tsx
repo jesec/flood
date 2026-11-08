@@ -22,6 +22,9 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
   const [filterTagEnabled, setFilterTagEnabled] = useState<FloodSettings['UISidebarFilterTag']>(
     SettingStore.floodSettings.UISidebarFilterTag,
   );
+  const [filterRememberEnabled, setFilterRememberEnabled] = useState<FloodSettings['UISidebarFilterRemember']>(
+    SettingStore.floodSettings.UISidebarFilterRemember,
+  );
   const [trackerWarningEnabled, setTrackerWarningEnabled] = useState<FloodSettings['UITrackerWarningEnabled']>(
     SettingStore.floodSettings.UITrackerWarningEnabled,
   );
@@ -45,6 +48,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
     const nextValue = !filterTagEnabled;
     setFilterTagEnabled(nextValue);
     onSettingsChange({UISidebarFilterTag: nextValue});
+  };
+  const handleFilterRememberToggle = () => {
+    const nextValue = !filterRememberEnabled;
+    setFilterRememberEnabled(nextValue);
+    onSettingsChange({UISidebarFilterRemember: nextValue});
   };
   const handleTrackerWarningToggle = () => {
     const nextValue = !trackerWarningEnabled;
@@ -73,6 +81,11 @@ const MiscUISettingsList: FC<MiscUISettingsListProps> = ({onSettingsChange}: Mis
           label: 'settings.ui.sidebar.filter.tag',
           checked: filterTagEnabled,
           onClick: handleFilterTagToggle,
+        },
+        {
+          label: 'settings.ui.sidebar.filter.remember',
+          checked: filterRememberEnabled,
+          onClick: handleFilterRememberToggle,
         },
         {
           label: 'settings.ui.tracker.warning.enabled',

@@ -5,6 +5,7 @@ import TorrentContextMenuActions, {
   type TorrentContextMenuAction,
 } from '../../client/src/javascript/constants/TorrentContextMenuActions';
 import TorrentListColumns, {type TorrentListColumn} from '../../client/src/javascript/constants/TorrentListColumns';
+import torrentStatusMap from '../constants/torrentStatusMap';
 import type {FloodSettings} from '../types/FloodSettings';
 
 const languageKeys = Object.keys(Languages) as Array<Language>;
@@ -37,6 +38,8 @@ export const floodSettingKeySchema = z.enum(
     UISidebarFilterLocation: true,
     UISidebarFilterTracker: true,
     UISidebarFilterTag: true,
+    UISidebarFilterRemember: true,
+    UISidebarFilterSelection: true,
     UITrackerWarningEnabled: true,
   }) as [keyof FloodSettings, ...Array<keyof FloodSettings>],
 );
@@ -153,6 +156,16 @@ const speedLimitsSchema = speedLimitsSchemaBase.default({
   upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
 });
 
+const sidebarFilterSelectionSchema = z
+  .object({
+    status: z.array(z.enum(torrentStatusMap)),
+    tag: z.array(z.string()),
+    tracker: z.array(z.string()),
+    location: z.array(z.string()),
+    search: z.string(),
+  })
+  .strict();
+
 export const floodSettingsSchema = z
   .object({
     language: languageSchema.default('auto'),
@@ -173,6 +186,8 @@ export const floodSettingsSchema = z
     UISidebarFilterLocation: z.boolean().default(true),
     UISidebarFilterTracker: z.boolean().default(true),
     UISidebarFilterTag: z.boolean().default(true),
+    UISidebarFilterRemember: z.boolean().default(false),
+    UISidebarFilterSelection: sidebarFilterSelectionSchema.optional(),
     UITrackerWarningEnabled: z.boolean().default(true),
   })
   .strict();

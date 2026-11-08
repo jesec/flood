@@ -216,6 +216,7 @@
   "settings.ui.misc": "Miscellaneous",
   "settings.ui.page.title.speed": "Display upload and download speed in page title",
   "settings.ui.sidebar.filter.location": "Show location filters",
+  "settings.ui.sidebar.filter.remember": "Remember sidebar filters and search across sessions",
   "settings.ui.sidebar.filter.tag": "Show tag filters",
   "settings.ui.sidebar.filter.tracker": "Show tracker filters",
   "settings.ui.tracker.warning.enabled": "Enable tracker warning status",
