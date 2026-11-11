@@ -17,7 +17,10 @@ USER ${AUR_USER}
 WORKDIR /home/${AUR_USER}
 
 RUN mkdir .ssh
-RUN curl https://gitlab.archlinux.org/archlinux/infrastructure/-/raw/master/docs/ssh-known_hosts.txt?inline=false > .ssh/known_hosts
+RUN curl -fL \
+    https://gitlab.archlinux.org/archlinux/infrastructure/-/raw/main/docs/ssh-known_hosts.txt \
+    -o .ssh/known_hosts \
+    && ssh-keygen -F aur.archlinux.org -f .ssh/known_hosts
 RUN echo ${AUR_KEY} | base64 -d > .ssh/id_rsa
 RUN chmod 0400 .ssh/id_rsa
 
