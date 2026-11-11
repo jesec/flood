@@ -15,8 +15,8 @@ import type {
 } from './types/DelugeCoreMethods';
 import type {RencodableArray, RencodableData, RencodableObject} from './util/rencode';
 import {decode, encode} from './util/rencode';
+import {DELUGE_RPC_PROTOCOL_VERSION, DelugeRpcFrameDecoder} from './util/rpcFrameDecoder';
 
-const DELUGE_RPC_PROTOCOL_VERSION = 0x01;
 const protocolVerBuf = Buffer.alloc(1);
 protocolVerBuf[0] = DELUGE_RPC_PROTOCOL_VERSION;
 
@@ -104,8 +104,7 @@ class ClientRequestManager {
       this.requestId = 0;
       this.requestQueue = {};
 
-      let rpcBufferSize = 0;
-      let rpcBuffer: Buffer | null = null;
+      const frameDecoder = new DelugeRpcFrameDecoder();
 
       const tlsSocket = tls.connect({
         host: this.connectionSettings.host,
@@ -125,26 +124,16 @@ class ClientRequestManager {
 
       tlsSocket.on('secureConnect', () => {
         tlsSocket.on('data', (chunk: Buffer) => {
-          if (rpcBuffer != null) {
-            rpcBuffer = Buffer.concat(
-              [rpcBuffer, chunk],
-              rpcBufferSize <= rpcBuffer.length + chunk.length ? rpcBufferSize : undefined,
-            );
-          } else {
-            if (chunk[0] !== DELUGE_RPC_PROTOCOL_VERSION) {
-              handleError(new Error('Unexpected Deluge RPC version.'));
-              return;
-            }
-
-            rpcBufferSize = chunk.subarray(1, 5).readUInt32BE(0);
-            rpcBuffer = chunk.subarray(5);
+          let payloads: Buffer[];
+          try {
+            payloads = frameDecoder.push(chunk);
+          } catch (e) {
+            handleError(e as Error);
+            return;
           }
 
-          if (rpcBuffer.length >= rpcBufferSize) {
-            const buf = rpcBuffer;
-            rpcBuffer = null;
-            rpcBufferSize = 0;
-            inflate(buf, (err, data) => {
+          payloads.forEach((payload) => {
+            inflate(payload, (err, data) => {
               if (err) {
                 handleError(err);
                 return;
@@ -152,7 +141,7 @@ class ClientRequestManager {
 
               this.receive(data);
             });
-          }
+          });
         });
 
         resolve(tlsSocket);
