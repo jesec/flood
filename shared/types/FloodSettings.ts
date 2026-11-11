@@ -1,6 +1,7 @@
 import type {Language} from '../../client/src/javascript/constants/Languages';
 import type {TorrentContextMenuAction} from '../../client/src/javascript/constants/TorrentContextMenuActions';
 import type {TorrentListColumn} from '../../client/src/javascript/constants/TorrentListColumns';
+import type {TorrentStatus} from '../constants/torrentStatusMap';
 
 export interface FloodSettings {
   language: Language;
@@ -49,6 +50,18 @@ export interface FloodSettings {
   UISidebarFilterLocation: boolean;
   UISidebarFilterTracker: boolean;
   UISidebarFilterTag: boolean;
+
+  // Remember sidebar filter selection (and search) across sessions
+  UISidebarFilterRemember: boolean;
+
+  // Last sidebar filter selection, restored on load when UISidebarFilterRemember is enabled
+  UISidebarFilterSelection?: {
+    status: Array<TorrentStatus>;
+    tag: Array<string>;
+    tracker: Array<string>;
+    location: Array<string>;
+    search: string;
+  };
 
   // Show/hide the tracker warning status level
   UITrackerWarningEnabled: boolean;

@@ -2,8 +2,11 @@ import {makeAutoObservable} from 'mobx';
 import jsonpatch, {Operation} from 'fast-json-patch';
 import {KeyboardEvent, MouseEvent, TouchEvent} from 'react';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {Taxonomy} from '@shared/types/Taxonomy';
 import torrentStatusMap, {TorrentStatus} from '@shared/constants/torrentStatusMap';
+
+export type SidebarFilterSelection = NonNullable<FloodSettings['UISidebarFilterSelection']>;
 
 class TorrentFilterStore {
   locationFilter: Array<string> = [];
@@ -34,8 +37,27 @@ class TorrentFilterStore {
     );
   }
 
+  get selection(): SidebarFilterSelection {
+    return {
+      status: this.statusFilter.slice(),
+      tag: this.tagFilter.slice(),
+      tracker: this.trackerFilter.slice(),
+      location: this.locationFilter.slice(),
+      search: this.searchFilter,
+    };
+  }
+
   constructor() {
     makeAutoObservable(this);
+  }
+
+  restoreSelection(selection: SidebarFilterSelection) {
+    this.statusFilter = selection.status.slice();
+    this.tagFilter = selection.tag.slice();
+    this.trackerFilter = selection.tracker.slice();
+    this.locationFilter = selection.location.slice();
+    this.searchFilter = selection.search;
+    this.filterTrigger = !this.filterTrigger;
   }
 
   clearAllFilters() {

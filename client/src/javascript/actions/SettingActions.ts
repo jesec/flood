@@ -3,6 +3,7 @@ import axios from 'axios';
 import AlertStore from '@client/stores/AlertStore';
 import ConfigStore from '@client/stores/ConfigStore';
 import SettingStore from '@client/stores/SettingStore';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 
 import type {FloodSetting, FloodSettings} from '@shared/types/FloodSettings';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
@@ -13,6 +14,12 @@ const SettingActions = {
   fetchSettings: async (): Promise<void> =>
     axios.get<FloodSettings>(`${baseURI}api/settings`).then(
       ({data}) => {
+        // Restore before applying settings, so the persistence reaction never sees
+        // "remember" enabled alongside the not-yet-restored (empty) selection.
+        if (data.UISidebarFilterRemember && data.UISidebarFilterSelection != null) {
+          TorrentFilterStore.restoreSelection(data.UISidebarFilterSelection);
+        }
+
         SettingStore.handleSettingsFetchSuccess(data);
       },
       () => {

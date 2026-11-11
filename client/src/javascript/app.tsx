@@ -9,6 +9,7 @@ import LoadingOverlay from './components/general/LoadingOverlay';
 import AsyncIntlProvider from './i18n/languages';
 import ConfigStore from './stores/ConfigStore';
 import UIStore from './stores/UIStore';
+import startSidebarFilterPersistence from './util/sidebarFilterPersistence';
 
 import stringUtil from '@shared/util/stringUtil';
 
@@ -53,6 +54,8 @@ const FloodApp: FC = observer(() => {
       },
     ]);
   }, []);
+
+  useEffect(() => startSidebarFilterPersistence(), []);
 
   const isSystemPreferDark = useMedia('(prefers-color-scheme: dark)');
   useEffect(() => {

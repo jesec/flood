@@ -28,6 +28,14 @@ const settings: Partial<FloodSettings> = {
   torrentDestinations: {
     '': '/home/download/test',
   },
+  UISidebarFilterRemember: true,
+  UISidebarFilterSelection: {
+    status: ['downloading', 'seeding'],
+    tag: ['untagged'],
+    tracker: ['example.com'],
+    location: ['/home/download'],
+    search: 'linux',
+  },
 };
 
 describe('PATCH /api/settings', () => {
