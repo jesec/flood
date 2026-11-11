@@ -70,7 +70,17 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
         classNamePrefix="application__loading-overlay"
       >
         {(transitionClassName) => (
-          <LoadingOverlay className={transitionClassName} dependencies={UIStore.dependencies} />
+          <LoadingOverlay
+            className={transitionClassName}
+            dependencies={UIStore.dependencies}
+            onLogout={
+              AuthStore.isAuthenticated && ConfigStore.authMethod !== 'none'
+                ? () => {
+                    AuthActions.logout().then(() => window.location.reload());
+                  }
+                : undefined
+            }
+          />
         )}
       </Transition>
       <Transition

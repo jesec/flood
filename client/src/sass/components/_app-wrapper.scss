@@ -2,6 +2,10 @@
 @use '../tools/themes';
 
 .application {
+  &__loading-recovery {
+    margin-top: 24px;
+  }
+
   &__loading-overlay {
     align-items: center;
     @include themes.theme('background', 'loading--background');
