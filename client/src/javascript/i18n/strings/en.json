@@ -319,6 +319,7 @@
   "torrents.details.selected.files": "{count, plural, =1 {{countElement} selected file} other {{countElement} selected files}}",
   "torrents.details.selected.files.set.priority": "Set Priority",
   "torrents.details.trackers": "Trackers",
+  "torrents.details.trackers.enabled": "Enabled",
   "torrents.details.trackers.no.data": "There is no tracker data for this torrent.",
   "torrents.details.trackers.type": "Type",
   "torrents.generate.magnet.heading": "Generate Magnet Link",

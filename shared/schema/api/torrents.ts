@@ -130,6 +130,12 @@ export const setTorrentsTrackersSchema = strictObject({
   trackers: array(string()),
 }).strip();
 
+// PATCH /api/torrents/{hash}/trackers
+export const setTorrentTrackersEnabledSchema = strictObject({
+  indices: array(number().int().nonnegative()).nonempty(),
+  isEnabled: boolean(),
+}).strip();
+
 // PATCH /api/torrents/{hash}/contents
 export const setTorrentContentsPropertiesSchema = strictObject({
   indices: array(number().int().nonnegative()).nonempty(),

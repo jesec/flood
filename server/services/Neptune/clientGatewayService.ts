@@ -241,6 +241,10 @@ class NeptuneClientGatewayService extends ClientGatewayService {
     );
   }
 
+  async setTorrentTrackersEnabled(): Promise<void> {
+    throw new Error('Neptune does not support enabling or disabling trackers.');
+  }
+
   async setTorrentContentsPriority(
     hash: string,
     {indices, priority}: SetTorrentContentsPropertiesOptions,

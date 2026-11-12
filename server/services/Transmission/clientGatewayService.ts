@@ -319,6 +319,10 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentTrackersEnabled(): Promise<void> {
+    throw new Error('Transmission does not support enabling or disabling trackers.');
+  }
+
   async setTorrentContentsPriority(
     hash: string,
     {indices, priority}: SetTorrentContentsPropertiesOptions,

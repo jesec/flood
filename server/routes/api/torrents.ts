@@ -27,6 +27,7 @@ import {
   setTorrentsSequentialSchema,
   setTorrentsTagsSchema,
   setTorrentsTrackersSchema,
+  setTorrentTrackersEnabledSchema,
   startTorrentsSchema,
   stopTorrentsSchema,
 } from '../../../shared/schema/api/torrents';
@@ -1071,6 +1072,28 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     async (request) => {
       const authedContext = getRequiredAuthContext(request);
       return authedContext.services.clientGatewayService.getTorrentTrackers(request.params.hash);
+    },
+  );
+
+  typedFastify.patch(
+    '/:hash/trackers',
+    {
+      schema: {
+        summary: 'Enable or disable torrent trackers',
+        description: 'Enable or disable trackers of a torrent. Only supported by rTorrent.',
+        tags: ['Torrent'],
+        security: [{User: []}],
+        params: hashParamSchema,
+        body: setTorrentTrackersEnabledSchema,
+        response: {
+          200: emptyResponseSchema,
+          500: errorResponseSchema,
+        },
+      },
+    },
+    async (request) => {
+      const authedContext = getRequiredAuthContext(request);
+      await authedContext.services.clientGatewayService.setTorrentTrackersEnabled(request.params.hash, request.body);
     },
   );
 };

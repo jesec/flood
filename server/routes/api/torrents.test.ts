@@ -412,6 +412,49 @@ describe('PATCH /api/torrents/trackers', () => {
   });
 });
 
+describe('PATCH /api/torrents/{hash}/trackers', () => {
+  const getTrackers = async (): Promise<Array<TorrentTracker>> => {
+    const res = await request
+      .get(`/api/torrents/${torrentHash}/trackers`)
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/);
+
+    return res.body;
+  };
+
+  const setTrackerEnabled = (indices: number[], isEnabled: boolean) =>
+    request
+      .patch(`/api/torrents/${torrentHash}/trackers`)
+      .send({indices, isEnabled})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json');
+
+  if (config.configUser?.client === 'rTorrent') {
+    it('Disables and enables a tracker', async () => {
+      const index = (await getTrackers()).findIndex((tracker) => tracker.url === testTrackers[0]);
+      expect(index).toBeGreaterThanOrEqual(0);
+
+      await setTrackerEnabled([index], false).expect(200).expect('Content-Type', /json/);
+      expect((await getTrackers())[index]).toMatchObject({url: testTrackers[0], isEnabled: false});
+
+      await setTrackerEnabled([index], true).expect(200).expect('Content-Type', /json/);
+      expect((await getTrackers())[index]).toMatchObject({url: testTrackers[0], isEnabled: true});
+    });
+
+    it('Rejects invalid indices', async () => {
+      await setTrackerEnabled([], true).expect(400);
+      await setTrackerEnabled([-1], true).expect(400);
+    });
+  } else {
+    it('Reports that enabling trackers is not supported', async () => {
+      await setTrackerEnabled([0], false).expect(500);
+    });
+  }
+});
+
 describe('GET /api/torrents/{hash}/contents', () => {
   it('Gets contents of torrents', async () => {
     const res = await request

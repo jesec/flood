@@ -19,6 +19,7 @@ import type {
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
+  SetTorrentTrackersEnabledOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
@@ -452,14 +453,13 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
         );
       })
       .then((processedResponses) =>
-        processedResponses
-          .filter((processedResponse) => processedResponse.isEnabled)
-          .map((processedResponse) => {
-            return {
-              url: processedResponse.url,
-              type: processedResponse.type,
-            };
-          }),
+        processedResponses.map((processedResponse) => {
+          return {
+            url: processedResponse.url,
+            type: processedResponse.type,
+            isEnabled: processedResponse.isEnabled,
+          };
+        }),
       );
   }
 
@@ -767,6 +767,30 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
         ),
       ),
     );
+  }
+
+  async setTorrentTrackersEnabled(hash: string, {indices, isEnabled}: SetTorrentTrackersEnabledOptions): Promise<void> {
+    const methodCalls = indices.reduce((accumulator: MultiMethodCalls, index) => {
+      accumulator.push({
+        methodName: 't.is_enabled.set',
+        params: [`${hash}:t${index}`, isEnabled ? '1' : '0'],
+      });
+
+      return accumulator;
+    }, []);
+
+    // Save full session to persist tracker state
+    methodCalls.push({
+      methodName: 'd.save_full_session',
+      params: [hash],
+    });
+
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async setTorrentContentsPriority(

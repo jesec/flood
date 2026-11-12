@@ -44,7 +44,9 @@ const GenerateMagnetModal: FC = () => {
           isLoadingTrackers: false,
           magnetTrackersLink: generateMagnet(
             TorrentStore.selectedTorrents[0],
-            trackers.filter((tracker) => tracker.type !== TorrentTrackerType.DHT).map((tracker) => tracker.url),
+            trackers
+              .filter((tracker) => tracker.isEnabled !== false && tracker.type !== TorrentTrackerType.DHT)
+              .map((tracker) => tracker.url),
           ),
         });
       }

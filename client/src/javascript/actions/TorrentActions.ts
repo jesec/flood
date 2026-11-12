@@ -21,6 +21,7 @@ import {
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
+  SetTorrentTrackersEnabledOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
   TorrentAddResponse,
@@ -252,6 +253,16 @@ const TorrentActions = {
   setTags: (options: SetTorrentsTagsOptions): Promise<void> =>
     axios.patch(`${baseURI}api/torrents/tags`, options).then(
       () => UIStore.handleSetTaxonomySuccess(),
+      () => {
+        // do nothing.
+      },
+    ),
+
+  setTrackerEnabled: (hash: TorrentProperties['hash'], options: SetTorrentTrackersEnabledOptions): Promise<void> =>
+    axios.patch(`${baseURI}api/torrents/${hash}/trackers`, options).then(
+      () => {
+        // do nothing.
+      },
       () => {
         // do nothing.
       },

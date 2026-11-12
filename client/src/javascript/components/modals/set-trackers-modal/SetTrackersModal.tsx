@@ -29,7 +29,7 @@ const SetTrackersModal: FC = () => {
         setTrackerState({
           isLoadingTrackers: false,
           trackerURLs: trackers
-            .filter((tracker) => tracker.type !== TorrentTrackerType.DHT)
+            .filter((tracker) => tracker.isEnabled !== false && tracker.type !== TorrentTrackerType.DHT)
             .map((tracker) => tracker.url),
         });
       }
