@@ -9,6 +9,7 @@ import type {Feed, Item, MatchedTorrents, Rule} from '../../shared/types/Feed';
 import type {FeedReaderOptions} from '../models/FeedReader';
 import FeedReader from '../models/FeedReader';
 import {getFeedItemsMatchingRules, getTorrentUrlsFromFeedItem} from '../util/feedUtil';
+import {getTagsWithAutoTags} from '../util/torrentTagUtil';
 import BaseService from './BaseService';
 
 class FeedService extends BaseService<Record<string, never>> {
@@ -287,7 +288,7 @@ class FeedService extends BaseService<Record<string, never>> {
                 urls,
                 cookies: {},
                 destination,
-                tags,
+                tags: await getTagsWithAutoTags(this.services.settingService, this.user.username, tags),
                 start,
                 isBasePath: false,
                 isCompleted: false,

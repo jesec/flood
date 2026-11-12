@@ -44,6 +44,7 @@ import {
   isAllowedPathAsync,
   sanitizePath,
 } from '../../util/fileUtil';
+import {getTagsWithAutoTags} from '../../util/torrentTagUtil';
 import {rateLimit} from '../utils';
 
 async function createTorrentAsync(input: TorrentInput, option: CreateTorrentOptions): Promise<Buffer> {
@@ -185,7 +186,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         urls: normalizedUrls,
         cookies: cookies != null ? cookies : {},
         destination: finalDestination,
-        tags: tags ?? [],
+        tags: await getTagsWithAutoTags(authedContext.services.settingService, authedContext.user.username, tags),
         isBasePath: isBasePath ?? false,
         isCompleted: isCompleted ?? false,
         isSequential: isSequential ?? false,
@@ -239,7 +240,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       const response = await authedContext.services.clientGatewayService.addTorrentsByFile({
         files,
         destination: finalDestination,
-        tags: tags ?? [],
+        tags: await getTagsWithAutoTags(authedContext.services.settingService, authedContext.user.username, tags),
         isBasePath: isBasePath ?? false,
         isCompleted: isCompleted ?? false,
         isSequential: isSequential ?? false,
@@ -308,7 +309,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
             ? sanitizedPath
             : path.dirname(sanitizedPath),
-          tags: tags ?? [],
+          tags: await getTagsWithAutoTags(authedContext.services.settingService, authedContext.user.username, tags),
           isBasePath: true,
           isCompleted: true,
           isSequential: false,
