@@ -364,6 +364,10 @@ class QBittorrentClientGatewayService extends BaseClientGatewayService implement
     ).then(() => undefined);
   }
 
+  async setTorrentTrackersEnabled(): Promise<void> {
+    throw new Error('qBittorrent does not support enabling or disabling trackers.');
+  }
+
   async setTorrentContentsPriority(
     hash: string,
     {indices, priority}: SetTorrentContentsPropertiesOptions,

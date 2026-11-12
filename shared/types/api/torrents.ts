@@ -101,6 +101,14 @@ export interface SetTorrentsTrackersOptions {
   trackers: Array<string>;
 }
 
+// PATCH /api/torrents/{hash}/trackers
+export interface SetTorrentTrackersEnabledOptions {
+  // An array of number representing indices of trackers of a torrent
+  indices: Array<number>;
+  // If the trackers should be enabled
+  isEnabled: boolean;
+}
+
 // PATCH /api/torrents/{hash}/contents
 export interface SetTorrentContentsPropertiesOptions {
   // An array of number representing indices of contents of a torrent

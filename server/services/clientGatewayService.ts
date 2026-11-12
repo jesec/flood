@@ -15,6 +15,7 @@ import type {
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
+  SetTorrentTrackersEnabledOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
@@ -152,6 +153,15 @@ export interface ClientGatewayService extends TypedEmitter<ClientGatewayServiceE
    * @return - Rejects with error.
    */
   setTorrentsTrackers(options: SetTorrentsTrackersOptions): Promise<void>;
+
+  /**
+   * Enables or disables trackers of a torrent
+   *
+   * @param hash - Hash of the torrent.
+   * @param options - An object of options...
+   * @return - Rejects with error.
+   */
+  setTorrentTrackersEnabled(hash: string, options: SetTorrentTrackersEnabledOptions): Promise<void>;
 
   /**
    * Sets priority of contents of a torrent

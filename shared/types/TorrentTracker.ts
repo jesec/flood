@@ -7,4 +7,6 @@ export enum TorrentTrackerType {
 export interface TorrentTracker {
   url: string;
   type: TorrentTrackerType;
+  // Whether the tracker is enabled. Left undefined if the client does not support enabling/disabling trackers.
+  isEnabled?: boolean;
 }

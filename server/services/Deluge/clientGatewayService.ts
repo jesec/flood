@@ -248,6 +248,10 @@ class DelugeClientGatewayService extends BaseClientGatewayService implements Cli
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentTrackersEnabled(): Promise<void> {
+    throw new Error('Deluge does not support enabling or disabling trackers.');
+  }
+
   async setTorrentContentsPriority(
     hash: string,
     {indices, priority}: SetTorrentContentsPropertiesOptions,
