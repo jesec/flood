@@ -11,7 +11,12 @@ import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
 
-import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
+import type {
+  TorrentContent,
+  TorrentContentPriority,
+  TorrentContentSelection,
+  TorrentContentSelectionTree,
+} from '@shared/types/TorrentContent';
 
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
 
@@ -19,6 +24,7 @@ const TorrentContents: FC = observer(() => {
   const [contents, setContents] = useState<TorrentContent[]>([]);
   const [itemsTree, setItemsTree] = useState<TorrentContentSelectionTree>({});
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [prioritySelectToken, setPrioritySelectToken] = useState<number>(0);
   const {i18n} = useLingui();
 
   useEffect(() => {
@@ -37,6 +43,19 @@ const TorrentContents: FC = observer(() => {
   }
 
   const {hash} = UIStore.activeModal;
+
+  const setPriority = (indices: number[], priority: TorrentContentPriority) => {
+    if (indices.length === 0) {
+      return;
+    }
+
+    TorrentActions.setFilePriority(hash, {indices, priority});
+
+    setContents((currentContents) =>
+      currentContents.map((content) => (indices.includes(content.index) ? {...content, priority} : content)),
+    );
+    setItemsTree((currentItemsTree) => selectionTree.applyPriority(currentItemsTree, indices, priority));
+  };
 
   let directoryHeadingIconContent = null;
   let fileDetailContent = null;
@@ -80,6 +99,7 @@ const TorrentContents: FC = observer(() => {
           setItemsTree(newItemsTree);
           setSelectedIndices(selectionTree.getSelectedItems(newItemsTree));
         }}
+        onPriorityChange={(index, priority) => setPriority([index], priority)}
         hash={hash}
         path={[]}
         itemsTree={itemsTree}
@@ -122,10 +142,8 @@ const TorrentContents: FC = observer(() => {
         if (event.target != null && (event.target as HTMLInputElement).name === 'file-priority') {
           const inputElement = event.target as HTMLInputElement;
           if (inputElement.value) {
-            TorrentActions.setFilePriority(hash, {
-              indices: selectedIndices,
-              priority: Number(inputElement.value),
-            });
+            setPriority(selectedIndices, Number(inputElement.value));
+            setPrioritySelectToken((token) => token + 1);
           }
         }
       }}
@@ -167,7 +185,7 @@ const TorrentContents: FC = observer(() => {
               }}
             />
           </Button>
-          <Select id="file-priority" persistentPlaceholder shrink={false} defaultID="">
+          <Select id="file-priority" key={prioritySelectToken} persistentPlaceholder shrink={false} defaultID="">
             <SelectItem id={-1} isPlaceholder>
               <Trans id="torrents.details.selected.files.set.priority" />
             </SelectItem>
