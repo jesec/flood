@@ -11,6 +11,7 @@ import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import {TorrentTrackerType} from '@shared/types/TorrentTracker';
+import {calculateTorrentHealth} from '@shared/util/torrentHealth';
 
 /**
  * Time constants in milliseconds
@@ -123,6 +124,10 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
   const nameList = MOCK_TORRENT_NAMES[category];
   const nameIndex = Math.floor(Math.random() * nameList.length);
 
+  // Health calculation based on seeds
+  const seedsConnected = overrides.seedsConnected ?? 5;
+  const seedsTotal = overrides.seedsTotal ?? 20;
+
   const baseData: TorrentProperties = {
     hash,
     name: overrides.name || nameList[nameIndex],
@@ -137,6 +142,7 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
     downRate: SPEED.MB_PER_SEC,
     downTotal: Math.floor(downTotal),
     eta: percentComplete < 100 ? Math.floor((sizeBytes - bytesDone) / SPEED.MB_PER_SEC) : -1,
+    health: overrides.health ?? calculateTorrentHealth(seedsConnected, seedsTotal),
     isPrivate: false,
     isInitialSeeding: false,
     isSequential: false,
@@ -146,8 +152,8 @@ export function generateMockTorrent(overrides: Partial<TorrentProperties> = {}):
     percentComplete: Math.floor(percentComplete * 100) / 100,
     priority: TorrentPriority.NORMAL,
     ratio: Math.round(ratio * 1000) / 1000,
-    seedsConnected: 5,
-    seedsTotal: 20,
+    seedsConnected,
+    seedsTotal,
     sizeBytes: Math.floor(sizeBytes),
     selectedSizeBytes: Math.floor(sizeBytes),
     tags: [],
@@ -376,6 +382,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     downRate: 100,
     upRate: 100,
     eta: 100,
+    health: 80,
     ratio: 80,
     sizeBytes: 100,
     selectedSizeBytes: 100,
@@ -700,6 +707,8 @@ export function createNewTorrentTemplate(
   },
 ): TorrentProperties {
   const start = options?.start ?? false;
+  const seedsConnected = start ? 2 : 0;
+  const seedsTotal = 10;
   return {
     hash,
     name: options?.name ?? `New Torrent ${new Date().toLocaleTimeString()}`,
@@ -714,6 +723,7 @@ export function createNewTorrentTemplate(
     downRate: start ? MOCK_TORRENT_SPEEDS.DOWNLOADING : 0,
     downTotal: 0,
     eta: start ? 7200 : -1,
+    health: calculateTorrentHealth(seedsConnected, seedsTotal),
     isPrivate: false,
     isInitialSeeding: false,
     isSequential: false,
@@ -723,8 +733,8 @@ export function createNewTorrentTemplate(
     percentComplete: 0,
     priority: TorrentPriority.NORMAL,
     ratio: 0,
-    seedsConnected: start ? 2 : 0,
-    seedsTotal: 10,
+    seedsConnected,
+    seedsTotal,
     sizeBytes: options?.sizeBytes ?? 5 * SIZE.GB,
     selectedSizeBytes: options?.sizeBytes ?? 5 * SIZE.GB,
     tags: options?.tags ?? [],
