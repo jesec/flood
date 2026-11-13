@@ -363,8 +363,8 @@ importers:
         specifier: 1.104.1
         version: 1.104.1
       saxen:
-        specifier: 11.1.1
-        version: 11.1.1
+        specifier: 12.0.0
+        version: 12.0.0
       storybook:
         specifier: 10.6.2
         version: 10.6.2(@types/react@19.3.0)(prettier@3.9.8)(react@19.3.0)
@@ -6496,8 +6496,8 @@ packages:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
 
-  saxen@11.1.1:
-    resolution: {integrity: sha512-J4BkmJFaM7VgE7pgkFGsNEcqqM3h7+Mz80vfLWFhx7uNOCOXIu6LLjQHYWNejdst3pf/3JUaBIG9+pkk1umlow==}
+  saxen@12.0.0:
+    resolution: {integrity: sha512-qjvLqxNJrb39GW/ixPalpAzNiYPZL7Qjyc4knYSHvX/3P9QTc03BVdQPKiPJSNnRk/AFaIWeDdgZivl7CAezsA==}
     engines: {node: '>= 20.12'}
 
   scheduler@0.28.0:
@@ -14089,7 +14089,7 @@ snapshots:
 
   sax@1.6.0: {}
 
-  saxen@11.1.1: {}
+  saxen@12.0.0: {}
 
   scheduler@0.28.0: {}
 
