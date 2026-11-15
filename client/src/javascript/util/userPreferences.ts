@@ -8,11 +8,13 @@ export const saveAddTorrentsUserPreferences = ({
   start,
   destination,
   tags,
+  trackers,
   tab,
 }: {
   start?: FloodSettings['startTorrentsOnLoad'];
   destination?: string;
   tags?: TorrentProperties['tags'];
+  trackers?: FloodSettings['createTorrentTrackers'];
   tab?: FloodSettings['UITorrentsAddTab'];
 }): void => {
   const changedSettings: Partial<FloodSettings> = {};
@@ -31,6 +33,10 @@ export const saveAddTorrentsUserPreferences = ({
     } else {
       changedSettings.torrentDestinations[''] = destination;
     }
+  }
+
+  if (trackers != null) {
+    changedSettings.createTorrentTrackers = trackers;
   }
 
   if (tab != null) {
