@@ -28,6 +28,7 @@ const settings: Partial<FloodSettings> = {
   torrentDestinations: {
     '': '/home/download/test',
   },
+  createTorrentTrackers: ['https://tracker.example.com/announce'],
 };
 
 describe('PATCH /api/settings', () => {

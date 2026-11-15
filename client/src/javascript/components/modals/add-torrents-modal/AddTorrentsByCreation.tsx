@@ -4,6 +4,7 @@ import {useLingui} from '@lingui/react';
 import {Checkbox, Form, FormHandle, FormRow, Textbox} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
 import TorrentActions from '@client/actions/TorrentActions';
+import SettingStore from '@client/stores/SettingStore';
 import UIStore from '@client/stores/UIStore';
 
 import AddTorrentsActions from './AddTorrentsActions';
@@ -27,6 +28,7 @@ const AddTorrentsByCreation: FC = () => {
   const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [isCreatingTorrents, setIsCreatingTorrents] = useState<boolean>(false);
+  const lastTrackers = SettingStore.floodSettings.createTorrentTrackers ?? [];
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -35,7 +37,7 @@ const AddTorrentsByCreation: FC = () => {
         id="trackers"
         label={i18n._('torrents.create.trackers.label')}
         placeholder={i18n._('torrents.create.tracker.input.placeholder')}
-        defaultValues={[{id: 0, value: ''}]}
+        defaultValues={lastTrackers.length > 0 ? lastTrackers.map((value, id) => ({id, value})) : [{id: 0, value: ''}]}
       />
       <FormRow>
         <Textbox
@@ -83,10 +85,12 @@ const AddTorrentsByCreation: FC = () => {
             return;
           }
 
+          const trackers = getTextArray(formData, 'trackers').filter((tracker) => tracker !== '');
+
           TorrentActions.createTorrent({
             name: formData.name,
             sourcePath: formData.sourcePath,
-            trackers: getTextArray(formData, 'trackers'),
+            trackers,
             comment: formData.comment,
             infoSource: formData.infoSource,
             isPrivate: formData.isPrivate || false,
@@ -99,6 +103,7 @@ const AddTorrentsByCreation: FC = () => {
           saveAddTorrentsUserPreferences({
             start: formData.start,
             destination: formData.sourcePath,
+            trackers,
             tab: 'by-creation',
           });
         }}
