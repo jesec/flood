@@ -30,6 +30,7 @@ import {TorrentPriority} from '../../../shared/types/Torrent';
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
+import {getRootDirectoryName} from '../../util/torrentFileUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import BaseClientGatewayService, {type ClientGatewayService} from '../clientGatewayService';
 import * as geoip from '../geoip';
@@ -54,16 +55,25 @@ class TransmissionClientGatewayService extends BaseClientGatewayService implemen
     files,
     destination,
     tags,
+    isBasePath,
     isCompleted,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
     const addedTorrents = await Promise.all(
       files.map(async (file) => {
+        // Transmission always appends the root directory of a multi-file torrent to its download
+        // directory, so a base path that already ends with that directory must point at its parent.
+        const rootDirectory = isBasePath ? getRootDirectoryName(Buffer.from(file, 'base64')) : undefined;
+        const downloadDir =
+          rootDirectory != null && path.basename(destination) === rootDirectory
+            ? path.dirname(destination)
+            : destination;
+
         const {hashString} =
           (await this.clientRequestManager
             .addTorrent({
               metainfo: file,
-              'download-dir': destination,
+              'download-dir': downloadDir,
               paused: !start,
             })
             .then(this.processClientRequestSuccess, this.processClientRequestError)
