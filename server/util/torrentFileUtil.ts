@@ -54,6 +54,23 @@ export const getComment = async (torrent: Buffer): Promise<string | undefined> =
   return torrentData.comment?.toString();
 };
 
+export const getRootDirectoryName = (torrent: Buffer): string | undefined => {
+  let torrentData: TorrentFile | null = null;
+
+  try {
+    torrentData = convertToBuffer(bencode.decode(torrent)) as TorrentFile;
+  } catch {
+    return;
+  }
+
+  if (torrentData?.info?.files == null) {
+    // Single file torrent, or not a torrent
+    return;
+  }
+
+  return torrentData.info.name.toString();
+};
+
 export const getContentSize = async (info: TorrentFile['info']): Promise<number> => {
   if (info.length != null) {
     // Single file torrent

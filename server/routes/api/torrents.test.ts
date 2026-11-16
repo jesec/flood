@@ -332,20 +332,35 @@ describe('POST /api/torrents/create', () => {
   });
 
   it('GET /api/torrents to verify torrents are added via creation', async () => {
-    const res = await request
-      .get('/api/torrents')
-      .send()
-      .set('Cookie', [authToken])
-      .set('Accept', 'application/json')
-      .expect(200)
-      .expect('Content-Type', /json/);
+    const getAddedTorrents = async () => {
+      const res = await request
+        .get('/api/torrents')
+        .send()
+        .set('Cookie', [authToken])
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /json/);
 
-    expect(res.body.torrents == null).toBe(false);
-    const torrentList: TorrentList = res.body.torrents;
+      expect(res.body.torrents == null).toBe(false);
+      const torrentList: TorrentList = res.body.torrents;
 
-    const addedTorrents = Object.values(torrentList).filter((torrent) =>
-      createdTorrentTags.every((tag) => torrent.tags.includes(tag)),
-    );
+      return Object.values(torrentList).filter((torrent) =>
+        createdTorrentTags.every((tag) => torrent.tags.includes(tag)),
+      );
+    };
+
+    let addedTorrents = await getAddedTorrents();
+
+    if (config.configUser?.client === 'Transmission') {
+      // Transmission can't skip verification, so wait for the hash check to complete
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        if (addedTorrents.every((torrent) => torrent.percentComplete === 100)) {
+          break;
+        }
+        await new Promise((r) => setTimeout(r, 500));
+        addedTorrents = await getAddedTorrents();
+      }
+    }
 
     expect(addedTorrents).toHaveLength(2);
 
@@ -353,12 +368,6 @@ describe('POST /api/torrents/create', () => {
       addedTorrents.map(async (torrent) => {
         createdTorrentHash = torrent.hash;
         expect(torrent.isPrivate).toBe(false);
-
-        if (config.configUser?.client === 'Transmission') {
-          // TODO: Test skipped as Transmission does not support isCompleted and isBasePath
-          return;
-        }
-
         expect(torrent.percentComplete).toBe(100);
       }),
     );
