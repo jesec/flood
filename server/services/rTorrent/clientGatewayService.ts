@@ -586,8 +586,25 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     const contentPaths = new Set<string>();
 
     if (deleteData) {
+      // Whether a torrent owns its directory cannot be inferred from how many files it has:
+      // a multi-file torrent may contain only one. Fall back to that guess if rTorrent cannot answer.
+      const isMultiFile = await this.clientRequestManager
+        .methodCall('system.multicall', [
+          hashes.map((hash) => {
+            return {
+              methodName: 'd.is_multi_file',
+              params: [hash],
+            };
+          }),
+        ])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+        .then((responses: string[][]): boolean[] =>
+          responses.map((response) => (typeof response === 'number' ? response !== 0 : response?.[0] !== '0')),
+        )
+        .catch(() => undefined);
+
       await Promise.all(
-        hashes.map((hash) => {
+        hashes.map((hash, index) => {
           const {directory} = this.services?.torrentService.getTorrent(hash) || {};
 
           if (directory == null) {
@@ -595,7 +612,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
           }
 
           return this.getTorrentContents(hash).then((contents) => {
-            if (contents.length > 1) {
+            if (isMultiFile?.[index] ?? contents.length > 1) {
               contents.map((content) => {
                 const relativePathSegments = path.normalize(content.path).split(path.sep);
 
@@ -638,7 +655,7 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
     // Try to remove empty directories
     for (const directoryPath of directoryPaths) {
-      await fs.promises.rmdir(directoryPath).catch(() => undefined);
+      await removeDirectoryIfEmpty(directoryPath);
     }
   }
 
