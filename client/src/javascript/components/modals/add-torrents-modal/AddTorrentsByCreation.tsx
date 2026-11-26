@@ -29,6 +29,7 @@ const AddTorrentsByCreation: FC = () => {
   const {i18n} = useLingui();
   const [isCreatingTorrents, setIsCreatingTorrents] = useState<boolean>(false);
   const lastTrackers = SettingStore.floodSettings.createTorrentTrackers ?? [];
+  const lastIsPrivate = SettingStore.floodSettings.createTorrentPrivate ?? false;
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -61,7 +62,7 @@ const AddTorrentsByCreation: FC = () => {
         />
       </FormRow>
       <FormRow>
-        <Checkbox grow={false} id="isPrivate">
+        <Checkbox grow={false} id="isPrivate" defaultChecked={lastIsPrivate}>
           {i18n._('torrents.create.is.private.label')}
         </Checkbox>
       </FormRow>
@@ -104,6 +105,7 @@ const AddTorrentsByCreation: FC = () => {
             start: formData.start,
             destination: formData.sourcePath,
             trackers,
+            isPrivate: formData.isPrivate || false,
             tab: 'by-creation',
           });
         }}
