@@ -171,8 +171,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1(vitest@5.0.1)
       '@yao-pkg/pkg':
-        specifier: 6.24.0
-        version: 6.24.0(supports-color@10.2.2)
+        specifier: 6.26.1
+        version: 6.26.1(supports-color@10.2.2)
       autoprefixer:
         specifier: 10.6.1
         version: 10.6.1(postcss@8.5.28)
@@ -1783,8 +1783,8 @@ packages:
   '@remix-run/route-pattern@0.22.1':
     resolution: {integrity: sha512-czdGJWh09Lapvcqt7Vb09KlrU2PhRJ8xQaI+AItTuD9aDJ5MAgxnS38lnys6Ll+6RJEqPiaUqTwIQhVLwFvv+w==}
 
-  '@roberts_lando/vfs@0.3.3':
-    resolution: {integrity: sha512-YjkxVSLw5WMZQoARaryRAjcxA+GbBzWMJdwYZX5oLUt9cC/gew9as4Dn7tcLzPp7BPoR221VpTZ+78TRPawnjg==}
+  '@roberts_lando/vfs@0.4.0':
+    resolution: {integrity: sha512-8gk53fJyCgTHEqJcMnwcuSyJA12w42uP2LWBL8Zfnzu7s/A7how1HBN+xbU5d6Hwqa5al16++TcnZ1lIYd+ImQ==}
     engines: {node: '>= 22'}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
@@ -3069,12 +3069,12 @@ packages:
   '@xobotyi/scrollbar-width@1.9.5':
     resolution: {integrity: sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==}
 
-  '@yao-pkg/pkg-fetch@3.6.7':
-    resolution: {integrity: sha512-uEeU5druVgHffruTAXzW6nf0wHfREWlCq5LBtQ4hCdLBDbwTteuym5NrxREur3EgNcqFRenEi6Rivwo723PkHg==}
+  '@yao-pkg/pkg-fetch@3.6.8':
+    resolution: {integrity: sha512-eMJsm6Dc0+aVqCI5Br2qBLb1hJv/tQsYDfCmHkooHSaZRlc3qCd1Z3QNsCFf3IULYz9vduE0b5gn5+170YnRcQ==}
     hasBin: true
 
-  '@yao-pkg/pkg@6.24.0':
-    resolution: {integrity: sha512-SMwFLic12noHLbqxhhQVClVX6YZlQtzwwez6dq7Xj64rXX6OFgZTTQbPgw4wgec5IoUN+6rCRKgyW/cnVPOwkA==}
+  '@yao-pkg/pkg@6.26.1':
+    resolution: {integrity: sha512-nQcvihDRk0Qy3J9euftNcGObFPiCtN11zL+RNzJcswCM+jXbf6xlHzzAjbWoUIMzuwg6S9TiLlYSeSrli2C9Pg==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -8887,7 +8887,7 @@ snapshots:
 
   '@remix-run/route-pattern@0.22.1': {}
 
-  '@roberts_lando/vfs@0.3.3': {}
+  '@roberts_lando/vfs@0.4.0': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     optional: true
@@ -10020,7 +10020,7 @@ snapshots:
 
   '@xobotyi/scrollbar-width@1.9.5': {}
 
-  '@yao-pkg/pkg-fetch@3.6.7':
+  '@yao-pkg/pkg-fetch@3.6.8':
     dependencies:
       picocolors: 1.1.1
       progress: 2.0.3
@@ -10033,14 +10033,14 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  '@yao-pkg/pkg@6.24.0(supports-color@10.2.2)':
+  '@yao-pkg/pkg@6.26.1(supports-color@10.2.2)':
     dependencies:
       '@babel/generator': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/traverse': 7.29.7(supports-color@10.2.2)
       '@babel/types': 7.29.7
-      '@roberts_lando/vfs': 0.3.3
-      '@yao-pkg/pkg-fetch': 3.6.7
+      '@roberts_lando/vfs': 0.4.0
+      '@yao-pkg/pkg-fetch': 3.6.8
       esbuild: 0.28.1
       into-stream: 9.1.0
       multistream: 4.1.0
