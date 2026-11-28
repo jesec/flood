@@ -1,5 +1,7 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import {setTimeout} from 'node:timers/promises';
 
 import type {
   AddTorrentByFileOptions,
@@ -29,9 +31,11 @@ import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
+import bencode from 'bencode';
 import {move} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
+import {getTempPath} from '../../models/TemporaryStorage';
 import {fetchUrls} from '../../util/fetchUtil';
 import {cleanupEmptyDirectories, isAllowedPath, removeDirectoryIfEmpty, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
@@ -56,6 +60,11 @@ import {
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
 } from './util/torrentPropertiesUtil';
+
+// rTorrent 0.9.8 drops an SCGI request over 2 MiB, whatever
+// network.xmlrpc.size_limit says: a torrent larger than this in base64 is
+// handed over as a file instead.
+const MAX_INLINE_TORRENT_BASE64 = 1.5 * 1024 * 1024;
 
 type AvailableMethodCalls = {
   methodList: string[];
@@ -239,6 +248,14 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
 
     const result: string[] = [];
 
+    const largeFiles = processedFiles.filter((file) => file.length > MAX_INLINE_TORRENT_BASE64);
+    processedFiles = processedFiles.filter((file) => file.length <= MAX_INLINE_TORRENT_BASE64);
+    await Promise.all(largeFiles.map((file) => this.loadTorrentFromFile(file, start, additionalCalls)));
+
+    if (!processedFiles[0]) {
+      return result;
+    }
+
     if (this.clientRequestManager.isJSONCapable) {
       const methodName = await this.getPreferredMethod(
         start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
@@ -273,6 +290,51 @@ class RTorrentClientGatewayService extends BaseClientGatewayService implements C
     }
 
     return result;
+  }
+
+  // Loads a torrent from a file in Flood's temporary directory, which
+  // rTorrent must see at the same path. rTorrent reads the file only after
+  // it has answered, so the file stays until the torrent is in its list.
+  async loadTorrentFromFile(file: string, start: boolean, additionalCalls: string[]): Promise<void> {
+    const torrent = Buffer.from(file, 'base64');
+    const {info} = bencode.decode(torrent) as {info?: unknown};
+    if (info == null) {
+      throw new Error('Torrent has no info dictionary');
+    }
+    const hash = crypto.createHash('sha1').update(bencode.encode(info)).digest('hex').toUpperCase();
+
+    const methodName = await this.getPreferredMethod(
+      start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
+    );
+    const torrentPath = path.resolve(getTempPath(`load-${crypto.randomUUID()}.torrent`));
+    await fs.promises.writeFile(torrentPath, torrent);
+    try {
+      await this.clientRequestManager
+        .methodCall(methodName, [
+          '',
+          torrentPath,
+          // Not tied to the file, which is removed once loaded.
+          'd.tied_to_file.set=',
+          ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+        ])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+
+      for (let attempt = 0; ; attempt += 1) {
+        const loaded = await this.clientRequestManager.methodCall('d.hash', [hash]).then(
+          () => true,
+          () => false,
+        );
+        if (loaded) {
+          break;
+        }
+        if (attempt >= 100) {
+          throw new Error(`rTorrent did not load torrent ${hash} from ${torrentPath}`);
+        }
+        await setTimeout(100);
+      }
+    } finally {
+      await fs.promises.rm(torrentPath, {force: true});
+    }
   }
 
   async addTorrentsByURL({

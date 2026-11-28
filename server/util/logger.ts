@@ -24,9 +24,29 @@ export const createLoggerOptions = (component?: string): pino.LoggerOptions => {
   };
 };
 
+// Under systemd, with stdout going to the journal, each line starts with
+// its syslog priority, which journald takes for the line's level.
+const syslogPriorities: Array<[pino.Level, number]> = [
+  ['trace', 7],
+  ['debug', 7],
+  ['info', 6],
+  ['warn', 4],
+  ['error', 3],
+  ['fatal', 2],
+];
+
 const createDestination = () => {
   if (!shouldPrettyPrint()) {
-    return undefined;
+    if (!process.env.JOURNAL_STREAM) {
+      return undefined;
+    }
+    return pino.multistream(
+      syslogPriorities.map(([level, priority]) => ({
+        level,
+        stream: {write: (line: string) => process.stdout.write(`<${priority}>${line}`)},
+      })),
+      {dedupe: true},
+    );
   }
 
   return pretty({

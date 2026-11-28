@@ -39,6 +39,12 @@ export interface FloodSettings {
   // Tag selector preference
   UITagSelectorMode?: 'single' | 'multi';
 
+  // Last used trackers of "Create Torrent"
+  createTorrentTrackers?: Array<string>;
+
+  // Last used "private" choice of "Create Torrent"
+  createTorrentPrivate?: boolean;
+
   // Last used "Add Torrents" tab
   UITorrentsAddTab?: 'by-url' | 'by-file' | 'by-creation';
 
