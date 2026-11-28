@@ -25,12 +25,15 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
-  fastify.setErrorHandler((error: FastifyError, _request, reply) => {
+  fastify.setErrorHandler((error: FastifyError, request, reply) => {
     if (reply.sent) {
       return;
     }
 
     const statusCode = error.statusCode ?? 500;
+    if (statusCode >= 500) {
+      request.log.error({err: error}, 'request failed');
+    }
 
     reply.status(statusCode).send({
       code: error.code ?? 'INTERNAL_SERVER_ERROR',
@@ -54,7 +57,8 @@ const constructRoutes = async (fastify: FastifyInstance<any, any, any, any>) => 
       return url;
     });
     fastify.addHook('onRequest', (request, reply, done) => {
-      morgan('dev')(request.raw, reply.raw, done);
+      // Colours only for a terminal, not in the journal.
+      morgan(process.stdout.isTTY ? 'dev' : 'short')(request.raw, reply.raw, done);
     });
   }
 
