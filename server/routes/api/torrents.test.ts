@@ -7,6 +7,7 @@ import stream from 'node:stream';
 
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import bencode from 'bencode';
 import fastify, {LogController} from 'fastify';
 import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
@@ -275,6 +276,48 @@ describe('POST /api/torrents/add-files', () => {
         expect(torrent.directory.startsWith(addTorrentByFileOptions.destination as string)).toBe(true);
       }),
     );
+  });
+
+  it('Adds a torrent too large for one rTorrent request', async () => {
+    // 1.8 MB of piece hashes: over 2 MiB in base64, more than rTorrent
+    // 0.9.8 reads in one SCGI request.
+    const pieceCount = 90000;
+    const info = {
+      name: 'large',
+      'piece length': 16384,
+      length: pieceCount * 16384,
+      pieces: crypto.randomBytes(pieceCount * 20),
+    };
+    const largeTorrent = Buffer.from(bencode.encode({announce: 'http://tracker.invalid/announce', info}));
+    const hash = crypto.createHash('sha1').update(bencode.encode(info)).digest('hex').toUpperCase();
+
+    const res = await request
+      .post('/api/torrents/add-files')
+      .send({...addTorrentByFileOptions, files: [largeTorrent.toString('base64')], tags: ['testAddLarge']})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+
+    if (res.status !== 200 && res.status !== 202) {
+      throw new Error(`Failed to add torrent ${JSON.stringify(res.body)}`);
+    }
+
+    const list = await request
+      .get('/api/torrents')
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200);
+
+    expect((list.body.torrents as TorrentList)[hash]?.tags).toEqual(['testAddLarge']);
+    expect(fs.readdirSync(getTempPath('')).filter((file) => file.endsWith('.torrent'))).toEqual([]);
+
+    await request
+      .post('/api/torrents/delete')
+      .send({hashes: [hash], deleteData: false})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200);
   });
 });
 
