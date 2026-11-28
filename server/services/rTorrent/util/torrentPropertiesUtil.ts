@@ -62,7 +62,9 @@ export const getTorrentStatusFromProperties = (
   }
 
   if (typeof message === 'string' && message.length) {
-    torrentStatus.push('error');
+    // rTorrent writes failed tracker announces to d.message as "Tracker: [...]",
+    // which can happen on dead backup trackers even while the torrent is healthy.
+    torrentStatus.push(message.startsWith('Tracker:') ? 'warning' : 'error');
   }
 
   if (upRate !== 0 || downRate !== 0) {
