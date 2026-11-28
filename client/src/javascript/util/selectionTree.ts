@@ -155,9 +155,44 @@ const getSelectionTree = (contents: Array<TorrentContent>, isSelected = false): 
   return tree;
 };
 
+const applyContentsByIndex = (
+  tree: TorrentContentSelectionTree,
+  contentsByIndex: Map<number, TorrentContent>,
+): TorrentContentSelectionTree => ({
+  ...tree,
+  ...(tree.directories != null
+    ? {
+        directories: Object.fromEntries(
+          Object.entries(tree.directories).map(([directory, subTree]) => [
+            directory,
+            applyContentsByIndex(subTree, contentsByIndex),
+          ]),
+        ),
+      }
+    : {}),
+  ...(tree.files != null
+    ? {
+        files: Object.fromEntries(
+          Object.entries(tree.files).map(([fileName, file]) => {
+            const content = contentsByIndex.get(file.index);
+            return [fileName, content != null ? {...content, isSelected: file.isSelected} : file];
+          }),
+        ),
+      }
+    : {}),
+});
+
+// Refreshes file properties (e.g. priority) from freshly fetched contents while preserving selection state.
+const applyContents = (
+  tree: TorrentContentSelectionTree,
+  contents: Array<TorrentContent>,
+): TorrentContentSelectionTree =>
+  applyContentsByIndex(tree, new Map(contents.map((content) => [content.index, content])));
+
 const selectionTree = {
   selectAll,
   applySelection,
+  applyContents,
   getSelectedItems,
   getSelectionTree,
 };
